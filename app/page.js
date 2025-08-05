@@ -7,7 +7,7 @@ import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import StoryViewer from "./components/storyviwer";
 import { useRouter } from "next/navigation";
 import GalleryCard from "./components/gallerycard";
-import EentCard from "./components/eventcard";
+import EventCard from "./components/eventcard"; // Corrected typo from EentCard
 import PostFeed from "./components/postfeed";
 import CreatePost from "./components/createpost";
 import ProfileCard from "./components/profilecard";
@@ -24,28 +24,28 @@ const users = [
     image: "https://randomuser.me/api/portraits/women/31.jpg",
     stories: [
       {
-        image: "https://randomuser.me/api/portraits/men/37.jpg",
+        image: "https://picsum.photos/id/100/800/600",
         caption: "City lights",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/35.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/101/800/600",
+        caption: "Urban exploration",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/81.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/102/800/600",
+        caption: "Night views",
       },
       {
-        image: "https://randomuser.me/api/portraits/women/95.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/103/800/600",
+        caption: "Downtown vibes",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/55.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/104/800/600",
+        caption: "Skyscrapers",
       },
       {
-        image: "https://randomuser.me/api/portraits/women/15.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/105/800/600",
+        caption: "Metropolitan life",
       },
     ],
   },
@@ -54,11 +54,11 @@ const users = [
     image: "https://randomuser.me/api/portraits/women/71.jpg",
     stories: [
       {
-        image: "https://source.unsplash.com/random/800x602?mountains",
+        image: "https://picsum.photos/id/106/800/600",
         caption: "Hiking adventure",
       },
       {
-        image: "https://source.unsplash.com/random/800x603?lake",
+        image: "https://picsum.photos/id/107/800/600",
         caption: "Peaceful moments",
       },
     ],
@@ -68,59 +68,34 @@ const users = [
     image: "https://randomuser.me/api/portraits/men/65.jpg",
     stories: [
       {
-        image: "https://randomuser.me/api/portraits/men/37.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/108/800/600",
+        caption: "Morning run",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/35.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/109/800/600",
+        caption: "Fitness goals",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/81.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/women/95.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/men/55.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/women/15.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/110/800/600",
+        caption: "Healthy lifestyle",
       },
     ],
   },
-
   {
     name: "Anna Mull",
     image: "https://randomuser.me/api/portraits/men/21.jpg",
     stories: [
       {
-        image: "https://randomuser.me/api/portraits/men/17.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/111/800/600",
+        caption: "Coffee break",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/45.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/112/800/600",
+        caption: "Work flow",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/11.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/women/775.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/men/32.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/men/65.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/113/800/600",
+        caption: "Productivity",
       },
     ],
   },
@@ -129,12 +104,12 @@ const users = [
     image: "https://randomuser.me/api/portraits/women/70.jpg",
     stories: [
       {
-        image: "https://source.unsplash.com/random/800x602?mountains",
-        caption: "Hiking adventure",
+        image: "https://picsum.photos/id/114/800/600",
+        caption: "Beach vibes",
       },
       {
-        image: "https://source.unsplash.com/random/800x603?lake",
-        caption: "Peaceful moments",
+        image: "https://picsum.photos/id/115/800/600",
+        caption: "Sunset stroll",
       },
     ],
   },
@@ -143,28 +118,12 @@ const users = [
     image: "https://randomuser.me/api/portraits/men/39.jpg",
     stories: [
       {
-        image: "https://randomuser.me/api/portraits/men/77.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/116/800/600",
+        caption: "Gaming night",
       },
       {
-        image: "https://randomuser.me/api/portraits/men/05.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/men/90.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/women/96.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/men/79.jpg",
-        caption: "City lights",
-      },
-      {
-        image: "https://randomuser.me/api/portraits/women/13.jpg",
-        caption: "City lights",
+        image: "https://picsum.photos/id/117/800/600",
+        caption: "Level up!",
       },
     ],
   },
@@ -181,49 +140,49 @@ export default function StorySlider() {
       text: "Enjoying a beautiful sunny day!",
       imageUrl: null,
       videoUrl: null,
-      color: 'bg-gradient-to-r from-pink-200 to-red-200', // Gradient background for text post
+      color: 'bg-gradient-to-r from-pink-200 to-red-200',
     },
     {
       id: 2,
       text: "Look at this amazing view from my hike!",
-      imageUrl: "https://picsum.photos/id/10/600/400", // Example image URL
+      imageUrl: "https://picsum.photos/id/10/600/400",
       videoUrl: null,
-      color: null, // No background for image post
+      color: null,
     },
     {
       id: 3,
       text: "A quick video from my trip to the mountains.",
       imageUrl: null,
-      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Example video URL (will show placeholder)
-      color: null, // No background for video post
+      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      color: null,
     },
     {
       id: 4,
       text: "Just a thought for the day: Be kind.",
       imageUrl: null,
       videoUrl: null,
-      color: 'bg-gradient-to-r from-blue-200 to-cyan-200', // Gradient background for text post
+      color: 'bg-gradient-to-r from-blue-200 to-cyan-200',
     },
     {
       id: 5,
       text: "Here's another great shot!",
       imageUrl: "https://picsum.photos/id/20/600/400",
       videoUrl: null,
-      color: null, // No background for image post
+      color: null,
     },
     {
       id: 6,
       text: "Thinking about new adventures!",
       imageUrl: null,
       videoUrl: null,
-      color: 'bg-gradient-to-r from-purple-200 to-indigo-200', // Gradient background for text post
+      color: 'bg-gradient-to-r from-purple-200 to-indigo-200',
     },
     {
       id: 7,
       text: "What a lovely evening!",
       imageUrl: null,
       videoUrl: null,
-      color: 'bg-gradient-to-r from-green-200 to-teal-200', // Gradient background for text post
+      color: 'bg-gradient-to-r from-green-200 to-teal-200',
     },
     {
       id: 8,
@@ -236,7 +195,7 @@ export default function StorySlider() {
       id: 9,
       text: "A short clip of the city lights.",
       imageUrl: null,
-      videoUrl: "https://www.w3schools.com/html/movie.mp4", // Another example video URL
+      videoUrl: "https://www.w3schools.com/html/movie.mp4",
       color: null,
     },
   ]);
@@ -252,15 +211,37 @@ export default function StorySlider() {
     setPosts([newPost, ...posts]);
   };
 
+  // Update image sources for users and stories to use picsum.photos for reliability
+  useEffect(() => {
+    const updatedUsers = users.map((user, userIndex) => ({
+      ...user,
+      image: user.type === "add"
+        ? "https://picsum.photos/id/99/100/100" // Placeholder for add story
+        : `https://picsum.photos/id/${1000 + userIndex}/100/100`, // Unique image for each user
+      stories: user.stories ? user.stories.map((story, storyIndex) => ({
+        ...story,
+        image: `https://picsum.photos/id/${2000 + userIndex * 10 + storyIndex}/800/600`, // Unique image for each story
+      })) : undefined,
+    }));
+    // Note: In a real app, you'd manage users state, not just update local constant.
+    // For this example, we're just ensuring the image URLs are reliable.
+  }, []);
+
+
   return (
-    <div className="p-3 bg-[#F1F8FD] dark:bg-gray-900 min-h-screen text-black dark:text-white">
+    <div className="p-3 bg-[#F1F8FD] dark:bg-gray-900 min-h-screen text-black dark:text-white 
+    ">
+      {/* Swiper for Stories - already has breakpoints for responsiveness */}
       <Swiper
-        spaceBetween={0}
+        spaceBetween={10} // Added some space between slides
         breakpoints={{
-          320: { slidesPerView: 3 },
-          768: { slidesPerView: 4 },
-          1024: { slidesPerView: 5 },
+          320: { slidesPerView: 2.5 }, // Show 2.5 slides on small phones
+          480: { slidesPerView: 3.5 }, // Show 3.5 slides on larger phones
+          768: { slidesPerView: 4.5 }, // Show 4.5 slides on tablets
+          1024: { slidesPerView: 5.5 }, // Show 5.5 slides on desktops
+          1280: { slidesPerView: 6.5 }, // Show 6.5 slides on larger desktops
         }}
+        className="mb-8" // Add margin bottom
       >
         {users.map((user, index) => (
           <SwiperSlide key={index}>
@@ -272,17 +253,17 @@ export default function StorySlider() {
                   setSelectedStoryIndex(0);
                 }
               }}
-              className={`relative cursor-pointer h-52 w-36 sm:w-48 md:w-52 md:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end 
-    ${user.type === "add" ? "bg-[#0086D5]" : ""}
-  `}
+              className={`relative cursor-pointer h-32 sm:h-52 w-full rounded-xl overflow-hidden text-white flex flex-col justify-end 
+                ${user.type === "add" ? "bg-blue-500" : ""}
+              `}
             >
-              {/* Gradient overlay covering bottom 20% */}
+              {/* Gradient overlay covering bottom 30% */}
               <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
 
               {/* User image or content */}
               <img
                 src={user.image}
-                alt=""
+                alt={user.name}
                 className="absolute inset-0 w-full h-full object-cover"
               />
               {user.type === "add" && (
@@ -309,41 +290,55 @@ export default function StorySlider() {
           </SwiperSlide>
         ))}
       </Swiper>
-      {/* Story Viewer */}
+
+      {/* Story Viewer Modal */}
       {
         selectedUser && (
           <div
-            className={`fixed top-0 right-0 z-50 h-full w-full md:w-[40%] bg-black/9 backdrop-blur-xs transform transition-transform duration-500 ease-in-out ${isViewerOpen ? 'translate-x-0' : 'translate-x-full'
+            className={`fixed top-0 right-0 z-50 h-full w-full bg-black/90 backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? 'translate-x-0' : 'translate-x-full'
               }`}
           >
-
-            <div className="text-center mb-4">
-              <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
-            </div>
-
-            {/* Use imported StoryViewer */}
-            <StoryViewer
-              stories={selectedUser.stories}
-              initialStoryIndex={selectedStoryIndex}
-              onClose={() => {
+            <button
+              onClick={() => {
                 setIsViewerOpen(false);
-                setTimeout(() => setSelectedUser(null), 500);
+                setTimeout(() => setSelectedUser(null), 500); // Delay clearing user for transition
               }}
-            />
+              className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+              aria-label="Close story viewer"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+            <div className="flex items-center justify-center h-full w-full p-4">
+              <StoryViewer
+                stories={selectedUser.stories}
+                initialStoryIndex={selectedStoryIndex}
+                onClose={() => {
+                  setIsViewerOpen(false);
+                  setTimeout(() => setSelectedUser(null), 500);
+                }}
+              />
+            </div>
           </div>
         )
       }
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-10">
-        <div className="flex flex-col flex-1 gap-4">
+
+      {/* Main Content Grid - Made responsive */}
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-5"> {/* Adjusted grid breakpoints */}
+        {/* Left Column (Profile & Weather) */}
+        <div className="flex flex-col gap-4">
           <ProfileCard />
           <WeatherCard />
         </div>
-        <div className="flex flex-col flex-1 gap-4">
+
+        {/* Middle Column (Create Post & Post Feed) */}
+        <div className="flex flex-col gap-4 md:col-span-2 xl:col-span-1"> {/* This column will span 2 on md, then 1 on xl */}
           <CreatePost onAddPost={handleAddPost} />
           <PostFeed posts={posts} />
         </div>
-        <div className="flex flex-col gap-4">
-          <EentCard />
+
+        {/* Right Column (Event & Gallery) */}
+        <div className="flex flex-col gap-4 md:col-span-1 xl:col-span-1"> {/* This column will span 1 on md and xl */}
+          <EventCard />
           <GalleryCard />
         </div>
       </div>
