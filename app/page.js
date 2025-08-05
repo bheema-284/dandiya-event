@@ -7,7 +7,7 @@ import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import StoryViewer from "./components/storyviwer";
 import { useRouter } from "next/navigation";
 import GalleryCard from "./components/gallerycard";
-import BirthdayCard from "./components/birthdaycard";
+import EentCard from "./components/eventcard";
 import PostFeed from "./components/postfeed";
 import CreatePost from "./components/createpost";
 import ProfileCard from "./components/profilecard";
@@ -257,14 +257,14 @@ export default function StorySlider() {
           />
         </div>
       )}
-      <div className="flex flex-col md:flex-row gap-4 pt-6 bg-blue-50">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-10">
         <ProfileCard />
         <div className="flex flex-col flex-1 gap-4">
           <CreatePost onAddPost={handleAddPost} />
           <PostFeed posts={posts} />
         </div>
         <div className="flex flex-col gap-4">
-          <BirthdayCard />
+          <EentCard />
           <GalleryCard />
         </div>
       </div>

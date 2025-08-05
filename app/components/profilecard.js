@@ -1,6 +1,6 @@
 export default function ProfileCard() {
     return (
-        <div className="bg-white rounded-lg p-6 shadow w-64">
+        <div className="bg-white rounded-lg p-6 shadow w-full">
             <div className="flex flex-col items-center">
                 <img
                     src="https://randomuser.me/api/portraits/women/12.jpg"

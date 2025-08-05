@@ -23,10 +23,11 @@ const days = [
   { label: "Day 8", icon: FaceSmileIcon },
   { label: "Day 9", icon: GiftIcon },
 ];
-
+const navbarHeight = 'h-16';
+const sidebarWidth = 'w-24';
 const Sidebar = ({ selectedDay, onDaySelect }) => {
   return (
-    <aside className="w-24 bg-gradient-to-b from-pink-100 to-blue-100 shadow-xl rounded-r-xl p-4 space-y-4 overflow-y-auto h-screen">
+    <aside className={`bg-gradient-to-b from-pink-100 to-blue-100 shadow-xl rounded-r-xl p-4 space-y-4 overflow-y-auto h-screen fixed top-${navbarHeight.replace('h-', '')} left-0 bottom-0 z-40 ${sidebarWidth} bg-gray-900 text-white`}>
       {days.map((day, index) => {
         const Icon = day.icon;
         return (

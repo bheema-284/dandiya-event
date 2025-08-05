@@ -22,7 +22,7 @@ export default function Navbar() {
   const [showProfile, setShowProfile] = useState(false);
 
   return (
-    <div className="flex flex-wrap items-center justify-between bg-[#0288D1] px-4 py-3 text-white">
+    <div className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between bg-[#0288D1] px-4 py-3 text-white">
       {/* Logo */}
       <div className="text-xl font-bold mb-2 sm:mb-0">
         <span className="relative inline-block pl-[0.5rem]">
