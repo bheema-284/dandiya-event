@@ -11,6 +11,7 @@ import EentCard from "./components/eventcard";
 import PostFeed from "./components/postfeed";
 import CreatePost from "./components/createpost";
 import ProfileCard from "./components/profilecard";
+import WeatherCard from "./components/weathercard";
 
 const users = [
   {
@@ -328,7 +329,10 @@ export default function StorySlider() {
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-10">
-        <ProfileCard />
+        <div className="flex flex-col flex-1 gap-4">
+          <ProfileCard />
+          <WeatherCard />
+        </div>
         <div className="flex flex-col flex-1 gap-4">
           <CreatePost onAddPost={handleAddPost} />
           <PostFeed posts={posts} />
