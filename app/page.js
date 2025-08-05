@@ -272,15 +272,18 @@ export default function StorySlider() {
                   setSelectedStoryIndex(0);
                 }
               }}
-              className={`relative cursor-pointer h-52 w-36 sm:w-48 md:w-52 md:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end ${user.type === "add" ? "bg-[#0086D5]" : ""
-                }`}
+              className={`relative cursor-pointer h-52 w-36 sm:w-48 md:w-52 md:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end 
+    ${user.type === "add" ? "bg-[#0086D5]" : ""}
+  `}
             >
-              <Image
+              {/* Gradient overlay covering bottom 20% */}
+              <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
+
+              {/* User image or content */}
+              <img
                 src={user.image}
-                alt={user.name}
-                fill={true}
-                className={`object-cover transition-all duration-300 ${user.type === "add" ? "blur-sm scale-105" : ""
-                  }`}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
               />
               {user.type === "add" && (
                 <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
@@ -307,27 +310,29 @@ export default function StorySlider() {
         ))}
       </Swiper>
       {/* Story Viewer */}
-      {selectedUser && (
-        <div
-          className={`fixed top-0 right-0 z-50 h-full w-full md:w-[40%] bg-black/9 backdrop-blur-xs transform transition-transform duration-500 ease-in-out ${isViewerOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
-        >
+      {
+        selectedUser && (
+          <div
+            className={`fixed top-0 right-0 z-50 h-full w-full md:w-[40%] bg-black/9 backdrop-blur-xs transform transition-transform duration-500 ease-in-out ${isViewerOpen ? 'translate-x-0' : 'translate-x-full'
+              }`}
+          >
 
-          <div className="text-center mb-4">
-            <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
+            <div className="text-center mb-4">
+              <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
+            </div>
+
+            {/* Use imported StoryViewer */}
+            <StoryViewer
+              stories={selectedUser.stories}
+              initialStoryIndex={selectedStoryIndex}
+              onClose={() => {
+                setIsViewerOpen(false);
+                setTimeout(() => setSelectedUser(null), 500);
+              }}
+            />
           </div>
-
-          {/* Use imported StoryViewer */}
-          <StoryViewer
-            stories={selectedUser.stories}
-            initialStoryIndex={selectedStoryIndex}
-            onClose={() => {
-              setIsViewerOpen(false);
-              setTimeout(() => setSelectedUser(null), 500);
-            }}
-          />
-        </div>
-      )}
+        )
+      }
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-10">
         <div className="flex flex-col flex-1 gap-4">
           <ProfileCard />
@@ -342,6 +347,6 @@ export default function StorySlider() {
           <GalleryCard />
         </div>
       </div>
-    </div>
+    </div >
   );
 }
