@@ -278,7 +278,7 @@ export default function StorySlider() {
               <Image
                 src={user.image}
                 alt={user.name}
-                fill
+                fill={true}
                 className={`object-cover transition-all duration-300 ${user.type === "add" ? "blur-sm scale-105" : ""
                   }`}
               />
