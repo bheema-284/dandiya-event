@@ -6,6 +6,11 @@ import "swiper/css";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import StoryViewer from "./components/storyviwer";
 import { useRouter } from "next/navigation";
+import GalleryCard from "./components/gallerycard";
+import BirthdayCard from "./components/birthdaycard";
+import PostFeed from "./components/postfeed";
+import CreatePost from "./components/createpost";
+import ProfileCard from "./components/profilecard";
 
 const users = [
   {
@@ -169,7 +174,13 @@ export default function StorySlider() {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
   const router = useRouter();
+  const [posts, setPosts] = useState([]);
 
+  const handleAddPost = (text) => {
+    if (text.trim()) {
+      setPosts([{ id: Date.now(), text }, ...posts]);
+    }
+  };
   return (
     <div className="p-3 bg-[#F1F8FD] dark:bg-gray-900 min-h-screen text-black dark:text-white">
       <Swiper
@@ -246,6 +257,17 @@ export default function StorySlider() {
           />
         </div>
       )}
+      <div className="flex flex-col md:flex-row gap-4 pt-6 bg-blue-50">
+        <ProfileCard />
+        <div className="flex flex-col flex-1 gap-4">
+          <CreatePost onAddPost={handleAddPost} />
+          <PostFeed posts={posts} />
+        </div>
+        <div className="flex flex-col gap-4">
+          <BirthdayCard />
+          <GalleryCard />
+        </div>
+      </div>
     </div>
   );
 }
