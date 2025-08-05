@@ -174,13 +174,83 @@ export default function StorySlider() {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
   const router = useRouter();
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      text: "Enjoying a beautiful sunny day!",
+      imageUrl: null,
+      videoUrl: null,
+      color: 'bg-gradient-to-r from-pink-200 to-red-200', // Gradient background for text post
+    },
+    {
+      id: 2,
+      text: "Look at this amazing view from my hike!",
+      imageUrl: "https://picsum.photos/id/10/600/400", // Example image URL
+      videoUrl: null,
+      color: null, // No background for image post
+    },
+    {
+      id: 3,
+      text: "A quick video from my trip to the mountains.",
+      imageUrl: null,
+      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Example video URL (will show placeholder)
+      color: null, // No background for video post
+    },
+    {
+      id: 4,
+      text: "Just a thought for the day: Be kind.",
+      imageUrl: null,
+      videoUrl: null,
+      color: 'bg-gradient-to-r from-blue-200 to-cyan-200', // Gradient background for text post
+    },
+    {
+      id: 5,
+      text: "Here's another great shot!",
+      imageUrl: "https://picsum.photos/id/20/600/400",
+      videoUrl: null,
+      color: null, // No background for image post
+    },
+    {
+      id: 6,
+      text: "Thinking about new adventures!",
+      imageUrl: null,
+      videoUrl: null,
+      color: 'bg-gradient-to-r from-purple-200 to-indigo-200', // Gradient background for text post
+    },
+    {
+      id: 7,
+      text: "What a lovely evening!",
+      imageUrl: null,
+      videoUrl: null,
+      color: 'bg-gradient-to-r from-green-200 to-teal-200', // Gradient background for text post
+    },
+    {
+      id: 8,
+      text: "Exploring new places.",
+      imageUrl: "https://picsum.photos/id/30/600/400",
+      videoUrl: null,
+      color: null,
+    },
+    {
+      id: 9,
+      text: "A short clip of the city lights.",
+      imageUrl: null,
+      videoUrl: "https://www.w3schools.com/html/movie.mp4", // Another example video URL
+      color: null,
+    },
+  ]);
 
-  const handleAddPost = (text) => {
-    if (text.trim()) {
-      setPosts([{ id: Date.now(), text }, ...posts]);
-    }
+  const handleAddPost = ({ text, imageUrl = null, videoUrl = null, color = null }) => {
+    const newPost = {
+      id: Date.now(),
+      text,
+      imageUrl,
+      videoUrl,
+      color,
+    };
+    setPosts([newPost, ...posts]);
   };
+
   return (
     <div className="p-3 bg-[#F1F8FD] dark:bg-gray-900 min-h-screen text-black dark:text-white">
       <Swiper
