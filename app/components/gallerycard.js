@@ -1,12 +1,17 @@
 export default function GalleryCard() {
   // The number of images has been increased to 30 to better showcase the repeating pattern.
   // You can change this number as needed.
-  const galleryItems = [...Array(30)].map((_, index) => ({
-    id: index,
-    // Using a reliable placeholder service for predictable image display.
-    image: `https://randomuser.me/api/portraits/women/${index + 10}.jpg`,
-    alt: `Gallery image ${index + 1}`,
-  }));
+  const galleryItems = [...Array(30)].map((_, index) => {
+    const gender = Math.random() < 0.5 ? 'men' : 'women';
+    const imageId = Math.floor(Math.random() * 90); // random id between 0-89
+
+    return {
+      id: index,
+      image: `https://randomuser.me/api/portraits/${gender}/${imageId}.jpg`,
+      alt: `Gallery image ${index + 1} (${gender})`,
+    };
+  });
+
 
   // This layout array precisely defines the grid positions to match the image
   // (large image on the right).
@@ -35,7 +40,7 @@ export default function GalleryCard() {
     // Check if we're in an even-numbered block (0, 2, 4...)
     const isStandardLayout = Math.floor(index / 6) % 2 === 0;
     const layout = isStandardLayout ? standardLayout : reversedLayout;
-    
+
     return {
       ...item,
       span: layout[layoutIndex].span,

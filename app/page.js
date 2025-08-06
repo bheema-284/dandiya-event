@@ -271,7 +271,7 @@ export default function StorySlider() {
               )}
               <div className="relative p-2 z-10">
                 {user.type === "add" ? (
-                  <div onClick={() => router.push('/stories')} className="flex flex-col items-center">
+                  <div onClick={() => router.push('/stories')} className="flex flex-col items-center text-center">
                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-md shadow-md">
                       <PlusIcon className="w-6 h-6 text-white" />
                     </div>
