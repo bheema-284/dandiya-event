@@ -227,116 +227,126 @@ export default function StorySlider() {
   }, []);
 
   return (
-    <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white w-full px-4 md:px-6 box-border">
-      <Swiper
-        spaceBetween={16}
-        slidesPerView="auto"
-        breakpoints={{
-          320: { slidesPerView: 2 },
-          480: { slidesPerView: 2.5 },
-          640: { slidesPerView: 3 },
-          768: { slidesPerView: 3.5 },
-          1024: { slidesPerView: 4 },
-          1280: { slidesPerView: 5 },
-        }}
-        className="mb-5 px-4 sm:px-6 lg:px-8 justify-between"
-      >
-        {users && users.map((user, index) => (
-          <SwiperSlide key={index} className="w-40"> {/* Add a fixed width here */}
-            <div
-              onClick={() => {
-                if (user.type !== "add") {
-                  setSelectedUser(user);
-                  setIsViewerOpen(true);
-                  setSelectedStoryIndex(0);
-                }
-              }}
-              className={`relative cursor-pointer h-32 sm:h-72 rounded-xl overflow-hidden text-white flex flex-col justify-end 
+    <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white">
+      <div className="relative min-h-screen dark:bg-gray-900">
+        <div
+          className="absolute inset-0 z-0 opacity-20"
+          style={{
+            backgroundImage: "url('/background-pattern.png')", // You would need to create a `background-pattern.png` image with the emojis and thumb-up icons.
+            backgroundSize: '250px', // Adjust size as needed
+            backgroundRepeat: 'repeat',
+          }}
+        />
+        <div className="relative z-10">
+          <Swiper
+            spaceBetween={16}
+            slidesPerView="auto"
+            breakpoints={{
+              320: { slidesPerView: 2 },
+              480: { slidesPerView: 2.5 },
+              640: { slidesPerView: 3 },
+              768: { slidesPerView: 3.5 },
+              1024: { slidesPerView: 4 },
+              1280: { slidesPerView: 5 },
+            }}
+            className="mb-5 px-4 sm:px-6 lg:px-8 justify-between"
+          >
+            {users && users.map((user, index) => (
+              <SwiperSlide key={index} className="w-40"> {/* Add a fixed width here */}
+                <div
+                  onClick={() => {
+                    if (user.type !== "add") {
+                      setSelectedUser(user);
+                      setIsViewerOpen(true);
+                      setSelectedStoryIndex(0);
+                    }
+                  }}
+                  className={`relative cursor-pointer h-32 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end 
           ${user.type === "add" ? "bg-blue-500" : ""}
         `} >
-              <img
-                src={user.image}
-                alt={user.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              {user.type === "add" && (
-                <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
-              )}
-              <div className="relative p-2 z-10">
-                {user.type === "add" ? (
-                  <div onClick={() => router.push("/stories")} className="flex flex-col items-center text-center">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-md shadow-md">
-                      <PlusIcon className="w-6 h-6 text-white" />
-                    </div>
-                    <span className="mt-2 text-center font-medium text-white text-sm sm:text-base">
-                      {user.name}
-                    </span>
+                  <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {user.type === "add" && (
+                    <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
+                  )}
+                  <div className="relative p-2 z-10">
+                    {user.type === "add" ? (
+                      <div onClick={() => router.push("/stories")} className="flex flex-col items-center text-center">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-md shadow-md">
+                          <PlusIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <span className="mt-2 text-center font-medium text-white text-sm sm:text-base">
+                          {user.name}
+                        </span>
+                      </div>
+                    ) : (
+                      <div>
+                        <h4 className="font-semibold text-sm sm:text-base">{user.name}</h4>
+                        <p className="text-xs sm:text-sm">Active now</p>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div>
-                    <h4 className="font-semibold text-sm sm:text-base">{user.name}</h4>
-                    <p className="text-xs sm:text-sm">Active now</p>
-                  </div>
-                )}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          {/* Story Viewer Modal */}
+          {selectedUser && (
+            <div
+              className={`fixed top-0 right-0 z-50 h-full w-full bg-black/90 backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
+                }`}
+            >
+              <button
+                onClick={() => {
+                  setIsViewerOpen(false);
+                  setTimeout(() => setSelectedUser(null), 500);
+                }}
+                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                aria-label="Close story viewer"
+              >
+                <XMarkIcon className="h-6 w-6" />
+              </button>
+              <div className="flex items-center justify-center h-full w-full p-4">
+                <StoryViewer
+                  stories={selectedUser.stories}
+                  initialStoryIndex={selectedStoryIndex}
+                  onClose={() => {
+                    setIsViewerOpen(false);
+                    setTimeout(() => setSelectedUser(null), 500);
+                  }}
+                />
               </div>
             </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-[27%_43%_27%] gap-2 w-full justify-between">
+            {/* Left Column */}
+            <div className="flex flex-col gap-4">
+              <ProfileCard />
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
+                <h4 className="font-semibold text-lg mb-2">Friend Suggestion</h4>
+                <p className="text-gray-600 dark:text-gray-400">Content for friend suggestions...</p>
+              </div>
+              <WeatherCard />
+            </div>
 
-      {/* Story Viewer Modal */}
-      {selectedUser && (
-        <div
-          className={`fixed top-0 right-0 z-50 h-full w-full bg-black/90 backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
-            }`}
-        >
-          <button
-            onClick={() => {
-              setIsViewerOpen(false);
-              setTimeout(() => setSelectedUser(null), 500);
-            }}
-            className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
-            aria-label="Close story viewer"
-          >
-            <XMarkIcon className="h-6 w-6" />
-          </button>
-          <div className="flex items-center justify-center h-full w-full p-4">
-            <StoryViewer
-              stories={selectedUser.stories}
-              initialStoryIndex={selectedStoryIndex}
-              onClose={() => {
-                setIsViewerOpen(false);
-                setTimeout(() => setSelectedUser(null), 500);
-              }}
-            />
+            {/* Middle Column */}
+            <div className="flex flex-col gap-4">
+              <CreatePost onAddPost={handleAddPost} />
+              <PostFeed posts={posts} />
+            </div>
+
+            {/* Right Column */}
+            <div className="flex flex-col gap-4">
+              <EventCard />
+              <GalleryCard />
+            </div>
           </div>
-        </div>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-[26%_46%_26%] justify-between gap-5">
 
-        {/* Left Column */}
-        <div className="flex flex-col gap-4">
-          <ProfileCard />
-          {/* The image shows a 'Friend Suggestion' card here. You can rename WeatherCard or create a new component. */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
-            <h4 className="font-semibold text-lg mb-2">Friend Suggestion</h4>
-            {/* Add your friend suggestion UI here */}
-            <p className="text-gray-600 dark:text-gray-400">Content for friend suggestions...</p>
-          </div>
-          <WeatherCard />
-        </div>
 
-        {/* Middle Column */}
-        <div className="flex flex-col gap-4 md:col-span-1">
-          <CreatePost onAddPost={handleAddPost} />
-          <PostFeed posts={posts} />
-        </div>
-
-        {/* Right Column */}
-        <div className="flex flex-col gap-4">
-          {/* The image has a Birthday/Event Card and a Gallery card in the right column */}
-          <EventCard />
-          <GalleryCard />
         </div>
       </div>
     </div>

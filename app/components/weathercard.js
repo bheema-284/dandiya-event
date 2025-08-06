@@ -53,7 +53,7 @@ export default function WeatherCard() {
 
     // Generate snowflakes client-side to avoid hydration mismatch
     useEffect(() => {
-        const flakes = Array.from({ length: 15 }).map((_, i) => ({
+        const flakes = Array.from({ length: 10 }).map((_, i) => ({
             id: i,
             left: `${Math.random() * 100}%`,
             animationDuration: `${Math.random() * 8 + 6}s`,
@@ -78,7 +78,7 @@ export default function WeatherCard() {
             {snowflakes.map((flake) => (
                 <div
                     key={flake.id}
-                    className="absolute text-white opacity-75 animate-fall-zigzag"
+                    className="absolute text-white opacity-100 z-50 animate-fall-zigzag"
                     style={{
                         left: flake.left,
                         animationDuration: flake.animationDuration,
@@ -133,10 +133,10 @@ export default function WeatherCard() {
                 @keyframes fall-zigzag {
                     0% {
                         transform: translateY(-100px) translateX(0px);
-                        opacity: 0;
+                        opacity: 0.1;
                     }
                     10% {
-                        opacity: 0.8;
+                        opacity: 2;
                     }
                     25% {
                         transform: translateY(50px) translateX(20px);
@@ -149,7 +149,7 @@ export default function WeatherCard() {
                     }
                     100% {
                         transform: translateY(350px) translateX(0px);
-                        opacity: 0;
+                        opacity: 0.5;
                     }
                 }
                 .animate-fall-zigzag {
