@@ -36,3 +36,29 @@ body {
 .animate-fill {
   animation: fill 3s linear forwards;
 }
+
+.bg-smile {
+  position: relative;
+  z-index: 0;
+}
+
+.bg-smile::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('https://themes.pixelstrap.com/friendbook/assets/images/smiley-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: -2;
+}
+
+.bg-smile::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 220, 220, 0.5); /* 👈 Adjust transparency here */
+  z-index: -1;
+}
+
+

@@ -15,6 +15,28 @@ import {
 import { useState } from 'react';
 import ThemeToggle from './common/themetoggle';
 import { UserIcon } from '@heroicons/react/24/solid';
+// components/IconBar.js
+import {
+  DocumentIcon,
+  StarIcon,
+  UserGroupIcon,
+  HeadphonesIcon,
+  CloudIcon,
+  CalendarIcon,
+  GiftIcon, // Using GiftIcon as a similar icon for a cake/birthday
+  JoystickIcon, // Assuming this is available, if not, check docs for a similar one
+} from '@heroicons/react/24/outline';
+
+const icons = [
+  { icon: DocumentIcon, name: 'Document' },
+  { icon: StarIcon, name: 'Starred' },
+  { icon: UserGroupIcon, name: 'Friends' },
+  { icon: HeadphonesIcon, name: 'Music' },
+  { icon: CloudIcon, name: 'Cloud' },
+  { icon: CalendarIcon, name: 'Calendar' },
+  { icon: GiftIcon, name: 'Birthday' },
+  { icon: JoystickIcon, name: 'Gaming' },
+];
 
 export default function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -47,14 +69,15 @@ export default function Navbar() {
 
       {/* Stats */}
       <div className="hidden lg:flex gap-4 mb-2 sm:mb-0">
-        <div className="bg-white/20 px-3 py-2 flex gap-1 items-center rounded-md text-center">
-          <div className="font-bold text-lg">326</div>
-          <div className="text-sm">Total Posts</div>
-        </div>
-        <div className="bg-white/20 px-3 py-2 flex gap-1 items-center rounded-md text-center">
-          <div className="font-bold text-lg">2456</div>
-          <div className="text-sm">Total Friends</div>
-        </div>
+        {icons.map((item, index) => {
+          const IconComponent = item.icon;
+          if (!IconComponent) return null; // Skip if undefined
+          return (
+            <div key={index} className="flex flex-col items-center cursor-pointer p-2">
+              <IconComponent className="h-8 w-8 text-white hover:text-gray-200 transition-colors duration-200" />
+            </div>
+          );
+        })}
       </div>
 
       {/* Right Icons */}
