@@ -1,76 +1,147 @@
-// StoryViewer.jsx
-import React, { useEffect, useState } from "react";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
-const StoryViewer = ({ stories, onClose, initialStoryIndex }) => {
-    const [currentIndex, setCurrentIndex] = useState(initialStoryIndex || 0);
+export default function StoryViewer({ stories = [], onClose, selectedIndex = 0 }) {
+    const [currentIndex, setCurrentIndex] = useState(selectedIndex);
+    const [progress, setProgress] = useState(0);
+
+    const totalStories = stories.length;
 
     useEffect(() => {
-        setCurrentIndex(initialStoryIndex); // reset when prop changes
-    }, [initialStoryIndex]);
+        let interval;
+
+        if (progress < 100) {
+            interval = setInterval(() => {
+                setProgress((prev) => Math.min(prev + 1, 100));
+            }, 30); // speed of progress
+        } else {
+            handleNext();
+        }
+
+        return () => clearInterval(interval);
+    }, [progress]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (currentIndex < stories.length - 1) {
-                setCurrentIndex(currentIndex + 1);
-            } else {
-                onClose(); // Close viewer after last story
-            }
-        }, 3000); // 3 seconds per story
+        setProgress(0);
+    }, [currentIndex]);
 
-        return () => clearTimeout(timer);
-    }, [currentIndex, stories.length, onClose]);
+    const handleNext = () => {
+        if (currentIndex < totalStories - 1) {
+            setCurrentIndex((prev) => prev + 1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex((prev) => prev - 1);
+        }
+    };
+
+    // New effect to handle the end of all stories
+    useEffect(() => {
+        if (progress === 100 && currentIndex === totalStories - 1) {
+            // Optional: Close the viewer or show a message when all stories are done
+            // onClose();
+        }
+    }, [progress, currentIndex, totalStories, onClose]);
+
+
+    if (!stories[currentIndex]) return null;
 
     return (
-        <div className="fixed top-0 left-0 w-full h-full bg-black/10 backdrop-blur-xs flex flex-col items-center justify-center z-50">
-            <div className="w-full p-20 relative rounded overflow-hidden shadow-lg bg-black/10 backdrop-blur-xs">
-                {/* Progress bar */}
-                <div className="absolute top-2 left-2 right-2 flex gap-1 z-10">
-                    {stories.map((_, index) => (
+        <div className="fixed inset-0 z-50 flex flex-col md:flex-row mt-20 h-screen md:h-auto">
+            {/* Left Side - Stories List */}
+            <div className="w-full md:w-[30%] bg-white h-[40%] md:h-[90%] rounded-b-lg md:rounded-lg p-4 overflow-y-auto">
+                <div className='flex gap-5 justify-between items-center'>
+                    <h2 className="font-bold text-lg md:text-2xl">Stories</h2>
+                    <button
+                        className="text-white w-9 h-9 hover:text-gray-400 hover:bg-gray-300 rounded-full flex items-center justify-center"
+                        onClick={onClose}
+                    >
+                        <XMarkIcon className="h-6 w-6 text-red-300" />
+                    </button>
+                </div>
+
+                <div className="mb-4">
+                    <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
+                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gray-100 flex items-center justify-center shadow-md">
+                            <PlusIcon className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />
+                        </div>
+                        <div>
+                            <p className="font-medium text-sm md:text-base">Create a story</p>
+                            <p className="text-xs md:text-sm text-gray-500">Share a photo or write something.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="hidden md:block">
+                    {stories.map((story, index) => (
                         <div
-                            key={index}
+                            key={story.id}
                             onClick={() => setCurrentIndex(index)}
-                            className="h-1 flex-1 rounded-full bg-white/30 overflow-hidden cursor-pointer"
+                            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer mb-2 ${index === currentIndex ? "bg-blue-100 font-semibold" : "hover:bg-gray-100"}`}
                         >
+                            <img src={story.image} alt="story-thumb" className="w-12 h-12 md:w-16 md:h-16 rounded-full" />
+                            <div>
+                                <p>{story.username}</p>
+                                <p className="text-xs text-gray-500">13h</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Right Side - Story Viewer */}
+            <div className="flex-1 w-full md:w-[70%] bg-black relative flex items-center justify-center h-[60%] md:h-[90%]">
+                {/* Progress bars */}
+                <div className="absolute top-4 md:top-6 left-4 md:left-6 right-4 md:right-6 flex gap-2 px-2 z-10">
+                    {stories.map((_, i) => (
+                        <div key={i} className="flex-1 bg-gray-700 h-1 rounded overflow-hidden">
                             <div
-                                key={currentIndex === index ? `active-${Date.now()}` : `inactive-${index}`}
-                                className={`h-full transition-all ease-linear ${index < currentIndex
-                                    ? "bg-white w-full"
-                                    : index === currentIndex
-                                        ? "bg-white animate-fill"
-                                        : "w-0"
-                                    }`}
-                            ></div>
+                                className={`h-full ${i < currentIndex ? 'bg-white' : i === currentIndex ? 'bg-white' : 'bg-transparent'}`}
+                                style={{
+                                    width: i === currentIndex ? `${progress}%` : i < currentIndex ? '100%' : '0%',
+                                    transition: 'width 0.2s linear',
+                                }}
+                            />
                         </div>
                     ))}
                 </div>
 
-
-                {/* Story Image */}
+                {/* Image */}
                 <img
                     src={stories[currentIndex].image}
-                    alt={`Story ${currentIndex}`}
-                    className="w-full h-full object-cover"
+                    alt={`Story ${currentIndex + 1}`}
+                    className="max-h-[85%] max-w-full object-contain"
                 />
 
-                {/* Close Button */}
-                <button
-                    className="absolute top-2 cursor-pointer right-2 text-white text-2xl font-bold z-10"
-                    onClick={onClose}
-                >
-                    ×
-                </button>
-                <div className="flex items-center gap-2 p-2 rounded-md mt-2">
-                    <input
-                        type="text"
-                        placeholder="Reply..."
-                        className="flex-1 p-2 rounded bg-white text-black outline-none"
-                    />
-                    <button className="text-xl">😊</button>
-                </div>
+                {/* Previous Button */}
+                {currentIndex > 0 && (
+                    <button
+                        onClick={handlePrevious}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/50 p-2 rounded-full hover:bg-black hidden md:block"
+                    >
+                        <ChevronLeftIcon className="h-6 w-6" />
+                    </button>
+                )}
 
+                {/* Next Button */}
+                {currentIndex < totalStories - 1 && (
+                    <button
+                        onClick={handleNext}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/50 p-2 rounded-full hover:bg-black hidden md:block"
+                    >
+                        <ChevronRightIcon className="h-6 w-6" />
+                    </button>
+                )}
+
+                {/* Mobile Navigation */}
+                <div className="absolute inset-0 flex">
+                    <div onClick={handlePrevious} className="flex-1"></div>
+                    <div onClick={handleNext} className="flex-1"></div>
+                </div>
             </div>
         </div>
     );
-};
-
-export default StoryViewer;
+}

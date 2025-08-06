@@ -88,7 +88,7 @@ export default function CreatePost({ onAddPost }) {
             <div className="relative mb-4">
                 <textarea
                     placeholder={placeholders[placeholderIndex]}
-                    className={`rounded-lg bg-gray-200 w-full p-3 pr-10 text-gray-700 resize-none h-12 ${selectedColor}`}
+                    className={`z rounded-lg w-full p-3 pr-10 text-gray-700 focus:ring-blue-500 focus:border-blue-500 resize-none h-24 ${selectedColor}`}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     onClick={handleTextareaClick} // Add onClick to change placeholder

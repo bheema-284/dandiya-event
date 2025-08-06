@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "next/image"; // Image import is not directly used for images in this component's JSX, but kept for Next.js context.
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+// Assuming these components are defined elsewhere and correctly imported
 import StoryViewer from "./components/storyviwer";
 import { useRouter } from "next/navigation";
 import GalleryCard from "./components/gallerycard";
@@ -212,22 +213,11 @@ export default function StorySlider() {
     setPosts([newPost, ...posts]);
   };
 
-  // Update image sources for users and stories to use picsum.photos for reliability
-  useEffect(() => {
-    const updatedUsers = users.map((user, userIndex) => ({
-      ...user,
-      image: user.type === "add"
-        ? "https://picsum.photos/id/99/100/100"
-        : `https://picsum.photos/id/${1000 + userIndex}/100/100`,
-      stories: user.stories ? user.stories.map((story, storyIndex) => ({
-        ...story,
-        image: `https://picsum.photos/id/${2000 + userIndex * 10 + storyIndex}/800/600`,
-      })) : undefined,
-    }));
-  }, []);
+  // The useEffect for updating user images is removed as the `users` array is static
+  // and the image URLs are already set to use picsum.photos directly in the array definition.
 
   return (
-    <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white">
+    <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white mt-5">     
       <div className="relative min-h-screen dark:bg-gray-900">
         <div
           className="absolute inset-0 z-0 opacity-20"
@@ -261,7 +251,7 @@ export default function StorySlider() {
                       setSelectedStoryIndex(0);
                     }
                   }}
-                  className={`relative cursor-pointer h-32 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end 
+                  className={`relative cursor-pointer h-48 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end
           ${user.type === "add" ? "bg-blue-500" : ""}
         `} >
                   <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
@@ -269,6 +259,7 @@ export default function StorySlider() {
                     src={user.image}
                     alt={user.name}
                     className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/100x100/CCCCCC/000000?text=User"; }}
                   />
                   {user.type === "add" && (
                     <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
@@ -297,7 +288,7 @@ export default function StorySlider() {
           {/* Story Viewer Modal */}
           {selectedUser && (
             <div
-              className={`fixed top-0 right-0 z-50 h-full w-full bg-black/90 backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
+              className={`fixed top-0 right-0 z-50 h-full w-full bg-white backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
                 }`}
             >
               <button
@@ -313,6 +304,7 @@ export default function StorySlider() {
               <div className="flex items-center justify-center h-full w-full p-4">
                 <StoryViewer
                   stories={selectedUser.stories}
+                  user={selectedUser}
                   initialStoryIndex={selectedStoryIndex}
                   onClose={() => {
                     setIsViewerOpen(false);
@@ -322,9 +314,11 @@ export default function StorySlider() {
               </div>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-[27%_43%_27%] gap-2 w-full justify-between">
-            {/* Left Column */}
-            <div className="flex flex-col gap-4">
+          {/* Main content grid for columns */}
+          {/* Using flex-col for mobile and grid for md and larger */}
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-[27%_43%_27%] md:gap-2 w-full justify-between">
+            {/* Left Column - Default order 0 (first in source) on desktop, order-2 on mobile */}
+            <div className="flex flex-col gap-4 order-2 md:order-none">
               <ProfileCard />
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
                 <h4 className="font-semibold text-lg mb-2">Friend Suggestion</h4>
@@ -333,20 +327,18 @@ export default function StorySlider() {
               <WeatherCard />
             </div>
 
-            {/* Middle Column */}
-            <div className="flex flex-col gap-4">
+            {/* Middle Column - Default order 0 (second in source) on desktop, order-1 on mobile */}
+            <div className="flex flex-col gap-4 order-1 md:order-none">
               <CreatePost onAddPost={handleAddPost} />
               <PostFeed posts={posts} />
             </div>
 
-            {/* Right Column */}
-            <div className="flex flex-col gap-4">
+            {/* Right Column - Default order 0 (third in source) on desktop, order-3 on mobile */}
+            <div className="flex flex-col gap-4 order-3 md:order-none">
               <EventCard />
               <GalleryCard />
             </div>
           </div>
-
-
         </div>
       </div>
     </div>

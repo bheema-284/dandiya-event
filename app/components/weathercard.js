@@ -78,7 +78,7 @@ export default function WeatherCard() {
             {snowflakes.map((flake) => (
                 <div
                     key={flake.id}
-                    className="absolute text-white opacity-100 z-50 animate-fall-zigzag"
+                    className="absolute text-white opacity-100 animate-fall-zigzag"
                     style={{
                         left: flake.left,
                         animationDuration: flake.animationDuration,

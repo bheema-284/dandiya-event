@@ -1,20 +1,24 @@
+'use client';
+import { useEffect, useState } from 'react';
+
 export default function GalleryCard() {
-  // The number of images has been increased to 30 to better showcase the repeating pattern.
-  // You can change this number as needed.
-  const galleryItems = [...Array(30)].map((_, index) => {
-    const gender = Math.random() < 0.5 ? 'men' : 'women';
-    const imageId = Math.floor(Math.random() * 90); // random id between 0-89
+  const [galleryItems, setGalleryItems] = useState([]);
 
-    return {
-      id: index,
-      image: `https://randomuser.me/api/portraits/${gender}/${imageId}.jpg`,
-      alt: `Gallery image ${index + 1} (${gender})`,
-    };
-  });
+  useEffect(() => {
+    const generated = [...Array(30)].map((_, index) => {
+      const gender = Math.random() < 0.5 ? 'men' : 'women';
+      const imageId = Math.floor(Math.random() * 90);
 
+      return {
+        id: index,
+        image: `https://randomuser.me/api/portraits/${gender}/${imageId}.jpg`,
+        alt: `Gallery image ${index + 1} (${gender})`,
+      };
+    });
 
-  // This layout array precisely defines the grid positions to match the image
-  // (large image on the right).
+    setGalleryItems(generated);
+  }, []);
+
   const standardLayout = [
     { span: 'col-span-1 row-span-1' },
     { span: 'col-span-1 row-span-1' },
@@ -24,7 +28,6 @@ export default function GalleryCard() {
     { span: 'col-span-1 row-span-1' },
   ];
 
-  // This is the reversed layout, with the large image on the left.
   const reversedLayout = [
     { span: 'col-span-2 row-span-2' },
     { span: 'col-span-1 row-span-1' },
@@ -35,9 +38,7 @@ export default function GalleryCard() {
   ];
 
   const combinedItems = galleryItems.map((item, index) => {
-    // Determine which layout to use based on the block of 6 items.
-    const layoutIndex = index % 6; // Position within the current block (0-5)
-    // Check if we're in an even-numbered block (0, 2, 4...)
+    const layoutIndex = index % 6;
     const isStandardLayout = Math.floor(index / 6) % 2 === 0;
     const layout = isStandardLayout ? standardLayout : reversedLayout;
 
