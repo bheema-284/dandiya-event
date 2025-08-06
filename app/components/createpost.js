@@ -3,13 +3,22 @@ import { useState } from 'react';
 import { CameraIcon, FaceSmileIcon, MapPinIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function CreatePost({ onAddPost }) {
+    // State for the main post content
     const [text, setText] = useState('');
-    const [selectedColor, setSelectedColor] = useState(''); // State for selected background color (gradient class)
-    const [showAlbumUpload, setShowAlbumUpload] = useState(false); // State to control album upload visibility
-    const [placeholderIndex, setPlaceholderIndex] = useState(0); // State for changing textarea placeholder
-    const [showSearchBox, setShowSearchBox] = useState(false); // State to control search box visibility
-    const [searchPlaceholderIndex, setSearchPlaceholderIndex] = useState(0); // State for changing search box placeholder
-    const [searchQuery, setSearchQuery] = useState(''); // State for search box input
+    // State for the selected background color (gradient class)
+    const [selectedColor, setSelectedColor] = useState('');
+    // State for the image file to be uploaded
+    const [imageFile, setImageFile] = useState(null);
+    // State to control album upload visibility (now handled by the image preview)
+    const [showAlbumUpload, setShowAlbumUpload] = useState(false);
+    // State for changing textarea placeholder
+    const [placeholderIndex, setPlaceholderIndex] = useState(0);
+    // State to control search box visibility
+    const [showSearchBox, setShowSearchBox] = useState(false);
+    // State for changing search box placeholder
+    const [searchPlaceholderIndex, setSearchPlaceholderIndex] = useState(0);
+    // State for search box input
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Define gradient color palette data
     const gradientColors = [
@@ -46,13 +55,31 @@ export default function CreatePost({ onAddPost }) {
         "Find something...",
     ];
 
+    // Handles the file selection and sets the image state
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(URL.createObjectURL(file));
+            setSelectedColor(''); // Clear color if an image is selected
+            setShowAlbumUpload(false);
+        }
+    };
+
+    // Handles clearing the selected image
+    const handleClearImage = () => {
+        setImageFile(null);
+    };
+
     const handlePost = () => {
-        onAddPost({ text, color: selectedColor, searchQuery }); // Pass text, color, and search query
+        // Pass all relevant data to the parent component
+        onAddPost({ text, color: selectedColor, searchQuery, imageUrl: imageFile });
+        // Reset all states after posting
         setText('');
-        setSelectedColor(''); // Reset color after posting
-        setShowAlbumUpload(false); // Hide album upload after posting
-        setShowSearchBox(false); // Hide search box after posting
-        setSearchQuery(''); // Clear search query
+        setSelectedColor('');
+        setImageFile(null);
+        setShowAlbumUpload(false);
+        setShowSearchBox(false);
+        setSearchQuery('');
     };
 
     const handleClearColor = () => {
@@ -60,7 +87,9 @@ export default function CreatePost({ onAddPost }) {
     };
 
     const handleAlbumClick = () => {
-        setShowAlbumUpload(!showAlbumUpload); // Toggle album upload visibility
+        // Now, this button simply toggles a visual state
+        // The actual file input is handled by a hidden input element
+        setShowAlbumUpload(!showAlbumUpload);
         setShowSearchBox(false); // Hide search box if album is opened
     };
 
@@ -81,19 +110,19 @@ export default function CreatePost({ onAddPost }) {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow w-full mx-auto">
+        <div className="bg-white p-6 rounded-lg shadow w-full mx-auto max-w-2xl">
             <h3 className="font-bold text-lg mb-4 text-gray-800">Create Post</h3>
 
-            {/* Textarea with icon and optional close button */}
+            {/* Textarea for post content */}
             <div className="relative mb-4">
                 <textarea
                     placeholder={placeholders[placeholderIndex]}
                     className={`z rounded-lg w-full p-3 pr-10 text-gray-700 focus:ring-blue-500 focus:border-blue-500 resize-none h-24 ${selectedColor}`}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    onClick={handleTextareaClick} // Add onClick to change placeholder
+                    onClick={handleTextareaClick}
                 ></textarea>
-                {selectedColor && ( // Show X icon only if a color is selected
+                {selectedColor && (
                     <button
                         onClick={handleClearColor}
                         className="absolute right-3 top-3 text-gray-600 hover:text-gray-900"
@@ -102,9 +131,8 @@ export default function CreatePost({ onAddPost }) {
                         <XMarkIcon className="h-5 w-5" />
                     </button>
                 )}
-                {!selectedColor && ( // Show original icon only if no color is selected
+                {!selectedColor && (
                     <span className="absolute right-3 top-3 text-gray-400">
-                        {/* Using a simple SVG for the icon, similar to the screenshot */}
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-type">
                             <polyline points="4 7 4 4 20 4 20 7" />
                             <line x1="9" x2="15" y1="20" y2="20" />
@@ -114,43 +142,56 @@ export default function CreatePost({ onAddPost }) {
                 )}
             </div>
 
+            {/* Image Preview */}
+            {imageFile && (
+                <div className="relative mb-4">
+                    <img src={imageFile} alt="Post Preview" className="w-full h-auto max-h-96 object-cover rounded-lg shadow" />
+                    <button
+                        onClick={handleClearImage}
+                        className="absolute top-2 right-2 p-1 bg-black/50 text-white rounded-full hover:bg-black/70 transition"
+                        aria-label="Remove image"
+                    >
+                        <XMarkIcon className="h-5 w-5" />
+                    </button>
+                </div>
+            )}
+
             {/* Color Palette */}
             <div className="flex flex-wrap gap-2 mb-4">
                 {gradientColors.map((colorClass, index) => (
                     <div
                         key={index}
                         className={`w-6 h-6 rounded-full cursor-pointer ${colorClass} ${selectedColor === colorClass ? 'ring-2 ring-blue-500 ring-offset-1' : ''}`}
-                        onClick={() => setSelectedColor(colorClass)}
-                        title={colorClass.replace('bg-gradient-to-r from-', '').replace('to-', ' to ')} // Tooltip for color name
+                        onClick={() => { setSelectedColor(colorClass); setImageFile(null); }} // Clear image when a color is selected
+                        title={colorClass.replace('bg-gradient-to-r from-', '').replace('to-', ' to ')}
                     ></div>
                 ))}
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-2 mb-4">
-                <button
-                    onClick={handleAlbumClick} // Add onClick for Album functionality
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
-                >
+                <label className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
                     <CameraIcon className="h-5 w-5" />
                     <span>Album</span>
-                </button>
+                    {/* Hidden input to handle file selection */}
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                </label>
                 <button
-                    onClick={handleSearchButtonClick} // Open search box for Feelings & Activity
+                    onClick={handleSearchButtonClick}
                     className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                     <FaceSmileIcon className="h-5 w-5" />
                     <span>Feelings & Activity</span>
                 </button>
                 <button
-                    onClick={handleSearchButtonClick} // Open search box for Check In
+                    onClick={handleSearchButtonClick}
                     className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                     <MapPinIcon className="h-5 w-5" />
                     <span>Check In</span>
                 </button>
                 <button
-                    onClick={handleSearchButtonClick} // Open search box for Tag Friends
+                    onClick={handleSearchButtonClick}
                     className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                     <TagIcon className="h-5 w-5" />
@@ -158,18 +199,7 @@ export default function CreatePost({ onAddPost }) {
                 </button>
             </div>
 
-            {/* Simulated Album Upload Area */}
-            {showAlbumUpload && (
-                <div className="border border-dashed border-gray-400 rounded-lg p-6 text-center text-gray-500 mb-4">
-                    <p>Click or drag to upload image(s)</p>
-                    <input type="file" className="hidden" multiple />
-                    <button className="mt-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
-                        Browse Files
-                    </button>
-                </div>
-            )}
-
-            {/* Single Search Box for Feelings, Check-in, Tag Friends */}
+            {/* Search Box */}
             {showSearchBox && (
                 <div className="relative mb-4">
                     <input
@@ -192,10 +222,11 @@ export default function CreatePost({ onAddPost }) {
             {/* Post Button */}
             <button
                 onClick={handlePost}
-                className="bg-blue-500 text-white px-6 py-3 rounded-lg w-full font-semibold hover:bg-blue-600 transition-colors shadow-md"
+                className="bg-blue-500 cursor-pointer text-white px-6 py-3 rounded-lg w-full font-semibold hover:bg-blue-600 transition-colors shadow-md"
             >
                 Post
             </button>
         </div>
     );
 }
+

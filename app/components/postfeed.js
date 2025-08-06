@@ -9,7 +9,7 @@ export default function PostFeed({ posts }) {
                         {/* Display text if present */}
                         {post.text && (
                             <div className={`p-3 rounded-lg mb-2 ${post.color || 'bg-gray-100 text-gray-800'}`}>
-                                <p className={post.color ? 'text-white' : 'text-gray-800'}>
+                                <p className={post.color ? 'text-black' : 'text-gray-800'}>
                                     {post.text}
                                 </p>
                             </div>

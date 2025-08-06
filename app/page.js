@@ -202,7 +202,7 @@ export default function StorySlider() {
     },
   ]);
 
-  const handleAddPost = ({ text, imageUrl = null, videoUrl = null, color = null }) => {
+  const handleAddPost = ({ text, imageUrl, videoUrl = null, color = null }) => {
     const newPost = {
       id: Date.now(),
       text,
