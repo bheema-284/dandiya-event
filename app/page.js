@@ -242,7 +242,7 @@ export default function StorySlider() {
             className="mb-5 px-4 sm:px-6 lg:px-8 justify-between"
           >
             {users && users.map((user, index) => (
-              <SwiperSlide key={index} className="w-40"> {/* Add a fixed width here */}
+              <SwiperSlide key={index} className="w-40 min-w-40"> {/* Add a fixed width here */}
                 <div
                   onClick={() => {
                     if (user.type !== "add") {
@@ -251,10 +251,10 @@ export default function StorySlider() {
                       setSelectedStoryIndex(0);
                     }
                   }}
-                  className={`relative cursor-pointer h-48 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end
+                  className={`relative cursor-pointer min-w-40 h-48 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end
           ${user.type === "add" ? "bg-blue-500" : ""}
         `} >
-                  <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
+                  <div className="absolute bottom-0 left-0 min-w-40 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
                   <img
                     src={user.image}
                     alt={user.name}

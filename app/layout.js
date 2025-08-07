@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
   `}
       >
         <Navbar />
-        <div className={`w-[90%] m-auto flex flex-1 pt-24 sm:pt-16`}>
+        <div className={`w-[85%] m-auto flex flex-1 pt-24 sm:pt-16`}>
           <main className={`flex-1 overflow-y-auto`}>
             {children}
           </main>

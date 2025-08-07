@@ -26,6 +26,7 @@ import {
   GiftIcon, // Using GiftIcon as a similar icon for a cake/birthday
   JoystickIcon, // Assuming this is available, if not, check docs for a similar one
 } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
 
 const icons = [
   { icon: DocumentIcon, name: 'Document' },
@@ -42,11 +43,12 @@ export default function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between bg-[#0288D1] px-4 py-3 text-white">
       {/* Logo */}
-      <div className="text-xl font-bold mb-2 sm:mb-0">
+      <div onClick={() => router.push("/")} className="text-xl cursor-pointer font-bold mb-2 sm:mb-0">
         <span className="relative inline-block pl-[0.5rem]">
           Dandiya Event
           <span className="absolute left-0 top-0 h-full w-[2.6ch] bg-red/20 rounded-lg z-50"></span>
@@ -79,7 +81,14 @@ export default function Navbar() {
           );
         })}
       </div>
-
+      <div className="animate-float hover:bg-white/20 px-3 py-1 rounded cursor-pointer shadow-lg transition-all duration-300">
+        <button
+          className="cursor-pointer bg-transparent text-white outline-none text-sm font-semibold animate-pulse focus:scale-105 transform transition duration-300"
+          onClick={() => router.push("/ticketing")}
+        >
+          🎟️ Buy Ticket
+        </button>
+      </div>
       {/* Right Icons */}
       <div className="flex items-center gap-4">
         {/* Messages */}
