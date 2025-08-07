@@ -367,7 +367,8 @@ export default function Ticketing() {
 
                     <button
                         onClick={handleBuyTicket}
-                        className="w-full bg-blue-500 cursor-pointer text-white py-4 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 hover:bg-blue-400 hover:shadow-xl active:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+                        disabled={selectedDays.length === 0}
+                        className={`${selectedDays.length === 0 ? "cursor-not-allowed opacity-75" : "cursor-pointer opacity-100 hover:bg-blue-400 hover:shadow-xl"} w-full bg-blue-500 text-white py-4 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50`}
                     >
                         Buy Ticket
                     </button>
