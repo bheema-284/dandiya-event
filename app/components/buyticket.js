@@ -3,26 +3,100 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { format } from 'date-fns';
-import { useRouter } from 'next/navigation';
+
 
 export default function Ticketing() {
-    const [ticketCount, setTicketCount] = useState(1);
-    const [totalPrice, setTotalPrice] = useState(25.00);
+    // State variables for ticket and food selection
+    const [selectedDays, setSelectedDays] = useState([]);
+    const [selectedFoods, setSelectedFoods] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [whatsappNumber, setWhatsappNumber] = useState('');
+    const [mobileNumberError, setMobileNumberError] = useState('');
+
+    // Modal and payment state variables
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showQrCode, setShowQrCode] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(1.5 * 60);
+    const [timeLeft, setTimeLeft] = useState(90);
     const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
     const [paymentMessage, setPaymentMessage] = useState('');
     const [ticketCode, setTicketCode] = useState('');
-    const router = useRouter();
-    const TICKET_PRICE = 25.00;
-    useEffect(() => {
-        setTotalPrice(ticketCount * TICKET_PRICE);
-    }, [ticketCount]);
 
+    // Constant prices
+    const TICKET_PRICE_PER_DAY = 25.00;
+
+    // Food options data
+    const foodOptions = [
+        { name: 'Pav Bhaji', id: 'pavbhaji', price: 150.00 },
+        { name: 'Pani Puri', id: 'panipuri', price: 80.00 },
+        { name: 'Vada Pav', id: 'vadapav', price: 60.00 },
+        { name: 'Dosa', id: 'dosa', price: 75.00 },
+        { name: 'Chicken Biryani', id: 'cbiryani', price: 260.00 },
+        { name: 'Hyderabad Dum Biryani', id: 'hydbriyani', price: 180.00 },
+    ];
+
+    // Event data for each day
+    const eventSchedule = [
+        { day: 1, event: 'Opening Ceremony & Live Band' },
+        { day: 2, event: 'Garba Workshop & DJ Night' },
+        { day: 3, event: 'Traditional Folk Dance Night' },
+        { day: 4, event: 'Bollywood Dance Extravaganza' },
+        { day: 5, event: 'Fusion Night & Celebrity Guest' },
+        { day: 6, event: 'Kids Dandiya & Family Fun' },
+        { day: 7, event: 'Energetic Dandiya Battle' },
+        { day: 8, event: 'Live Stand-up & Bhangra' },
+        { day: 9, event: 'Grand Finale with Firework Show' },
+    ];
+
+    // Recalculate total price whenever the selected days or food changes
     useEffect(() => {
-        if (!showQrCode || timeLeft === 0) {
+        const totalDays = selectedDays.length;
+        let foodCostPerDay = 0;
+
+        selectedFoods.forEach(foodId => {
+            const foodItem = foodOptions.find(f => f.id === foodId);
+            if (foodItem) {
+                foodCostPerDay += foodItem.price;
+            }
+        });
+
+        let ticketCost = totalDays * TICKET_PRICE_PER_DAY;
+        let foodCost = foodCostPerDay * totalDays;
+        let total = ticketCost + foodCost;
+        setTotalPrice(total);
+    }, [selectedDays, selectedFoods]);
+
+    // Add this new useEffect hook inside the Ticketing component
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.3s ease-out forwards;
+        }
+    `;
+        document.head.appendChild(style);
+
+        // Clean up the style element when the component unmounts
+        return () => {
+            if (document.head.contains(style)) {
+                document.head.removeChild(style);
+            }
+        };
+    }, []); // The empty array ensures this runs once on mount
+
+    // Timer logic for the payment modal
+    useEffect(() => {
+        if (!showQrCode || timeLeft <= 0) {
             return;
         }
         const timerId = setInterval(() => {
@@ -31,23 +105,27 @@ export default function Ticketing() {
         return () => clearInterval(timerId);
     }, [showQrCode, timeLeft]);
 
-    const handleIncrease = () => {
-        setTicketCount(prevCount => prevCount + 1);
-    };
-
-    const handleDecrease = () => {
-        setTicketCount(prevCount => (prevCount > 1 ? prevCount - 1 : 1));
-    };
-
+    // Handle opening the payment modal with validation
     const handleBuyTicket = () => {
+        setMobileNumberError('');
+        if (selectedDays.length === 0) {
+            setMobileNumberError("Please select at least one day for your ticket.");
+            return;
+        }
+        const mobileRegex = /^[0-9]{10}$/;
+        if (!whatsappNumber || !mobileRegex.test(whatsappNumber)) {
+            setMobileNumberError("Please enter a valid 10-digit mobile number.");
+            return;
+        }
         setIsProcessing(false);
         setShowQrCode(false);
         setIsPaymentSuccessful(false);
         setPaymentMessage('');
         setIsModalOpen(true);
-        setTimeLeft(1.5 * 60);
+        setTimeLeft(90);
     };
 
+    // Handle starting the simulated payment process
     const handlePayment = () => {
         setIsProcessing(true);
         setTimeout(() => {
@@ -56,52 +134,138 @@ export default function Ticketing() {
         }, 2000);
     };
 
-    const handleSimulatePaymentSuccess = () => {
-        setPaymentMessage('Payment successful!');
-        const code = `DND-${Date.now().toString().slice(-6)}`; // Unique ticket code like: DND-349021
+    // --- UPDATED: handleSimulatePaymentSuccess to send detailed info and save to Firestore ---
+    const handleSimulatePaymentSuccess = async () => {
+        const code = `DND-${Date.now().toString().slice(-6)}`;
         setTicketCode(code);
-        setIsPaymentSuccessful(true);
+
+        // Get event details for selected days
+        const selectedEvents = selectedDays.map(day => {
+            const eventDetail = eventSchedule.find(e => e.day === day);
+            return eventDetail ? eventDetail.event : `Event for Day ${day}`;
+        });
+
+        // Get selected food details with price
+        const selectedFoodDetails = getSelectedFoodDetails();
+
+        // Simulate sending a WhatsApp message
+        try {
+            // Note: This API call is a placeholder and won't actually work without a backend
+            // implementation.
+            const response = await fetch('/api/sendwhatsapp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: `+91${whatsappNumber}`,
+                    ticketCode: code,
+                    selectedDays,
+                    foodDetails: selectedFoodDetails,
+                    events: selectedEvents,
+                    totalPrice: totalPrice.toFixed(2),
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                console.log('WhatsApp message sent successfully!');
+            } else {
+                console.error('Failed to send WhatsApp message:', data.error);
+            }
+
+            setPaymentMessage('Payment successful!');
+            setIsPaymentSuccessful(true);
+
+        } catch (error) {
+            console.error('Error sending WhatsApp message:', error);
+            setPaymentMessage('Payment successful, but failed to send WhatsApp message.');
+            setIsPaymentSuccessful(true);
+        }
     };
 
+
+    // Handle closing the modal and resetting state
     const handleDone = () => {
         setIsModalOpen(false);
         setTimeLeft(0);
         setIsProcessing(false);
         setShowQrCode(false);
-        setIsPaymentSuccessful(false);
         setPaymentMessage('');
+        setIsPaymentSuccessful(false);
+        setTicketCode('');
+        // We'll clear the mobile number only on successful purchase
+        if (isPaymentSuccessful) {
+            setWhatsappNumber('');
+            setSelectedDays([]);
+            setSelectedFoods([]);
+        }
     };
 
-    // Automatically close the modal if the timer runs out.
+    // Automatically close the modal if the timer runs out
     useEffect(() => {
         if (timeLeft === 0 && isModalOpen && !isPaymentSuccessful) {
             setPaymentMessage('Payment timed out. Please try again.');
-            // Wait a moment to show the message before closing.
             setTimeout(() => {
                 handleDone();
             }, 3000);
         }
     }, [timeLeft, isModalOpen, isPaymentSuccessful]);
 
-    // Automatically close the modal if the payment is successful.
+    // Automatically close the modal and reset on payment success
     useEffect(() => {
         if (isPaymentSuccessful) {
             const timerId = setTimeout(() => {
-                handleDone(); // close modal
-                router.push('/'); // redirect to home
+                handleDone();
             }, 3000);
             return () => clearTimeout(timerId);
         }
     }, [isPaymentSuccessful]);
 
+    // Toggle day selection
+    const handleDayToggle = (day) => {
+        if (day === 'all') {
+            if (selectedDays.length === 9) {
+                setSelectedDays([]);
+            } else {
+                setSelectedDays(Array.from({ length: 9 }, (_, i) => i + 1));
+            }
+        } else {
+            setSelectedDays(prevDays =>
+                prevDays.includes(day)
+                    ? prevDays.filter(d => d !== day)
+                    : [...prevDays, day].sort((a, b) => a - b)
+            );
+        }
+    };
 
-    // Format the time remaining for display.
+    // Toggle food selection
+    const handleFoodToggle = (foodId) => {
+        setSelectedFoods(prevFoods =>
+            prevFoods.includes(foodId)
+                ? prevFoods.filter(f => f !== foodId)
+                : [...prevFoods, foodId]
+        );
+    };
+
+    const handleNoFoodToggle = () => {
+        setSelectedFoods([]);
+    };
+
+    // Format the time remaining for display
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     };
 
+    // Helper function to get detailed food info with prices
+    const getSelectedFoodDetails = () => {
+        return selectedFoods.map(foodId => {
+            const foodItem = foodOptions.find(f => f.id === foodId);
+            return foodItem ? { name: foodItem.name, price: foodItem.price } : null;
+        }).filter(Boolean);
+    };
+
+    const isAllDaysSelected = selectedDays.length === 9;
 
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center p-4 font-sans">
@@ -116,33 +280,82 @@ export default function Ticketing() {
                     </p>
                 </div>
 
-                {/* Ticket Selection Section */}
+                {/* Ticket and Food Selection Section */}
                 <div className="w-full bg-gray-50 rounded-lg p-6 shadow-inner border border-gray-200">
-                    <div className="flex justify-between items-center">
-                        <span className="text-xl font-semibold text-gray-700">Dandiya Pass</span>
-                        <span className="text-xl font-bold text-gray-800">₹{TICKET_PRICE.toFixed(2)}</span>
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Select Your Days (₹{TICKET_PRICE_PER_DAY.toFixed(2)}/day)</h2>
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-medium text-gray-700">Ticket Days</h3>
+                        <button
+                            onClick={() => handleDayToggle('all')}
+                            className={`px-4 py-2 rounded-full font-semibold cursor-pointer transition-all duration-200 text-sm ${isAllDaysSelected
+                                ? 'bg-purple-500 text-white shadow-md'
+                                : 'bg-gray-200 text-gray-700 hover:bg-purple-100 hover:text-purple-500'
+                                }`}
+                        >
+                            All Days
+                        </button>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">Includes entry, a complimentary Dandiya stick rental, and access to all performances.</p>
+                    <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-6">
+                        {Array.from({ length: 9 }, (_, i) => i + 1).map(day => (
+                            <button
+                                key={day}
+                                onClick={() => handleDayToggle(day)}
+                                disabled={isAllDaysSelected}
+                                className={`px-4 py-2 rounded-full font-semibold cursor-pointer transition-all duration-200 text-sm ${selectedDays.includes(day) || isAllDaysSelected
+                                    ? 'bg-blue-500 text-white shadow-md'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-blue-100 hover:text-blue-500'
+                                    } ${isAllDaysSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                                Day {day}
+                            </button>
+                        ))}
+                    </div>
 
-                    <div className="flex items-center justify-center mt-6 space-x-4">
-                        <button
-                            onClick={handleDecrease}
-                            className="bg-gray-200 cursor-pointer text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                            </svg>
-                        </button>
-                        <span className="text-3xl font-extrabold text-gray-800 w-12 text-center">{ticketCount}</span>
-                        <button
-                            onClick={handleIncrease}
-                            className="bg-blue-500 cursor-pointer text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-blue-400 active:bg-blue-400 focus:outline-none"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                            </svg>
-                        </button>
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Add Food Items</h2>
+                    <div className="flex flex-col space-y-2">
+                        {foodOptions.map(food => (
+                            <label key={food.id} className="flex items-center justify-between space-x-3 p-3 bg-white rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors">
+                                {/* Checkbox and Food Name */}
+                                <div className="flex items-center space-x-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedFoods.includes(food.id)}
+                                        onChange={() => handleFoodToggle(food.id)}
+                                        className="h-4 w-4 text-blue-500 rounded focus:ring-blue-400"
+                                    />
+                                    <span className="font-medium text-gray-700">{food.name}</span>
+                                </div>
+                                {/* Food Price on the right corner */}
+                                <span className="text-gray-500 text-sm">₹{food.price.toFixed(2)}</span>
+                            </label>
+                        ))}
+                        <label className="flex items-center space-x-3 p-3 bg-white rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors">
+                            <input
+                                type="checkbox"
+                                checked={selectedFoods.length === 0}
+                                onChange={handleNoFoodToggle}
+                                className="h-4 w-4 text-blue-500 rounded focus:ring-blue-400"
+                            />
+                            <span className="font-medium text-gray-700">No Food</span>
+                        </label>
                     </div>
+                </div>
+
+                {/* Mobile Number Input */}
+                <div className="w-full">
+                    <label htmlFor="whatsapp-number" className="block text-xl font-semibold text-gray-700 mb-2">Mobile Number</label>
+                    <input
+                        id="whatsapp-number"
+                        type="tel"
+                        value={whatsappNumber}
+                        onChange={(e) => setWhatsappNumber(e.target.value)}
+                        placeholder="Enter your 10-digit number"
+                        pattern="[0-9]{10}"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-700"
+                    />
+                    {mobileNumberError && (
+                        <p className="mt-2 text-red-500 text-sm font-medium">{mobileNumberError}</p>
+                    )}
                 </div>
 
                 {/* Total Price and Button Section */}
@@ -180,11 +393,53 @@ export default function Ticketing() {
                         {!showQrCode && !isProcessing && !isPaymentSuccessful && (
                             <>
                                 <p className="text-lg text-gray-700 mb-2">You are about to purchase:</p>
-                                <div className="bg-blue-40 p-4 rounded-lg flex justify-between items-center mb-6">
-                                    <span className="text-gray-800">
-                                        <span className="font-bold">{ticketCount}</span> Ticket{ticketCount > 1 ? 's' : ''}
-                                    </span>
-                                    <span className="text-xl font-bold text-blue-400">₹{totalPrice.toFixed(2)}</span>
+                                <div className="bg-gray-100 p-4 rounded-lg mb-6">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-gray-800 font-semibold">Dandiya Pass ({selectedDays.length} day{selectedDays.length > 1 ? 's' : ''})</span>
+                                        <span className="text-lg font-bold text-blue-400">₹{(selectedDays.length * TICKET_PRICE_PER_DAY).toFixed(2)}</span>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">Days: {selectedDays.join(', ')}</p>
+                                    {selectedFoods.length > 0 && (
+                                        <>
+                                            <div className="flex justify-between items-center mt-2 text-sm text-gray-600">
+                                                <span>Food ({selectedFoods.length} item{selectedFoods.length > 1 ? 's' : ''})</span>
+                                                <span>
+                                                    ₹{(
+                                                        selectedFoods.reduce((total, foodId) => {
+                                                            const food = foodOptions.find(f => f.id === foodId);
+                                                            return total + (food ? food.price : 0);
+                                                        }, 0) * selectedDays.length
+                                                    ).toFixed(2)}
+                                                </span>
+                                            </div><div className="mt-2">
+                                                <p className="text-xs text-gray-500">Selected Days & Events:</p>
+                                                <ul className="text-xs text-gray-600 list-disc list-inside">
+                                                    {selectedDays.map(day => {
+                                                        const event = eventSchedule.find(e => e.day === day);
+                                                        return (
+                                                            <li key={day}>Day {day} - {event ? event.event : 'Event not found'}</li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </div>
+                                            <div className="mt-2">
+                                                <p className="text-xs text-gray-500">Food Items Selected:</p>
+                                                <ul className="text-xs text-gray-600 list-disc list-inside">
+                                                    {selectedFoods.map(foodId => {
+                                                        const food = foodOptions.find(f => f.id === foodId);
+                                                        return food ? (
+                                                            <li key={foodId}>{food.name} (₹{food.price.toFixed(2)})</li>
+                                                        ) : null;
+                                                    })}
+                                                </ul>
+                                            </div>
+                                        </>
+                                    )}
+
+                                </div>
+                                <div className="flex justify-between items-center text-xl font-bold text-gray-800 mb-6">
+                                    <span>Total:</span>
+                                    <span className="text-blue-500">₹{totalPrice.toFixed(2)}</span>
                                 </div>
                                 <button
                                     onClick={handlePayment}
@@ -211,7 +466,7 @@ export default function Ticketing() {
                             <div className="flex flex-col items-center text-center">
                                 <p className="text-lg text-gray-700 mb-4">Scan the QR code below to complete your payment.</p>
                                 <img
-                                    src={'/qr-code.jpeg'}
+                                    src={'https://placehold.co/200x200/5267a5/ffffff?text=QR+Code'}
                                     alt="Payment QR Code"
                                     className="rounded-lg w-48 h-48 shadow-md mb-6"
                                 />
@@ -228,7 +483,7 @@ export default function Ticketing() {
                             </div>
                         )}
 
-                        {/* Payment Successful State */}
+                        {/* Payment Successful State with detailed info */}
                         {isPaymentSuccessful && (
                             <div className="flex flex-col items-center text-center py-8">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-green-500" viewBox="0 0 20 20" fill="currentColor">
@@ -237,9 +492,49 @@ export default function Ticketing() {
                                 <p className="mt-4 text-lg font-semibold text-green-700">{paymentMessage}</p>
                                 <p className="mt-2 text-gray-500 text-sm">Your entry code:</p>
                                 <div className="bg-gray-100 text-xl font-mono font-bold text-blue-600 py-2 px-4 rounded-lg mt-2 mb-4">{ticketCode}</div>
-                                <p className="text-sm text-gray-400">Redirecting to homepage in 5 seconds...</p>
+
+                                {/* Days and Events */}
+                                <div className="text-left w-full mt-4">
+                                    <p className="text-md font-semibold text-gray-700">Days & Events:</p>
+                                    <ul className="text-gray-600 text-sm list-disc list-inside mt-1">
+                                        {selectedDays.map(day => {
+                                            const eventDetail = eventSchedule.find(e => e.day === day);
+                                            return (
+                                                <li key={day}>Day {day} - {eventDetail ? eventDetail.event : 'No event specified'}</li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+
+                                {/* Food Items */}
+                                <div className="text-left w-full mt-4">
+                                    <p className="text-md font-semibold text-gray-700">Food Items:</p>
+                                    {selectedFoods.length > 0 ? (
+                                        <ul className="text-gray-600 text-sm list-disc list-inside mt-1">
+                                            {getSelectedFoodDetails().map((food, index) => (
+                                                <li key={index}>{food.name} (₹{food.price.toFixed(2)})</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-gray-500 text-sm mt-1 italic">No food selected.</p>
+                                    )}
+                                </div>
+
+                                <p className="text-gray-500 text-sm font-semibold mt-4">
+                                    Total Paid: <span className="text-blue-500">₹{totalPrice.toFixed(2)}</span>
+                                </p>
+                                <p className="text-sm text-gray-400 mt-4">
+                                    A message with your ticket details would have been sent to {whatsappNumber}.
+                                </p>
+                                <button
+                                    onClick={handleDone}
+                                    className="w-full cursor-pointer bg-blue-500 text-white py-3 rounded-lg text-lg font-semibold transition-all duration-200 hover:bg-blue-400 mt-4"
+                                >
+                                    Done
+                                </button>
                             </div>
                         )}
+
 
                         {/* Payment Timeout State */}
                         {timeLeft === 0 && !isPaymentSuccessful && (
@@ -258,55 +553,3 @@ export default function Ticketing() {
         </div>
     );
 }
-
-// Add a simple fade-in animation for the modal.
-// In a real Next.js app, you'd place this in a CSS module or a global CSS file.
-// For this self-contained example, we can include it here.
-const style = document.createElement('style');
-style.innerHTML = `
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 0.3s ease-out forwards;
-  }
-`;
-document.head.appendChild(style);
-
-<style jsx>{`
-                @keyframes fall-zigzag {
-                    0% {
-                        transform: translateY(-100px) translateX(0px);
-                        opacity: 0.1;
-                    }
-                    10% {
-                        opacity: 2;
-                    }
-                    25% {
-                        transform: translateY(50px) translateX(20px);
-                    }
-                    50% {
-                        transform: translateY(150px) translateX(-20px);
-                    }
-                    75% {
-                        transform: translateY(250px) translateX(20px);
-                    }
-                    100% {
-                        transform: translateY(350px) translateX(0px);
-                        opacity: 0.5;
-                    }
-                }
-                .animate-fall-zigzag {
-                    animation-name: fall-zigzag;
-                    animation-timing-function: ease-in-out;
-                    animation-iteration-count: infinite;
-                }
-            `}</style>

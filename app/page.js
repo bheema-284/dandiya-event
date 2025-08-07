@@ -217,7 +217,7 @@ export default function StorySlider() {
   // and the image URLs are already set to use picsum.photos directly in the array definition.
 
   return (
-    <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white mt-5">     
+    <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white mt-5">
       <div className="relative min-h-screen dark:bg-gray-900">
         <div
           className="absolute inset-0 z-0 opacity-20"
@@ -228,92 +228,94 @@ export default function StorySlider() {
           }}
         />
         <div className="relative z-10">
-          <Swiper
-            spaceBetween={16}
-            slidesPerView="auto"
-            breakpoints={{
-              320: { slidesPerView: 2 },
-              480: { slidesPerView: 2.5 },
-              640: { slidesPerView: 3 },
-              768: { slidesPerView: 3.5 },
-              1024: { slidesPerView: 4 },
-              1280: { slidesPerView: 5 },
-            }}
-            className="mb-5 px-4 sm:px-6 lg:px-8 justify-between"
-          >
-            {users && users.map((user, index) => (
-              <SwiperSlide key={index} className="w-40 min-w-40"> {/* Add a fixed width here */}
-                <div
-                  onClick={() => {
-                    if (user.type !== "add") {
-                      setSelectedUser(user);
-                      setIsViewerOpen(true);
-                      setSelectedStoryIndex(0);
-                    }
-                  }}
-                  className={`relative cursor-pointer min-w-40 h-48 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end
+          {(!users || users.length === 0) ? <p className="text-center">Loading...</p> : <div className="px-2 sm:p-0">
+            <Swiper
+              spaceBetween={16}
+              slidesPerView="auto"
+              breakpoints={{
+                320: { slidesPerView: 2 },
+                480: { slidesPerView: 2.5 },
+                640: { slidesPerView: 3 },
+                768: { slidesPerView: 3.5 },
+                1024: { slidesPerView: 4 },
+                1280: { slidesPerView: 5 },
+              }}
+              className="mb-5 px-4 sm:px-6 lg:px-8 justify-between"
+            >
+              {users && users.map((user, index) => (
+                <SwiperSlide key={index} className="w-40 min-w-40"> {/* Add a fixed width here */}
+                  <div
+                    onClick={() => {
+                      if (user.type !== "add") {
+                        setSelectedUser(user);
+                        setIsViewerOpen(true);
+                        setSelectedStoryIndex(0);
+                      }
+                    }}
+                    className={`relative cursor-pointer min-w-40 h-52 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end
           ${user.type === "add" ? "bg-blue-500" : ""}
         `} >
-                  <div className="absolute bottom-0 left-0 min-w-40 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
-                  <img
-                    src={user.image}
-                    alt={user.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/100x100/CCCCCC/000000?text=User"; }}
-                  />
-                  {user.type === "add" && (
-                    <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
-                  )}
-                  <div className="relative p-2 z-10">
-                    {user.type === "add" ? (
-                      <div onClick={() => router.push("/stories")} className="flex flex-col items-center text-center">
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-md shadow-md">
-                          <PlusIcon className="w-6 h-6 text-white" />
-                        </div>
-                        <span className="mt-2 text-center font-medium text-white text-sm sm:text-base">
-                          {user.name}
-                        </span>
-                      </div>
-                    ) : (
-                      <div>
-                        <h4 className="font-semibold text-sm sm:text-base">{user.name}</h4>
-                        <p className="text-xs sm:text-sm">Active now</p>
-                      </div>
+                    <div className="absolute bottom-0 left-0 min-w-40 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
+                    <img
+                      src={user.image}
+                      alt={user.name}
+                      className={`absolute inset-0 w-full h-full object-cover`}
+                      onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/100x100/CCCCCC/000000?text=User"; }}
+                    />
+                    {user.type === "add" && (
+                      <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
                     )}
+                    <div className="relative p-2 z-10">
+                      {user.type === "add" ? (
+                        <div onClick={() => router.push("/stories")} className="flex flex-col items-center text-center">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-md shadow-md">
+                            <PlusIcon className="w-6 h-6 text-white" />
+                          </div>
+                          <span className="mt-2 text-center font-medium text-white text-sm sm:text-base">
+                            {user.name}
+                          </span>
+                        </div>
+                      ) : (
+                        <div>
+                          <h4 className="font-semibold text-sm sm:text-base">{user.name}</h4>
+                          <p className="text-xs sm:text-sm">Active now</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          {/* Story Viewer Modal */}
-          {selectedUser && (
-            <div
-              className={`fixed top-0 right-0 z-50 h-full w-full bg-white backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
-                }`}
-            >
-              <button
-                onClick={() => {
-                  setIsViewerOpen(false);
-                  setTimeout(() => setSelectedUser(null), 500);
-                }}
-                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
-                aria-label="Close story viewer"
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {/* Story Viewer Modal */}
+            {selectedUser && (
+              <div
+                className={`fixed top-0 right-0 z-50 h-full w-full bg-white backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
+                  }`}
               >
-                <XMarkIcon className="h-6 w-6" />
-              </button>
-              <div className="flex items-center justify-center h-full w-full p-4">
-                <StoryViewer
-                  stories={selectedUser.stories}
-                  user={selectedUser}
-                  initialStoryIndex={selectedStoryIndex}
-                  onClose={() => {
+                <button
+                  onClick={() => {
                     setIsViewerOpen(false);
                     setTimeout(() => setSelectedUser(null), 500);
                   }}
-                />
+                  className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                  aria-label="Close story viewer"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+                <div className="flex items-center justify-center h-full w-full p-4">
+                  <StoryViewer
+                    stories={selectedUser.stories}
+                    user={selectedUser}
+                    initialStoryIndex={selectedStoryIndex}
+                    onClose={() => {
+                      setIsViewerOpen(false);
+                      setTimeout(() => setSelectedUser(null), 500);
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>}
           {/* Main content grid for columns */}
           {/* Using flex-col for mobile and grid for md and larger */}
           <div className="flex flex-col gap-4 md:grid md:grid-cols-[27%_43%_27%] md:gap-2 w-full justify-between">
