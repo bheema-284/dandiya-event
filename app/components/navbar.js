@@ -96,7 +96,7 @@ export default function Navbar() {
             return (
               <div
                 key={index}
-                className={`relative flex flex-col items-center justify-center cursor-pointer px-2`}
+                className={`relative flex flex-col items-center justify-center cursor-pointer px-1`}
                 onClick={() => handleIconClick(index, item.name)}
               >
                 <IconComponent className="h-7 w-7 text-white hover:text-gray-200 transition-colors duration-200" />
