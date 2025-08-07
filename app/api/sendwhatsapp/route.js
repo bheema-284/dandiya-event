@@ -22,7 +22,7 @@ const eventSchedule = [
 ];
 export async function POST(req) {
     try {
-        const { to, ticketCode, selectedDays, foodItems, totalPrice } = await req.json();
+        const { to, ticketCode, selectedDays, totalPrice } = await req.json();
 
         if (!to || !ticketCode || !selectedDays || !totalPrice) {
             return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
@@ -34,16 +34,11 @@ export async function POST(req) {
             return `Day ${day} - ${event ? event.event : 'Event not found'}`;
         }).join('\n');
 
-        // Format food items
-        const foodLines = (Array.isArray(foodItems) && foodItems.length > 0)
-            ? foodItems.map(f => `• ${f.name} (₹${f.price.toFixed(2)})`).join('\n')
-            : 'None';
 
         const messageBody =
             `🎉 *Dandiya Night Ticket Confirmation* 🎉\n\n` +
             `🎫 Ticket Code: *${ticketCode}*\n\n` +
             `📅 Days & Events:\n${dayEventLines}\n\n` +
-            `🍽️ Food Items:\n${foodLines}\n\n` +
             `💰 Total Paid: ₹${Number(totalPrice).toFixed(2)}\n\n` +
             `✅ Show this message at the entry gate.\n` +
             `Enjoy the event! 💃🕺`;

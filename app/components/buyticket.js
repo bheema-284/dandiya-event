@@ -1,19 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { format } from 'date-fns';
 
-
 export default function Ticketing() {
-    // State variables for ticket and food selection
     const [selectedDays, setSelectedDays] = useState([]);
-    const [selectedFoods, setSelectedFoods] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [whatsappNumber, setWhatsappNumber] = useState('');
     const [mobileNumberError, setMobileNumberError] = useState('');
 
-    // Modal and payment state variables
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showQrCode, setShowQrCode] = useState(false);
@@ -22,20 +18,8 @@ export default function Ticketing() {
     const [paymentMessage, setPaymentMessage] = useState('');
     const [ticketCode, setTicketCode] = useState('');
 
-    // Constant prices
     const TICKET_PRICE_PER_DAY = 25.00;
 
-    // Food options data
-    const foodOptions = [
-        { name: 'Pav Bhaji', id: 'pavbhaji', price: 150.00 },
-        { name: 'Pani Puri', id: 'panipuri', price: 80.00 },
-        { name: 'Vada Pav', id: 'vadapav', price: 60.00 },
-        { name: 'Dosa', id: 'dosa', price: 75.00 },
-        { name: 'Chicken Biryani', id: 'cbiryani', price: 260.00 },
-        { name: 'Hyderabad Dum Biryani', id: 'hydbriyani', price: 180.00 },
-    ];
-
-    // Event data for each day
     const eventSchedule = [
         { day: 1, event: 'Opening Ceremony & Live Band' },
         { day: 2, event: 'Garba Workshop & DJ Night' },
@@ -48,64 +32,51 @@ export default function Ticketing() {
         { day: 9, event: 'Grand Finale with Firework Show' },
     ];
 
-    // Recalculate total price whenever the selected days or food changes
+    const colorClasses = [
+        { bg: 'bg-red-500', hover: 'hover:bg-red-100 hover:text-red-500' },
+        { bg: 'bg-purple-500', hover: 'hover:bg-purple-100 hover:text-purple-500' },
+        { bg: 'bg-yellow-500', hover: 'hover:bg-yellow-100 hover:text-yellow-500' },
+        { bg: 'bg-green-500', hover: 'hover:bg-green-100 hover:text-green-500' },
+        { bg: 'bg-pink-500', hover: 'hover:bg-pink-100 hover:text-pink-500' },
+        { bg: 'bg-indigo-500', hover: 'hover:bg-indigo-100 hover:text-indigo-500' },
+        { bg: 'bg-emerald-500', hover: 'hover:bg-emerald-100 hover:text-emerald-500' },
+        { bg: 'bg-cyan-500', hover: 'hover:bg-cyan-100 hover:text-cyan-500' },
+        { bg: 'bg-rose-500', hover: 'hover:bg-rose-100 hover:text-rose-500' },
+    ];
+
+    const dayColorMap = useMemo(() => {
+        const map = {};
+        for (let i = 1; i <= 9; i++) {
+            map[i] = colorClasses[i % colorClasses.length];
+        }
+        return map;
+    }, []);
+
     useEffect(() => {
-        const totalDays = selectedDays.length;
-        let foodCostPerDay = 0;
+        setTotalPrice(selectedDays.length * TICKET_PRICE_PER_DAY);
+    }, [selectedDays]);
 
-        selectedFoods.forEach(foodId => {
-            const foodItem = foodOptions.find(f => f.id === foodId);
-            if (foodItem) {
-                foodCostPerDay += foodItem.price;
-            }
-        });
-
-        let ticketCost = totalDays * TICKET_PRICE_PER_DAY;
-        let foodCost = foodCostPerDay * totalDays;
-        let total = ticketCost + foodCost;
-        setTotalPrice(total);
-    }, [selectedDays, selectedFoods]);
-
-    // Add this new useEffect hook inside the Ticketing component
     useEffect(() => {
         const style = document.createElement('style');
         style.innerHTML = `
         @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up {
             animation: fade-in-up 0.3s ease-out forwards;
         }
     `;
         document.head.appendChild(style);
+        return () => { if (document.head.contains(style)) document.head.removeChild(style); };
+    }, []);
 
-        // Clean up the style element when the component unmounts
-        return () => {
-            if (document.head.contains(style)) {
-                document.head.removeChild(style);
-            }
-        };
-    }, []); // The empty array ensures this runs once on mount
-
-    // Timer logic for the payment modal
     useEffect(() => {
-        if (!showQrCode || timeLeft <= 0) {
-            return;
-        }
-        const timerId = setInterval(() => {
-            setTimeLeft(prevTime => prevTime - 1);
-        }, 1000);
+        if (!showQrCode || timeLeft <= 0) return;
+        const timerId = setInterval(() => setTimeLeft(t => t - 1), 1000);
         return () => clearInterval(timerId);
     }, [showQrCode, timeLeft]);
 
-    // Handle opening the payment modal with validation
     const handleBuyTicket = () => {
         setMobileNumberError('');
         if (selectedDays.length === 0) {
@@ -125,7 +96,6 @@ export default function Ticketing() {
         setTimeLeft(90);
     };
 
-    // Handle starting the simulated payment process
     const handlePayment = () => {
         setIsProcessing(true);
         setTimeout(() => {
@@ -134,24 +104,16 @@ export default function Ticketing() {
         }, 2000);
     };
 
-    // --- UPDATED: handleSimulatePaymentSuccess to send detailed info and save to Firestore ---
     const handleSimulatePaymentSuccess = async () => {
         const code = `DND-${Date.now().toString().slice(-6)}`;
         setTicketCode(code);
 
-        // Get event details for selected days
         const selectedEvents = selectedDays.map(day => {
             const eventDetail = eventSchedule.find(e => e.day === day);
             return eventDetail ? eventDetail.event : `Event for Day ${day}`;
         });
 
-        // Get selected food details with price
-        const selectedFoodDetails = getSelectedFoodDetails();
-
-        // Simulate sending a WhatsApp message
         try {
-            // Note: This API call is a placeholder and won't actually work without a backend
-            // implementation.
             const response = await fetch('/api/sendwhatsapp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -159,31 +121,25 @@ export default function Ticketing() {
                     to: `+91${whatsappNumber}`,
                     ticketCode: code,
                     selectedDays,
-                    foodDetails: selectedFoodDetails,
                     events: selectedEvents,
                     totalPrice: totalPrice.toFixed(2),
                 })
             });
 
             const data = await response.json();
-            if (data.success) {
-                console.log('WhatsApp message sent successfully!');
-            } else {
-                console.error('Failed to send WhatsApp message:', data.error);
-            }
+            if (data.success) console.log('WhatsApp message sent!');
+            else console.error('WhatsApp send failed:', data.error);
 
             setPaymentMessage('Payment successful!');
             setIsPaymentSuccessful(true);
 
-        } catch (error) {
-            console.error('Error sending WhatsApp message:', error);
-            setPaymentMessage('Payment successful, but failed to send WhatsApp message.');
+        } catch (err) {
+            console.error('WhatsApp error:', err);
+            setPaymentMessage('Payment successful, but WhatsApp failed.');
             setIsPaymentSuccessful(true);
         }
     };
 
-
-    // Handle closing the modal and resetting state
     const handleDone = () => {
         setIsModalOpen(false);
         setTimeLeft(0);
@@ -192,77 +148,45 @@ export default function Ticketing() {
         setPaymentMessage('');
         setIsPaymentSuccessful(false);
         setTicketCode('');
-        // We'll clear the mobile number only on successful purchase
         if (isPaymentSuccessful) {
             setWhatsappNumber('');
             setSelectedDays([]);
-            setSelectedFoods([]);
         }
     };
 
-    // Automatically close the modal if the timer runs out
     useEffect(() => {
         if (timeLeft === 0 && isModalOpen && !isPaymentSuccessful) {
             setPaymentMessage('Payment timed out. Please try again.');
-            setTimeout(() => {
-                handleDone();
-            }, 3000);
+            setTimeout(() => handleDone(), 3000);
         }
     }, [timeLeft, isModalOpen, isPaymentSuccessful]);
 
-    // Automatically close the modal and reset on payment success
     useEffect(() => {
         if (isPaymentSuccessful) {
-            const timerId = setTimeout(() => {
-                handleDone();
-            }, 3000);
+            const timerId = setTimeout(() => handleDone(), 3000);
             return () => clearTimeout(timerId);
         }
     }, [isPaymentSuccessful]);
 
-    // Toggle day selection
     const handleDayToggle = (day) => {
         if (day === 'all') {
-            if (selectedDays.length === 9) {
-                setSelectedDays([]);
-            } else {
-                setSelectedDays(Array.from({ length: 9 }, (_, i) => i + 1));
-            }
+            setSelectedDays(prev =>
+                prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
+            );
         } else {
-            setSelectedDays(prevDays =>
-                prevDays.includes(day)
-                    ? prevDays.filter(d => d !== day)
-                    : [...prevDays, day].sort((a, b) => a - b)
+            setSelectedDays(prev =>
+                prev.includes(day)
+                    ? prev.filter(d => d !== day)
+                    : [...prev, day].sort((a, b) => a - b)
             );
         }
     };
 
-    // Toggle food selection
-    const handleFoodToggle = (foodId) => {
-        setSelectedFoods(prevFoods =>
-            prevFoods.includes(foodId)
-                ? prevFoods.filter(f => f !== foodId)
-                : [...prevFoods, foodId]
-        );
-    };
 
-    const handleNoFoodToggle = () => {
-        setSelectedFoods([]);
-    };
-
-    // Format the time remaining for display
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-    };
-
-    // Helper function to get detailed food info with prices
-    const getSelectedFoodDetails = () => {
-        return selectedFoods.map(foodId => {
-            const foodItem = foodOptions.find(f => f.id === foodId);
-            return foodItem ? { name: foodItem.name, price: foodItem.price } : null;
-        }).filter(Boolean);
     };
 
     const isAllDaysSelected = selectedDays.length === 9;
@@ -287,57 +211,35 @@ export default function Ticketing() {
                         <h3 className="text-lg font-medium text-gray-700">Ticket Days</h3>
                         <button
                             onClick={() => handleDayToggle('all')}
-                            className={`px-4 py-2 rounded-full font-semibold cursor-pointer transition-all duration-200 text-sm ${isAllDaysSelected
-                                ? 'bg-purple-500 text-white shadow-md'
-                                : 'bg-gray-200 text-gray-700 hover:bg-purple-100 hover:text-purple-500'
+                            className={`px-4 py-2 rounded-full font-semibold cursor-pointer transition-all duration-200 text-sm
+    ${isAllDaysSelected
+                                    ? 'bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-purple-500 to-pink-500 text-white shadow-md'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gradient-to-r hover:from-red-100 hover:via-yellow-100 hover:via-green-100 hover:via-blue-100 hover:via-purple-100 hover:to-pink-100 hover:text-purple-600'
                                 }`}
                         >
                             All Days
                         </button>
+
                     </div>
                     <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-6">
-                        {Array.from({ length: 9 }, (_, i) => i + 1).map(day => (
-                            <button
-                                key={day}
-                                onClick={() => handleDayToggle(day)}
-                                disabled={isAllDaysSelected}
-                                className={`px-4 py-2 rounded-full font-semibold cursor-pointer transition-all duration-200 text-sm ${selectedDays.includes(day) || isAllDaysSelected
-                                    ? 'bg-blue-500 text-white shadow-md'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-blue-100 hover:text-blue-500'
-                                    } ${isAllDaysSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            >
-                                Day {day}
-                            </button>
-                        ))}
-                    </div>
+                        {Array.from({ length: 9 }, (_, i) => {
+                            const day = i + 1;
+                            const isSelected = selectedDays.includes(day) || isAllDaysSelected;
+                            const { bg, hover } = dayColorMap[day];
 
-                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Add Food Items</h2>
-                    <div className="flex flex-col space-y-2">
-                        {foodOptions.map(food => (
-                            <label key={food.id} className="flex items-center justify-between space-x-3 p-3 bg-white rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors">
-                                {/* Checkbox and Food Name */}
-                                <div className="flex items-center space-x-3">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedFoods.includes(food.id)}
-                                        onChange={() => handleFoodToggle(food.id)}
-                                        className="h-4 w-4 text-blue-500 rounded focus:ring-blue-400"
-                                    />
-                                    <span className="font-medium text-gray-700">{food.name}</span>
-                                </div>
-                                {/* Food Price on the right corner */}
-                                <span className="text-gray-500 text-sm">₹{food.price.toFixed(2)}</span>
-                            </label>
-                        ))}
-                        <label className="flex items-center space-x-3 p-3 bg-white rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors">
-                            <input
-                                type="checkbox"
-                                checked={selectedFoods.length === 0}
-                                onChange={handleNoFoodToggle}
-                                className="h-4 w-4 text-blue-500 rounded focus:ring-blue-400"
-                            />
-                            <span className="font-medium text-gray-700">No Food</span>
-                        </label>
+                            return (
+                                <button
+                                    key={day}
+                                    onClick={() => handleDayToggle(day)}
+                                    disabled={isAllDaysSelected}
+                                    className={`px-4 py-2 rounded-full font-semibold cursor-pointer transition-all duration-200 text-sm
+              ${isSelected ? `${bg} text-white shadow-md` : `bg-gray-200 text-gray-700 ${hover}`}
+              ${isAllDaysSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                    Day {day}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -400,43 +302,17 @@ export default function Ticketing() {
                                         <span className="text-lg font-bold text-blue-400">₹{(selectedDays.length * TICKET_PRICE_PER_DAY).toFixed(2)}</span>
                                     </div>
                                     <p className="text-xs text-gray-500 mt-1">Days: {selectedDays.join(', ')}</p>
-                                    {selectedFoods.length > 0 && (
-                                        <>
-                                            <div className="flex justify-between items-center mt-2 text-sm text-gray-600">
-                                                <span>Food ({selectedFoods.length} item{selectedFoods.length > 1 ? 's' : ''})</span>
-                                                <span>
-                                                    ₹{(
-                                                        selectedFoods.reduce((total, foodId) => {
-                                                            const food = foodOptions.find(f => f.id === foodId);
-                                                            return total + (food ? food.price : 0);
-                                                        }, 0) * selectedDays.length
-                                                    ).toFixed(2)}
-                                                </span>
-                                            </div><div className="mt-2">
-                                                <p className="text-xs text-gray-500">Selected Days & Events:</p>
-                                                <ul className="text-xs text-gray-600 list-disc list-inside">
-                                                    {selectedDays.map(day => {
-                                                        const event = eventSchedule.find(e => e.day === day);
-                                                        return (
-                                                            <li key={day}>Day {day} - {event ? event.event : 'Event not found'}</li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            </div>
-                                            <div className="mt-2">
-                                                <p className="text-xs text-gray-500">Food Items Selected:</p>
-                                                <ul className="text-xs text-gray-600 list-disc list-inside">
-                                                    {selectedFoods.map(foodId => {
-                                                        const food = foodOptions.find(f => f.id === foodId);
-                                                        return food ? (
-                                                            <li key={foodId}>{food.name} (₹{food.price.toFixed(2)})</li>
-                                                        ) : null;
-                                                    })}
-                                                </ul>
-                                            </div>
-                                        </>
-                                    )}
-
+                                    <div className="mt-2">
+                                        <p className="text-xs text-gray-500">Selected Days & Events:</p>
+                                        <ul className="text-xs text-gray-600 list-disc list-inside">
+                                            {selectedDays.map(day => {
+                                                const event = eventSchedule.find(e => e.day === day);
+                                                return (
+                                                    <li key={day}>Day {day} - {event ? event.event : 'Event not found'}</li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div className="flex justify-between items-center text-xl font-bold text-gray-800 mb-6">
                                     <span>Total:</span>
@@ -506,21 +382,6 @@ export default function Ticketing() {
                                         })}
                                     </ul>
                                 </div>
-
-                                {/* Food Items */}
-                                <div className="text-left w-full mt-4">
-                                    <p className="text-md font-semibold text-gray-700">Food Items:</p>
-                                    {selectedFoods.length > 0 ? (
-                                        <ul className="text-gray-600 text-sm list-disc list-inside mt-1">
-                                            {getSelectedFoodDetails().map((food, index) => (
-                                                <li key={index}>{food.name} (₹{food.price.toFixed(2)})</li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p className="text-gray-500 text-sm mt-1 italic">No food selected.</p>
-                                    )}
-                                </div>
-
                                 <p className="text-gray-500 text-sm font-semibold mt-4">
                                     Total Paid: <span className="text-blue-500">₹{totalPrice.toFixed(2)}</span>
                                 </p>
