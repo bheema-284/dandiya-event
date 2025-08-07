@@ -20,21 +20,34 @@ import {
   CheckBadgeIcon,
   TrophyIcon,
 } from '@heroicons/react/24/outline';
+// Import the solid icons for the active state
+import {
+  DocumentIcon as DocumentIconSolid,
+  StarIcon as StarIconSolid,
+  UserGroupIcon as UserGroupIconSolid,
+  CalendarIcon as CalendarIconSolid,
+  GiftIcon as GiftIconSolid,
+  BriefcaseIcon as BriefcaseIconSolid,
+  CakeIcon as CakeIconSolid,
+  CheckBadgeIcon as CheckBadgeIconSolid,
+  TrophyIcon as TrophyIconSolid,
+} from '@heroicons/react/24/solid';
+
 import { useState } from 'react';
 import ThemeToggle from './common/themetoggle';
 import { UserIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 
 const dandiyaIcons = [
-  { icon: DocumentIcon, name: 'Day 1: Opening Ceremony' },
-  { icon: CalendarIcon, name: 'Day 2: Stand-up & Bhangra' },
-  { icon: UserGroupIcon, name: 'Day 3: Kids Dandiya' },
-  { icon: StarIcon, name: 'Day 4: Bollywood Extravaganza' },
-  { icon: CheckBadgeIcon, name: 'Day 5: Fusion Night' },
-  { icon: CakeIcon, name: 'Day 6: Dandiya Battle' },
-  { icon: BriefcaseIcon, name: 'Day 7: Grand Finale' },
-  { icon: GiftIcon, name: 'Day 8: Folk Dance Night' },
-  { icon: TrophyIcon, name: 'Day 9: Garba Workshop' },
+  { icon: DocumentIcon, solidIcon: DocumentIconSolid, name: 'Day 1: Opening Ceremony' },
+  { icon: CalendarIcon, solidIcon: CalendarIconSolid, name: 'Day 2: Stand-up & Bhangra' },
+  { icon: UserGroupIcon, solidIcon: UserGroupIconSolid, name: 'Day 3: Kids Dandiya' },
+  { icon: StarIcon, solidIcon: StarIconSolid, name: 'Day 4: Bollywood Extravaganza' },
+  { icon: CheckBadgeIcon, solidIcon: CheckBadgeIconSolid, name: 'Day 5: Fusion Night' },
+  { icon: CakeIcon, solidIcon: CakeIconSolid, name: 'Day 6: Dandiya Battle' },
+  { icon: BriefcaseIcon, solidIcon: BriefcaseIconSolid, name: 'Day 7: Grand Finale' },
+  { icon: GiftIcon, solidIcon: GiftIconSolid, name: 'Day 8: Folk Dance Night' },
+  { icon: TrophyIcon, solidIcon: TrophyIconSolid, name: 'Day 9: Garba Workshop' },
 ];
 
 export default function Navbar() {
@@ -44,9 +57,9 @@ export default function Navbar() {
   const [activeIcon, setActiveIcon] = useState(dandiyaIcons[0].name);
   const router = useRouter();
 
-  const handleIconClick = (iconName) => {
+  const handleIconClick = (index, iconName) => {
     setActiveIcon(iconName);
-    // Add routing logic here
+    router.push(`/days/${index + 1}`);
   };
 
   return (
@@ -75,15 +88,16 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Stats - Now using dandiyaIcons */}
-        <div className="hidden lg:flex gap-4">
+        <div className="hidden lg:flex gap-2">
           {dandiyaIcons.map((item, index) => {
-            const IconComponent = item.icon;
+            // Select the correct icon based on the active state
+            const IconComponent = activeIcon === item.name ? item.solidIcon : item.icon;
             const isActive = activeIcon === item.name;
             return (
               <div
                 key={index}
                 className={`relative flex flex-col items-center justify-center cursor-pointer px-2`}
-                onClick={() => handleIconClick(item.name)}
+                onClick={() => handleIconClick(index, item.name)}
               >
                 <IconComponent className="h-7 w-7 text-white hover:text-gray-200 transition-colors duration-200" />
                 {isActive && (
@@ -263,13 +277,14 @@ export default function Navbar() {
       {/* Mobile Stats Bar - Now using dandiyaIcons */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#0288D1] flex justify-around items-center lg:hidden">
         {dandiyaIcons.map((item, index) => {
-          const IconComponent = item.icon;
+          // Select the correct icon based on the active state
+          const IconComponent = activeIcon === item.name ? item.solidIcon : item.icon;
           const isActive = activeIcon === item.name;
           return (
             <div
               key={index}
               className={`relative flex flex-col items-center justify-center cursor-pointer p-2`}
-              onClick={() => handleIconClick(item.name)}
+              onClick={() => handleIconClick(index, item.name)}
             >
               <IconComponent className="h-6 w-6 text-white hover:text-gray-200 transition-colors duration-200" />
               {isActive && (

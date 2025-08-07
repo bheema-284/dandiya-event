@@ -218,15 +218,7 @@ export default function StorySlider() {
 
   return (
     <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white mt-5">
-      <div className="relative min-h-screen dark:bg-gray-900">
-        <div
-          className="absolute inset-0 z-0 opacity-20"
-          style={{
-            backgroundImage: "url('/background-pattern.png')", // You would need to create a `background-pattern.png` image with the emojis and thumb-up icons.
-            backgroundSize: '250px', // Adjust size as needed
-            backgroundRepeat: 'repeat',
-          }}
-        />
+      <div className="relative min-h-screen dark:bg-gray-900">       
         <div className="relative z-10">
           {(!users || users.length === 0) ? <p className="text-center">Loading...</p> : <div className="px-2 sm:p-0">
             <Swiper
