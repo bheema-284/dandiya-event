@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // Importing icons from @heroicons/react/24/outline
-import { CameraIcon, FaceSmileIcon, MapPinIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CameraIcon, FaceSmileIcon, LanguageIcon, MapPinIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function CreatePost({ onAddPost }) {
     // State for the main post content
@@ -132,13 +132,9 @@ export default function CreatePost({ onAddPost }) {
                     </button>
                 )}
                 {!selectedColor && (
-                    <span className="absolute right-3 top-3 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-type">
-                            <polyline points="4 7 4 4 20 4 20 7" />
-                            <line x1="9" x2="15" y1="20" y2="20" />
-                            <line x1="12" x2="12" y1="4" y2="20" />
-                        </svg>
-                    </span>
+                    <div className="absolute right-3 top-3 text-gray-400">
+                        <LanguageIcon className="h-7 w-7 text-gray-300" />
+                    </div>
                 )}
             </div>
 
