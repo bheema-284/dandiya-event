@@ -322,7 +322,6 @@ export default function HomePage({ currentPage }) {
                     {/* Right Column - Default order 0 (third in source) on desktop, order-3 on mobile */}
                     <div className="flex flex-col gap-4 order-3 md:order-none">
                         <EventCard />
-                        <GalleryCard />
                     </div>
                 </div>
             </div>
