@@ -1,6 +1,6 @@
 export default function PostFeed({ posts }) {
     return (
-        <div className="bg-white p-6 w-full rounded-lg shadow">
+        <div className="bg-gray-800 p-6 w-full rounded-lg shadow">
             {posts.length === 0 ? (
                 <p className="text-gray-400">No posts yet.</p>
             ) : (
@@ -9,7 +9,7 @@ export default function PostFeed({ posts }) {
                         {/* Display text if present */}
                         {post.text && (
                             <div className={`p-3 rounded-lg mb-2 ${post.color || 'bg-gray-100 text-gray-800'}`}>
-                                <p className={post.color ? 'text-black' : 'text-gray-800'}>
+                                <p className={post.color ? 'text-white' : 'text-gray-800'}>
                                     {post.text}
                                 </p>
                             </div>

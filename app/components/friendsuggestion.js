@@ -1,92 +1,38 @@
-'use client';
-import { useEffect, useRef } from 'react';
-import { ArrowPathIcon, SunIcon } from '@heroicons/react/24/outline';
+import { UsersIcon, CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
 
-const friends = [
-    {
-        name: 'Josephin Water',
-        status: 'Active Now',
-        img: 'https://randomuser.me/api/portraits/women/15.jpg',
-        gradient: 'from-red-400 to-red-300',
-    },
-    {
-        name: 'Josephin Water',
-        status: 'Active Now',
-        img: 'https://randomuser.me/api/portraits/men/11.jpg',
-        gradient: 'from-blue-500 to-indigo-500',
-    },
-    {
-        name: 'Bheema G',
-        status: 'Active Now',
-        img: 'https://randomuser.me/api/portraits/men/25.jpg',
-        gradient: 'from-green-500 to-green-400',
-    },
-    {
-        name: 'Josephin Water',
-        status: 'Active Now',
-        img: 'https://randomuser.me/api/portraits/men/15.jpg',
-        gradient: 'from-purple-500 to-purple-400',
-    },
-];
-
-export default function FriendSuggestionCarousel() {
-    const containerRef = useRef(null);
-
-    useEffect(() => {
-        const scrollContainer = containerRef.current;
-        const cardWidth = 125; // Tailwind w-48 (12rem = 192px)
-        const gap = 4; // Tailwind gap-4 (1rem = 16px)
-
-        const interval = setInterval(() => {
-            if (scrollContainer) {
-                const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-                if (scrollContainer.scrollLeft >= maxScrollLeft - 10) {
-                    scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
-                } else {
-                    scrollContainer.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
-                }
-            }
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="relative bg-white p-6 rounded-lg shadow-xl w-full max-w-xl overflow-hidden">
-            <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-semibold">Friend Suggestion</h2>
-                <div className="flex gap-2">
-                    <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                        <ArrowPathIcon className="w-5 h-5 text-gray-600" />
-                    </button>
-                    <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                        <SunIcon className="w-5 h-5 text-gray-600" />
-                    </button>
-                </div>
-            </div>
-
-            <div
-                ref={containerRef}
-                className="flex overflow-x-auto gap-4 scroll-smooth hide-scrollbar no-scrollbar"
-                style={{ width: '100%' }}
-            >
-                {friends.map((friend, index) => (
-                    <div
-                        key={index}
-                        className={`flex-shrink-0 w-32 h-40 rounded-2xl text-white relative bg-gradient-to-t ${friend.gradient}`}
-                    >
-                        <img
-                            src={friend.img}
-                            alt={friend.name}
-                            className="absolute w-full h-full object-cover rounded-2xl opacity-60"
-                        />
-                        <div className="absolute bottom-4 left-4 z-10">
-                            <h3 className="font-semibold text-lg">{friend.name}</h3>
-                            <p className="text-sm">{friend.status}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
+export default function EventCard() {
+  return (
+    <div className="max-w-md mx-auto bg-gray-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+      <div>
+        <img 
+          className="h-48 w-full object-cover" 
+          src="https://picsum.photos/id/20/600/400" 
+          alt="Christmas event" 
+        />
+      </div>
+      <div className="p-8">
+        <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Christmas 2021</div>
+        <a href="#" className="block mt-1 text-lg leading-tight font-medium text-black hover:underline">
+          26 January 2021
+        </a>
+        <p className="mt-2 text-slate-500">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        </p>
+        <div className="mt-4 flex items-center text-gray-600">
+          <UsersIcon className="h-5 w-5 text-gray-400" />
+          <span className="ml-2">15256 People Going</span>
         </div>
-    );
+        <div className="mt-4 flex space-x-2">
+          <button className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <CheckIcon className="h-4 w-4" />
+            <span className="ml-2">Going</span>
+          </button>
+          <button className="flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <XMarkIcon className="h-4 w-4" />
+            <span className="ml-2">Not Going</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

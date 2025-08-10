@@ -40,7 +40,7 @@ const dummyFriends = [
 
 // Content for the About tab
 const AboutContent = () => (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+    <div className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">About Kelin Jasen</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -64,7 +64,7 @@ const AboutContent = () => (
 
 // Content for the Friends tab
 const FriendsContent = () => (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+    <div className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">Friends ({dummyFriends.length})</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {dummyFriends.map((friend, index) => (
@@ -79,7 +79,7 @@ const FriendsContent = () => (
 
 // Content for the Photos tab
 const PhotosContent = () => (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+    <div className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">Photos</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 12 }).map((_, index) => (
@@ -95,7 +95,7 @@ const PhotosContent = () => (
 const TimelineContent = ({ posts }) => (
     <div className="flex flex-col gap-6">
         {posts.map((post) => (
-            <div key={post.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div key={post.id} className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md">
                 <div className="flex items-center gap-3 mb-4">
                     <img src={post.avatar} alt={post.author} className="w-10 h-10 rounded-full" />
                     <div>
@@ -181,7 +181,7 @@ export default function FriendProfilePage({ friend }) {
         <div>
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6 lg:p-8">
                 {/* Cover Photo and Profile Card Section */}
-                <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                <div className="relative bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                     {/* Cover Photo */}
                     <div
                         className="relative w-full h-48 md:h-64 bg-cover bg-center"
@@ -195,7 +195,7 @@ export default function FriendProfilePage({ friend }) {
                     </div>
 
                     {/* Profile Details Card */}
-                    <div className="relative -mt-20 md:-mt-24 ml-4 md:ml-8 lg:ml-12 p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl w-[95%] sm:w-3/4 md:w-2/3 lg:w-1/3">
+                    <div className="relative -mt-20 md:-mt-24 ml-4 md:ml-8 lg:ml-12 p-4 md:p-6 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-xl w-[95%] sm:w-3/4 md:w-2/3 lg:w-1/3">
                         <div className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0">
                             <img src={friend.profileImage} alt="Profile" className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white dark:border-gray-800 shadow-lg" />
                         </div>
@@ -232,7 +232,7 @@ export default function FriendProfilePage({ friend }) {
                 {/* Navigation and Main Content Section */}
                 <div className="mt-8">
                     {/* Navigation Tabs */}
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6 p-4">
+                    <div className="bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md mb-6 p-4">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                             {tabs.map((tab) => {
                                 const isActive = activeTab === tab.name;

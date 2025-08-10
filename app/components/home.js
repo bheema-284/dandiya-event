@@ -215,7 +215,7 @@ export default function HomePage({ currentPage }) {
     // and the image URLs are already set to use picsum.photos directly in the array definition.
 
     return (
-        <div className="dark:bg-gray-900 min-h-screen text-black dark:text-white mt-5">
+        <div className="dark:bg-gray-900 min-h-screen text-white dark:text-white mt-5">
             <div className="relative z-10">
                 {currentPage === "home" && <div> {(!users || users.length === 0) ? <p className="text-center">Loading...</p> : <div className="px-2 sm:p-0">
                     <Swiper
@@ -257,7 +257,7 @@ export default function HomePage({ currentPage }) {
                                     <div className="relative p-2 z-10">
                                         {user.type === "add" ? (
                                             <div onClick={() => router.push("/stories")} className="flex flex-col items-center text-center">
-                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/30 flex items-center justify-center backdrop-blur-md shadow-md">
+                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-800/30 flex items-center justify-center backdrop-blur-md shadow-md">
                                                     <PlusIcon className="w-6 h-6 text-white" />
                                                 </div>
                                                 <span className="mt-2 text-center font-medium text-white text-sm sm:text-base">
@@ -278,7 +278,7 @@ export default function HomePage({ currentPage }) {
                     {/* Story Viewer Modal */}
                     {selectedUser && (
                         <div
-                            className={`fixed top-0 right-0 z-50 h-full w-full bg-white backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
+                            className={`fixed top-0 right-0 z-50 h-full w-full bg-gray-800 backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
                                 }`}
                         >
                             <button
@@ -286,7 +286,7 @@ export default function HomePage({ currentPage }) {
                                     setIsViewerOpen(false);
                                     setTimeout(() => setSelectedUser(null), 500);
                                 }}
-                                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-gray-800/20 text-white hover:bg-gray-800/30 transition-colors"
                                 aria-label="Close story viewer"
                             >
                                 <XMarkIcon className="h-6 w-6" />

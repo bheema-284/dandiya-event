@@ -52,7 +52,7 @@ export default function StoryViewer({ stories = [], onClose, selectedIndex = 0 }
     return (
         <div className="fixed inset-0 z-50 flex flex-col md:flex-row mt-20 h-screen md:h-auto">
             {/* Left Side - Stories List */}
-            <div className="w-full md:w-[30%] bg-white h-[40%] md:h-[90%] rounded-b-lg md:rounded-lg p-4 overflow-y-auto">
+            <div className="w-full md:w-[30%] bg-gray-800 h-[40%] md:h-[90%] rounded-b-lg md:rounded-lg p-4 overflow-y-auto">
                 <div className='flex gap-5 justify-between items-center'>
                     <h2 className="font-bold text-lg md:text-2xl">Stories</h2>
                     <button
@@ -99,7 +99,7 @@ export default function StoryViewer({ stories = [], onClose, selectedIndex = 0 }
                     {stories.map((_, i) => (
                         <div key={i} className="flex-1 bg-gray-700 h-1 rounded overflow-hidden">
                             <div
-                                className={`h-full ${i < currentIndex ? 'bg-white' : i === currentIndex ? 'bg-white' : 'bg-transparent'}`}
+                                className={`h-full ${i < currentIndex ? 'bg-gray-800' : i === currentIndex ? 'bg-gray-800' : 'bg-transparent'}`}
                                 style={{
                                     width: i === currentIndex ? `${progress}%` : i < currentIndex ? '100%' : '0%',
                                     transition: 'width 0.2s linear',

@@ -33,7 +33,7 @@ export default function Page() {
     const [type, setType] = useState(null);
     const [text, setText] = useState('');
     const [photo, setPhoto] = useState(null);
-    const [bgClass, setBgClass] = useState('bg-white');
+    const [bgClass, setBgClass] = useState('bg-gray-800');
     const [iconBg, setIconBg] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
 
@@ -46,7 +46,7 @@ export default function Page() {
         setText('');
         setPhoto(null);
         setType(null);
-        setBgClass('bg-white');
+        setBgClass('bg-gray-800');
         setIconBg(null);
         setShowConfirm(false);
     };
@@ -58,7 +58,7 @@ export default function Page() {
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row font-sans">
             {/* Left Sidebar for User Info (Visible on all devices, but layout changes) */}
-            <div className="w-full md:w-1/4 bg-white p-4 shadow-md flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-200">
+            <div className="w-full md:w-1/4 bg-gray-800 p-4 shadow-md flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-200">
                 <div className="flex items-center justify-between w-full mb-4 md:mb-6">
                     <h2 className="font-bold text-lg md:text-xl text-gray-800">Your story</h2>
                     <XMarkIcon onClick={() => router.back()} className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-700" />
@@ -89,7 +89,7 @@ export default function Page() {
                                 onClick={() => setType('photo')}
                                 className="w-full md:w-64 h-48 md:h-96 rounded-xl cursor-pointer bg-gradient-to-br from-indigo-500 to-blue-300 flex flex-col items-center justify-center shadow-lg hover:scale-105 transition"
                             >
-                                <div className="bg-white rounded-full p-4 mb-4">
+                                <div className="bg-gray-800 rounded-full p-4 mb-4">
                                     <PhotoIcon className="h-8 w-8 md:h-10 md:w-10 text-indigo-500" />
                                 </div>
                                 <span className="text-white text-base md:text-lg font-semibold">Create a Photo Story</span>
@@ -99,7 +99,7 @@ export default function Page() {
                                 onClick={() => setType('text')}
                                 className="w-full md:w-64 h-48 md:h-96 rounded-xl cursor-pointer bg-gradient-to-br from-pink-500 to-purple-500 flex flex-col items-center justify-center shadow-lg hover:scale-105 transition"
                             >
-                                <div className="bg-white rounded-full p-4 mb-4">
+                                <div className="bg-gray-800 rounded-full p-4 mb-4">
                                     <ChatBubbleLeftRightIcon className="h-8 w-8 md:h-10 md:w-10 text-pink-500" />
                                 </div>
                                 <span className="text-white text-base md:text-lg font-semibold">Create a Text Story</span>
@@ -109,7 +109,7 @@ export default function Page() {
 
                     {type === 'photo' && (
                         <div className="mt-6 flex flex-col items-center w-full max-w-lg">
-                            <label className="flex items-center justify-center p-4 bg-white text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 transition w-full">
+                            <label className="flex items-center justify-center p-4 bg-gray-800 text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 transition w-full">
                                 <PhotoIcon className="h-5 w-5 mr-2" />
                                 <span>Upload a Photo</span>
                                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -149,8 +149,8 @@ export default function Page() {
                                         {iconBgs.map(({ key, icon }) => (
                                             <div
                                                 key={key}
-                                                className={`cursor-pointer w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white rounded-full border-2 hover:scale-110 transition ${iconBg && iconBg.key === key ? 'border-blue-500' : 'border-transparent'}`}
-                                                onClick={() => { setIconBg({ key, icon }); setBgClass('bg-white'); }}
+                                                className={`cursor-pointer w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-gray-800 rounded-full border-2 hover:scale-110 transition ${iconBg && iconBg.key === key ? 'border-blue-500' : 'border-transparent'}`}
+                                                onClick={() => { setIconBg({ key, icon }); setBgClass('bg-gray-800'); }}
                                             >
                                                 {icon}
                                             </div>
@@ -176,7 +176,7 @@ export default function Page() {
             {/* Discard Confirmation Modal */}
             {showConfirm && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
-                    <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full text-center">
+                    <div className="bg-gray-800 p-6 rounded shadow-lg max-w-sm w-full text-center">
                         <p className="text-lg font-semibold mb-2">Are you sure you want to discard this story?</p>
                         <p className="text-sm text-gray-600 mb-6">Your story won&apos;t be saved.</p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4">

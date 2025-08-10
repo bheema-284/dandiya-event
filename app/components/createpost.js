@@ -110,14 +110,14 @@ export default function CreatePost({ onAddPost }) {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow w-full mx-auto max-w-2xl">
-            <h3 className="font-bold text-lg mb-4 text-gray-800">Create Post</h3>
+        <div className="bg-gray-800 p-6 rounded-lg shadow w-full mx-auto max-w-2xl">
+            <h3 className="font-bold text-lg mb-4 text-white">Create Post</h3>
 
             {/* Textarea for post content */}
             <div className="relative mb-4">
                 <textarea
                     placeholder={placeholders[placeholderIndex]}
-                    className={`z rounded-lg w-full p-3 pr-10 text-gray-700 focus:ring-blue-500 focus:border-blue-500 resize-none h-24 ${selectedColor}`}
+                    className={`z rounded-lg w-full p-3 pr-10 text-white focus:ring-blue-500 focus:border-blue-500 resize-none h-24 ${selectedColor}`}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     onClick={handleTextareaClick}
@@ -125,7 +125,7 @@ export default function CreatePost({ onAddPost }) {
                 {selectedColor && (
                     <button
                         onClick={handleClearColor}
-                        className="absolute right-3 top-3 text-gray-600 hover:text-gray-900"
+                        className="absolute right-3 top-3 text-white hover:text-gray-900"
                         aria-label="Clear selected color"
                     >
                         <XMarkIcon className="h-5 w-5" />
@@ -166,7 +166,7 @@ export default function CreatePost({ onAddPost }) {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-2 mb-4">
-                <label className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
+                <label className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors cursor-pointer">
                     <CameraIcon className="h-5 w-5" />
                     <span>Album</span>
                     {/* Hidden input to handle file selection */}
@@ -174,21 +174,21 @@ export default function CreatePost({ onAddPost }) {
                 </label>
                 <button
                     onClick={handleSearchButtonClick}
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors"
                 >
                     <FaceSmileIcon className="h-5 w-5" />
                     <span>Feelings & Activity</span>
                 </button>
                 <button
                     onClick={handleSearchButtonClick}
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors"
                 >
                     <MapPinIcon className="h-5 w-5" />
                     <span>Check In</span>
                 </button>
                 <button
                     onClick={handleSearchButtonClick}
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors"
                 >
                     <TagIcon className="h-5 w-5" />
                     <span>Tag Friends</span>
@@ -201,13 +201,13 @@ export default function CreatePost({ onAddPost }) {
                     <input
                         type="text"
                         placeholder={searchPlaceholders[searchPlaceholderIndex]}
-                        className="border rounded-lg w-full p-3 pr-10 text-gray-700 focus:ring-blue-500 focus:border-blue-500"
+                        className="border rounded-lg w-full p-3 pr-10 text-white focus:ring-blue-500 focus:border-blue-500"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <button
                         onClick={handleCloseSearchBox}
-                        className="absolute right-3 top-3 text-gray-600 hover:text-gray-900"
+                        className="absolute right-3 top-3 text-white hover:text-gray-900"
                         aria-label="Close search box"
                     >
                         <XMarkIcon className="h-5 w-5" />

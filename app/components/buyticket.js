@@ -193,7 +193,7 @@ export default function Ticketing() {
 
     return (
         <div className="bg-gray-100 min-h-screen flex items-center justify-center p-4 font-sans">
-            <div className="bg-white rounded-xl shadow-2xl p-8 max-w-lg w-full flex flex-col items-center space-y-6">
+            <div className="bg-gray-800 text-white rounded-xl shadow-2xl p-8 max-w-lg w-full flex flex-col items-center space-y-6">
 
                 {/* Event Header Section */}
                 <div className="text-center">
@@ -280,7 +280,7 @@ export default function Ticketing() {
             {/* Payment Modal using React Portal */}
             {isModalOpen && createPortal(
                 <div className="fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-2xl shadow-3xl p-8 max-w-md w-full animate-fade-in-up">
+                    <div className="bg-gray-800 rounded-2xl shadow-3xl p-8 max-w-md w-full animate-fade-in-up">
 
                         {/* Modal Header */}
                         <div className="flex justify-between items-center mb-6">
