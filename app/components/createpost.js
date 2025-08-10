@@ -83,18 +83,15 @@ export default function CreatePost({ onAddPost }) {
     };
 
     const handleClearColor = () => {
-        setSelectedColor(''); // Clear the selected background color
+        setSelectedColor(''); 
     };
 
     const handleAlbumClick = () => {
-        // Now, this button simply toggles a visual state
-        // The actual file input is handled by a hidden input element
         setShowAlbumUpload(!showAlbumUpload);
         setShowSearchBox(false); // Hide search box if album is opened
     };
 
     const handleTextareaClick = () => {
-        // Change placeholder on each click, cycling through the array
         setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
     };
 
