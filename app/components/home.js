@@ -1,327 +1,264 @@
-"use client";
-import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
-import StoryViewer from "./storyviwer";
-import ProfileCard from "./profilecard";
-import FriendSuggestionCarousel from "./friendsuggestion";
-import WeatherCard from "./weathercard";
-import CreatePost from "./createpost";
-import PostFeed from "./postfeed";
-import EventCard from "./eventcard";
-import GalleryCard from "./gallerycard";
+'use client';
+import {
+    Plus, ThumbsUp, MoreHorizontal, Heart
+} from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import { useTheme } from '../config/themecontext';
+import { useEffect } from 'react';
 
-const users = [
-    {
-        type: "add",
-        name: "Add Stories",
-        image: "https://randomuser.me/api/portraits/men/75.jpg",
+const themeColors = {
+    light: {
+        '--bg-primary': '#ffffff',
+        '--bg-card': '#f9f9ffff', // dark navy like in the image
+        '--text-primary': '#252627ff',
+        '--text-secondary': '#373b40ff',
+        '--accent': '#4F46E5',
+        '--accent-hover': '#4338CA',
     },
-    {
-        name: "Anna Mull",
-        image: "https://randomuser.me/api/portraits/women/31.jpg",
-        stories: [
-            {
-                image: "https://picsum.photos/id/100/800/600",
-                caption: "City lights",
-            },
-            {
-                image: "https://picsum.photos/id/101/800/600",
-                caption: "Urban exploration",
-            },
-            {
-                image: "https://picsum.photos/id/102/800/600",
-                caption: "Night views",
-            },
-            {
-                image: "https://picsum.photos/id/103/800/600",
-                caption: "Downtown vibes",
-            },
-            {
-                image: "https://picsum.photos/id/104/800/600",
-                caption: "Skyscrapers",
-            },
-            {
-                image: "https://picsum.photos/id/105/800/600",
-                caption: "Metropolitan life",
-            },
-        ],
-    },
-    {
-        name: "Josephin Water",
-        image: "https://randomuser.me/api/portraits/women/71.jpg",
-        stories: [
-            {
-                image: "https://picsum.photos/id/106/800/600",
-                caption: "Hiking adventure",
-            },
-            {
-                image: "https://picsum.photos/id/107/800/600",
-                caption: "Peaceful moments",
-            },
-        ],
-    },
-    {
-        name: "Petey Cruiser",
-        image: "https://randomuser.me/api/portraits/men/65.jpg",
-        stories: [
-            {
-                image: "https://picsum.photos/id/108/800/600",
-                caption: "Morning run",
-            },
-            {
-                image: "https://picsum.photos/id/109/800/600",
-                caption: "Fitness goals",
-            },
-            {
-                image: "https://picsum.photos/id/110/800/600",
-                caption: "Healthy lifestyle",
-            },
-        ],
-    },
-    {
-        name: "Anna Mull",
-        image: "https://randomuser.me/api/portraits/men/21.jpg",
-        stories: [
-            {
-                image: "https://picsum.photos/id/111/800/600",
-                caption: "Coffee break",
-            },
-            {
-                image: "https://picsum.photos/id/112/800/600",
-                caption: "Work flow",
-            },
-            {
-                image: "https://picsum.photos/id/113/800/600",
-                caption: "Productivity",
-            },
-        ],
-    },
-    {
-        name: "Josephin Water",
-        image: "https://randomuser.me/api/portraits/women/70.jpg",
-        stories: [
-            {
-                image: "https://picsum.photos/id/114/800/600",
-                caption: "Beach vibes",
-            },
-            {
-                image: "https://picsum.photos/id/115/800/600",
-                caption: "Sunset stroll",
-            },
-        ],
-    },
-    {
-        name: "Petey Cruiser",
-        image: "https://randomuser.me/api/portraits/men/39.jpg",
-        stories: [
-            {
-                image: "https://picsum.photos/id/116/800/600",
-                caption: "Gaming night",
-            },
-            {
-                image: "https://picsum.photos/id/117/800/600",
-                caption: "Level up!",
-            },
-        ],
-    },
-];
+    dark: {
+        '--bg-primary': '#1f2937',
+        '--bg-card': '#0b0a2b',
+        '--text-primary': '#f9fafb',
+        '--text-secondary': '#d1d5db',
+        '--card-text': '#ffffff',
+        '--accent': '#facc15',
+        '--accent-hover': '#eab308',
+    }
+};
 
-export default function HomePage({ currentPage }) {
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [isViewerOpen, setIsViewerOpen] = useState(false);
-    const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
-    const router = useRouter();
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            text: "Enjoying a beautiful sunny day!",
-            imageUrl: null,
-            videoUrl: null,
-            color: "bg-gradient-to-r from-pink-200 to-red-200",
-        },
-        {
-            id: 2,
-            text: "Look at this amazing view from my hike!",
-            imageUrl: "https://picsum.photos/id/10/600/400",
-            videoUrl: null,
-            color: null,
-        },
-        {
-            id: 3,
-            text: "A quick video from my trip to the mountains.",
-            imageUrl: null,
-            videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-            color: null,
-        },
-        {
-            id: 4,
-            text: "Just a thought for the day: Be kind.",
-            imageUrl: null,
-            videoUrl: null,
-            color: "bg-gradient-to-r from-blue-200 to-cyan-200",
-        },
-        {
-            id: 5,
-            text: "Here's another great shot!",
-            imageUrl: "https://picsum.photos/id/20/600/400",
-            videoUrl: null,
-            color: null,
-        },
-        {
-            id: 6,
-            text: "Thinking about new adventures!",
-            imageUrl: null,
-            videoUrl: null,
-            color: "bg-gradient-to-r from-purple-200 to-indigo-200",
-        },
-        {
-            id: 7,
-            text: "What a lovely evening!",
-            imageUrl: null,
-            videoUrl: null,
-            color: "bg-gradient-to-r from-green-200 to-teal-200",
-        },
-        {
-            id: 8,
-            text: "Exploring new places.",
-            imageUrl: "https://picsum.photos/id/30/600/400",
-            videoUrl: null,
-            color: null,
-        },
-        {
-            id: 9,
-            text: "A short clip of the city lights.",
-            imageUrl: null,
-            videoUrl: "https://www.w3schools.com/html/movie.mp4",
-            color: null,
-        },
-    ]);
-
-    const handleAddPost = ({ text, imageUrl, videoUrl = null, color = null }) => {
-        const newPost = {
-            id: Date.now(),
-            text,
-            imageUrl,
-            videoUrl,
-            color,
-        };
-        setPosts([newPost, ...posts]);
+export default function Home() {
+    const { theme } = useTheme();
+    useEffect(() => {
+        const root = document.documentElement;
+        const colors = themeColors[theme];
+        for (const key in colors) {
+            root.style.setProperty(key, colors[key]);
+        }
+    }, [theme]);
+    const profileData = {
+        name: "Kelin Jasen",
+        email: "kelin.jasen156@gmail.com",
+        avatar: "https://placehold.co/100x100/A0AEC0/ffffff?text=KJ",
+        bio: "Lorem ipsum is simply dummy text of the printing and typesetting industry.",
+        following: "546",
+        likes: "26335",
+        followers: "6845"
     };
 
-    // The useEffect for updating user images is removed as the `users` array is static
-    // and the image URLs are already set to use picsum.photos directly in the array definition.
+    const storyColors = [
+        "#512E91", "#E6982D", "#EC8989", "#D6C3B5",
+        "#F8D94A", "#B3A4C4", "#EA9595", "#9E93AD"
+    ];
+
+    const postData = {
+        author: "Sufiya Eliza",
+        time: "30 Mins ago",
+        avatar: "https://placehold.co/100x100/94A3B8/ffffff?text=SE",
+        title: "Celebration new album song launched",
+        content: "#Musiccelebration, #music, #party, #music\nLorem ipsum is simply dummy text of the printing and typesetting industry, has been the industry's standard dummy text ever since the 1500s",
+        reactions: 12
+    };
+
+    const friendsList = [
+        { name: "Paige Turner", location: "Alabama, USA", avatar: "https://placehold.co/100x100/94A3B8/ffffff?text=PT" },
+        { name: "Bob Frapples", location: "Alabama, USA", avatar: "https://placehold.co/100x100/94A3B8/ffffff?text=BF" },
+    ];
 
     return (
-        <div className="dark:bg-gray-900 min-h-screen text-white dark:text-white mt-5">
-            <div className="relative z-10">
-                {currentPage === "home" && <div> {(!users || users.length === 0) ? <p className="text-center">Loading...</p> : <div className="px-2 sm:p-0">
-                    <Swiper
-                        spaceBetween={16}
-                        slidesPerView="auto"
-                        breakpoints={{
-                            320: { slidesPerView: 2 },
-                            480: { slidesPerView: 2.5 },
-                            640: { slidesPerView: 3 },
-                            768: { slidesPerView: 3.5 },
-                            1024: { slidesPerView: 4 },
-                            1280: { slidesPerView: 5 },
+        <div className="container w-full mx-auto">
+            <Swiper
+                spaceBetween={15}
+                slidesPerView={8}
+                className="mt-5 px-2"
+            >
+                <SwiperSlide>
+                    <div
+                        className="w-full aspect-square rounded-lg shadow-md flex items-center justify-center flex-col cursor-pointer"
+                        style={{
+                            backgroundColor: "var(--bg-card)",
+                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
                         }}
-                        className="mb-5 px-4 sm:px-6 lg:px-8 justify-between"
                     >
-                        {users && users.map((user, index) => (
-                            <SwiperSlide key={index} className="w-40 min-w-40"> {/* Add a fixed width here */}
-                                <div
-                                    onClick={() => {
-                                        if (user.type !== "add") {
-                                            setSelectedUser(user);
-                                            setIsViewerOpen(true);
-                                            setSelectedStoryIndex(0);
-                                        }
-                                    }}
-                                    className={`relative cursor-pointer min-w-40 h-52 sm:h-64 rounded-xl overflow-hidden text-white flex flex-col justify-end
-          ${user.type === "add" ? "bg-blue-500" : ""}
-        `} >
-                                    <div className="absolute bottom-0 left-0 min-w-40 w-full h-[30%] bg-gradient-to-t from-black/70 to-transparent z-10" />
-                                    <img
-                                        src={user.image}
-                                        alt={user.name}
-                                        className={`absolute inset-0 w-full h-full object-cover`}
-                                        onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/100x100/CCCCCC/000000?text=User"; }}
-                                    />
-                                    {user.type === "add" && (
-                                        <div className="absolute inset-0 bg-blue-500/40 backdrop-blur-sm z-0" />
-                                    )}
-                                    <div className="relative p-2 z-10">
-                                        {user.type === "add" ? (
-                                            <div onClick={() => router.push("/stories")} className="flex flex-col items-center text-center">
-                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-800/30 flex items-center justify-center backdrop-blur-md shadow-md">
-                                                    <PlusIcon className="w-6 h-6 text-white" />
-                                                </div>
-                                                <span className="mt-2 text-center font-medium text-white text-sm sm:text-base">
-                                                    {user.name}
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <h4 className="font-semibold text-sm sm:text-base">{user.name}</h4>
-                                                <p className="text-xs sm:text-sm">Active now</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                    {/* Story Viewer Modal */}
-                    {selectedUser && (
+                        <Plus size={32} style={{ color: "var(--accent)" }} />
+                        <p className="mt-2 text-sm font-semibold">Add Stories</p>
+                    </div>
+                </SwiperSlide>
+                {storyColors.map((color, index) => (
+                    <SwiperSlide key={index}>
                         <div
-                            className={`fixed top-0 right-0 z-50 h-full w-full bg-gray-800 backdrop-blur-sm transform transition-transform duration-500 ease-in-out ${isViewerOpen ? "translate-x-0" : "translate-x-full"
-                                }`}
-                        >
+                            className="w-full aspect-square rounded-lg shadow-md"
+                            style={{ backgroundColor: color }}
+                        ></div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+
+            <div className="mt-5 flex flex-col lg:flex-row gap-6 lg:gap-8">
+                {/* Left Sidebar */}
+                <div className="w-full lg:w-1/4 flex flex-col gap-6">
+                    <div
+                        className="rounded-lg shadow-md p-6"
+                        style={{
+                            backgroundColor: "var(--bg-card)",
+                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+                        }}
+                    >
+                        <div className="flex flex-col items-center">
+                            <img
+                                src={profileData.avatar}
+                                alt="Profile"
+                                className="w-24 h-24 rounded-full border-4"
+                                style={{ borderColor: "var(--bg-primary)" }}
+                            />
+                            <div className="text-center mt-4">
+                                <h2 className="font-bold text-xl flex items-center justify-center">
+                                    {profileData.name}{" "}
+                                    <Heart
+                                        className="h-4 w-4 ml-2 text-red-500"
+                                        fill="currentColor"
+                                    />
+                                </h2>
+                                <p style={{ color: "var(--text-secondary)" }}>
+                                    {profileData.email}
+                                </p>
+                                <p
+                                    className="mt-2 text-sm"
+                                >
+                                    {profileData.bio}
+                                </p>
+                            </div>
+                            <div className="flex justify-around w-full mt-6 text-center">
+                                {["Following", "Likes", "Followers"].map((label, idx) => {
+                                    const value = [
+                                        profileData.following,
+                                        profileData.likes,
+                                        profileData.followers
+                                    ][idx];
+                                    return (
+                                        <div key={label}>
+                                            <p className="font-bold">{value}</p>
+                                            <p style={{ color: "var(--text-secondary)" }}>{label}</p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                             <button
-                                onClick={() => {
-                                    setIsViewerOpen(false);
-                                    setTimeout(() => setSelectedUser(null), 500);
-                                }}
-                                className="absolute top-4 right-4 z-50 p-2 rounded-full bg-gray-800/20 text-white hover:bg-gray-800/30 transition-colors"
-                                aria-label="Close story viewer"
+                                className="mt-6 w-full py-2 font-semibold rounded-full hover:opacity-90 transition-colors"
+                                style={{ backgroundColor: "var(--accent)", color: "var(--text-primary)" }}
                             >
-                                <XMarkIcon className="h-6 w-6" />
+                                View Profile
                             </button>
-                            <div className="flex items-center justify-center h-full w-full p-4">
-                                <StoryViewer
-                                    stories={selectedUser.stories}
-                                    user={selectedUser}
-                                    initialStoryIndex={selectedStoryIndex}
-                                    onClose={() => {
-                                        setIsViewerOpen(false);
-                                        setTimeout(() => setSelectedUser(null), 500);
-                                    }}
-                                />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Center Content */}
+                <div className="w-full lg:w-1/2 flex flex-col gap-6">
+                    <div
+                        className="rounded-lg shadow-md p-6"
+                        style={{
+                            backgroundColor: "var(--bg-card)",
+                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+                        }}
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <p className="font-bold">Create Post</p>
+                            <MoreHorizontal
+                                className="cursor-pointer"
+                                style={{ color: "var(--text-secondary)" }}
+                            />
+                        </div>
+                        <textarea
+                            placeholder="Write Something Here..."
+                            className="w-full p-2 rounded-lg focus:outline-none"
+                            style={{
+                                backgroundColor: "var(--bg-primary)",
+                                color: "var(--text-primary)"
+                            }}
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div
+                        className="rounded-lg shadow-md p-6"
+                        style={{
+                            backgroundColor: "var(--bg-card)",
+                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+                        }}
+                    >
+                        <div className="flex items-center space-x-4 mb-4">
+                            <img
+                                src={postData.avatar}
+                                alt="Author"
+                                className="w-12 h-12 rounded-full"
+                            />
+                            <div>
+                                <p className="font-bold">{postData.author}</p>
+                                <p style={{ color: "var(--text-secondary)" }}>
+                                    {postData.time}
+                                </p>
                             </div>
                         </div>
-                    )}
-                </div>}</div>}
-                <div className="flex flex-col gap-4 md:grid md:grid-cols-[27%_43%_27%] md:gap-2 w-full justify-between">
-                    {/* Left Column - Default order 0 (first in source) on desktop, order-2 on mobile */}
-                    <div className="flex flex-col gap-4 order-2 md:order-none">
-                        <ProfileCard />
-                        <FriendSuggestionCarousel />
-                        <WeatherCard />
+                        <h3 className="font-bold mb-2">{postData.title}</h3>
+                        <p>{postData.content}</p>
+                        <div
+                            className="flex items-center mt-4"
+                            style={{ color: "var(--text-secondary)" }}
+                        >
+                            <ThumbsUp size={16} />{" "}
+                            <span className="ml-1">
+                                +{postData.reactions} people react this post
+                            </span>
+                        </div>
                     </div>
+                </div>
 
-                    {/* Middle Column - Default order 0 (second in source) on desktop, order-1 on mobile */}
-                    <div className="flex flex-col gap-4 order-1 md:order-none">
-                        <CreatePost onAddPost={handleAddPost} />
-                        <PostFeed posts={posts} />
+                {/* Right Sidebar */}
+                <div className="w-full lg:w-1/4 flex flex-col gap-6">
+                    <div
+                        className="rounded-lg shadow-md p-4"
+                        style={{
+                            backgroundColor: "var(--bg-card)",
+                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+                        }}
+                    >
+                        <h2 className="font-bold mb-2">FIND MY DANDIYA PARTNER</h2>
+                        <img
+                            src="https://placehold.co/400x200/F56565/ffffff?text=Dandiya Partner"
+                            alt="Dandiya Partner"
+                            className="rounded-lg w-full"
+                        />
                     </div>
-
-                    {/* Right Column - Default order 0 (third in source) on desktop, order-3 on mobile */}
-                    <div className="flex flex-col gap-4 order-3 md:order-none">
-                        <EventCard />
+                    <div
+                        className="rounded-lg shadow-md p-4"
+                        style={{
+                            backgroundColor: "var(--bg-card)",
+                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+                        }}
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <span className="font-bold">Friends</span>
+                            <MoreHorizontal className="cursor-pointer" />
+                        </div>
+                        {friendsList.map((friend, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center space-x-3 mb-3"
+                            >
+                                <img
+                                    src={friend.avatar}
+                                    alt="Friend"
+                                    className="w-10 h-10 rounded-full"
+                                />
+                                <div>
+                                    <p className="font-semibold">{friend.name}</p>
+                                    <p style={{ color: "var(--text-secondary)" }}>
+                                        {friend.location}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
