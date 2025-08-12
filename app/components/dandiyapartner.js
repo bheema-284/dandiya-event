@@ -52,11 +52,10 @@ export default function DandiyaPartner() {
     return (
         <div>
             <div style={{
-                backgroundColor: "var(--bg-card)",
                 color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-            }} className="bg-gradient-to-r from-orange-400 to-red-500 p-6 rounded-lg shadow w-full">
-                <h2 className="font-semibold text-sm mb-2">FIND MY DANDIYA PARTNER</h2>
-                <div className="flex items-center space-x-3 mb-2 justify-center">
+            }} className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow w-full">
+                <h2 className="font-semibold text-lg sm:text-sm text-center">FIND MY DANDIYA PARTNER</h2>
+                <div className="flex items-center space-x-3 mb-2 justify-center p-6">
                     <img src={'/dandiya.png'} />
                 </div>
             </div>
@@ -66,19 +65,17 @@ export default function DandiyaPartner() {
             }} className="max-w-md mx-auto rounded-2xl shadow-lg overflow-hidden mt-5">
                 {/* Header Section */}
                 <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex justify-between items-center">
                         <div className="space-y-1">
-                            <h1 className="text-3xl font-bold ">Friends</h1>
-                            <p className="text-sm">Start New Conversation</p>
+                            <h1 className="text-lg font-bold ">Friends</h1>
                         </div>
                         <button style={{
-                            backgroundColor: "var(--bg-card)",
                             color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }} className="p-2 rounded-full  transition-colors duration-200">
+                        }} className={`p-2 ${theme === "dark" ? "bg-gray-200 text-gray-400" : "bg-gray-300 text-white"} rounded-xl cursor-pointer transition-colors duration-200`}>
                             <Sun size={20} />
                         </button>
                     </div>
-
+                    <p className="text-xs mb-4">Start New Conversation</p>
                     {/* Search Bar */}
                     <div className="relative">
                         <input
@@ -95,9 +92,9 @@ export default function DandiyaPartner() {
                 </div>
 
                 {/* Close Friends Section */}
-                <div className="px-6 py-4 border-t border-gray-700">
+                <div className="px-6 py-4 border-t border-dotted border-gay-500">
                     <button onClick={toggleFriends} className="flex justify-between items-center w-full focus:outline-none">
-                        <h2 className="text-lg font-semibold">Close Friends</h2>
+                        <h2 className="text-md font-semibold">Close Friends</h2>
                         <ChevronDown className={`text-gray-400 transform transition-transform duration-200 ${showFriends ? 'rotate-180' : 'rotate-0'}`} />
                     </button>
                     {showFriends && (
@@ -110,9 +107,9 @@ export default function DandiyaPartner() {
                 </div>
 
                 {/* Recent Chats Section */}
-                <div className="px-6 py-4 border-t border-gray-700">
+                <div className="px-6 py-4 border-t border-dotted border-gay-500">
                     <button onClick={toggleRecents} className="flex justify-between items-center w-full focus:outline-none">
-                        <h2 className="text-lg font-semibold">Recent Chats</h2>
+                        <h2 className="text-md font-semibold">Recent Chats</h2>
                         <ChevronDown className={`text-gray-400 transform transition-transform duration-200 ${showRecents ? 'rotate-180' : 'rotate-0'}`} />
                     </button>
                     {showRecents && (

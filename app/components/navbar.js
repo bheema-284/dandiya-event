@@ -24,7 +24,7 @@ export default function Navbar() {
           <img
             src="/Durga.png"
             alt="Durga"
-            className="h-full w-full object-contain scale-85"
+            className="h-full w-full object-contain"
             style={{
               filter: "drop-shadow(0 0 1px white) drop-shadow(0 0 3px white) drop-shadow(0 0 6px white)"
             }}
@@ -32,7 +32,7 @@ export default function Navbar() {
         </div>
 
         {/* Event logo */}
-        <div className="h-10 w-34 overflow-hidden hidden sm:flex flex-1 flex items-center justify-center bg-transparent rounded-full">
+        <div className="h-12 w-40 overflow-hidden hidden sm:flex flex-1 flex items-center justify-center bg-transparent rounded-full">
           <img
             src="/Dandiya Carnival Logo.png"
             alt="event"
@@ -43,10 +43,10 @@ export default function Navbar() {
 
       {/* Center Nav Icons */}
       <div className="hidden md:flex items-center gap-8 cursor-pointer">
-        <img src="/News Feed.png" alt="News" className="h-6 w-auto" />
-        <img src="/Friends.png" alt="Friends" className="h-6 w-auto scale-75" />
-        <img src="/Shop.png" alt="Shop" className="h-6 w-auto" />
-        <img src="/Event Icon.png" alt="Events" className="h-6 w-auto" />
+        <img src="/News Feed.png" alt="News" className="h-7 w-auto" />
+        <img src="/Friends.png" alt="Friends" className="h-7 w-auto scale-75" />
+        <img src="/Shop.png" alt="Shop" className="h-7 w-auto" />
+        <img src="/Event Icon.png" alt="Events" className="h-7 w-auto" />
       </div>
 
       {/* Ticket Icon cropped */}
@@ -60,14 +60,14 @@ export default function Navbar() {
 
       {/* Right Icons */}
       <div className="flex items-center gap-6 cursor-pointer">
-        <img src="/Chat icon.png" alt="Chat" className="h-6 w-auto" />
-        <img src="/Notifications.png" alt="Notifications" className="h-6 w-auto" />
+        <img src="/Chat icon.png" alt="Chat" className="h-7 w-auto" />
+        <img src="/Notifications.png" alt="Notifications" className="h-7 w-auto" />
         <button onClick={toggleTheme} className="flex items-center cursor-pointer">
           {theme === 'light'
-            ? <MoonIcon className="w-6 text-yellow-500" />
-            : <SunIcon className="w-6 text-yellow-500" />}
+            ? <MoonIcon className="w-7 text-yellow-500" />
+            : <SunIcon className="w-7 text-yellow-500" />}
         </button>
-        <img src="/Profile Icon.jpg" alt="Profile" className="h-6 w-6 rounded-full object-cover" />
+        <img src="/Profile Icon.jpg" alt="Profile" className="h-7 w-7 rounded-full object-cover" />
       </div>
     </header>
   );
