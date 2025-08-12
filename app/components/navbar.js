@@ -54,7 +54,7 @@ export default function Navbar() {
         <img
           src="/Buy Tickets.png"
           alt="Buy Tickets"
-          className="h-full w-full object-cover scale-75"
+          className="h-full w-full object-cover"
         />
       </div>
 
@@ -67,7 +67,7 @@ export default function Navbar() {
             ? <MoonIcon className="w-6 text-yellow-500" />
             : <SunIcon className="w-6 text-yellow-500" />}
         </button>
-        <img src="/Profile Icon.jpg" alt="Profile" className="h-6 w-8 rounded-full object-cover" />
+        <img src="/Profile Icon.jpg" alt="Profile" className="h-6 w-6 rounded-full object-cover" />
       </div>
     </header>
   );
