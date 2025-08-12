@@ -111,9 +111,9 @@ export default function Ticketing() {
                                 key={day}
                                 onClick={() => handleDayToggle(day)}
                                 disabled={disabled}
-                                className={`px-3 md:px-4 py-1 rounded-full font-semibold text-xs md:text-sm transition-all duration-200 
-                                    ${isSelected ? `${bg} shadow-lg shadow-yellow-300` : `bg-gray-200 text-gray-700 ${hover}`}
-                                    ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                className={`px-3 md:px-4 py-1 rounded-full font-semibold border-2 ${theme === "light" ? "border-gray-400" : "border-white"} text-xs md:text-sm transition-all duration-200
+                    ${isSelected ? `${bg} shadow-md shadow-yellow-300` : `bg-gray-200 text-gray-700 ${hover}`}
+                    ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                             >
                                 {item.label}
                             </motion.button>
@@ -253,6 +253,6 @@ export default function Ticketing() {
                     <li><strong>Risk Disclaimer:</strong> Attendees participate at their own risk; organizers are not liable for personal injury, loss, or damage to property.</li>
                 </ul>
             </section>
-        </div>
+        </div >
     );
 }
