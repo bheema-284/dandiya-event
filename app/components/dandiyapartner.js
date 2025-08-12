@@ -31,7 +31,7 @@ export default function DandiyaPartner() {
     );
 
     const UserItem = ({ user }) => (
-        <div className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-700 transition-colors duration-200 cursor-pointer">
+        <div className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-700 hover:text-white transition-colors duration-200 cursor-pointer">
             <div className="relative">
                 <Image
                     src={user.avatar}

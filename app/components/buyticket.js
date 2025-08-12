@@ -63,7 +63,7 @@ export default function Ticketing() {
                                 key={day}
                                 onClick={() => handleDayToggle(day)}
                                 disabled={isAllDaysSelected}
-                                className={`px-2 py-0.5 rounded-full cursor-pointer text-center border-2 ${theme === "light" ? "border-gray-300":"border-white"} font-semibold text-sm transition-all duration-200 ${isSelected
+                                className={`px-2 py-0.5 rounded-full cursor-pointer text-center border-2 ${theme === "light" ? "border-gray-300" : "border-white"} font-semibold text-sm transition-all duration-200 ${isSelected
                                     ? `${selectedBg} shadow-md`
                                     : `hover:gray-400 ${bg}`
                                     } ${isAllDaysSelected ? 'opacity-50 cursor-not-allowed' : ''}`}

@@ -24,7 +24,7 @@ export default function Navbar() {
           <img
             src="/Durga.png"
             alt="Durga"
-            className="h-full w-full object-contain"
+            className="h-full w-full object-contain scale-85"
             style={{
               filter: "drop-shadow(0 0 1px white) drop-shadow(0 0 3px white) drop-shadow(0 0 6px white)"
             }}
@@ -54,7 +54,7 @@ export default function Navbar() {
         <img
           src="/Buy Tickets.png"
           alt="Buy Tickets"
-          className="h-full w-full object-cover scale:25 sm:scale:90"
+          className="h-full w-full object-cover scale-75"
         />
       </div>
 
