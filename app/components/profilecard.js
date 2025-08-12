@@ -1,6 +1,13 @@
+import { useTheme } from "../config/themecontext";
+
 export default function ProfileCard() {
+    const { theme } = useTheme();
+
     return (
-        <div className="bg-gray-800 rounded-lg p-6 shadow w-full">
+        <div style={{
+            backgroundColor: "var(--bg-card)",
+            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+        }} className="rounded-lg p-6 shadow w-full">
             <div className="flex flex-col items-center">
                 <img
                     src="https://randomuser.me/api/portraits/women/12.jpg"
@@ -26,7 +33,7 @@ export default function ProfileCard() {
                         <p className="text-xs text-gray-400">Followers</p>
                     </div>
                 </div>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded">
+                <button className="bg-blue-500 px-4 py-2 rounded">
                     View Profile
                 </button>
             </div>

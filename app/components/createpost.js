@@ -1,8 +1,11 @@
 import { useState } from 'react';
 // Importing icons from @heroicons/react/24/outline
 import { CameraIcon, FaceSmileIcon, LanguageIcon, MapPinIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '../config/themecontext';
 
 export default function CreatePost({ onAddPost }) {
+    const { theme } = useTheme();
+
     // State for the main post content
     const [text, setText] = useState('');
     // State for the selected background color (gradient class)
@@ -83,7 +86,7 @@ export default function CreatePost({ onAddPost }) {
     };
 
     const handleClearColor = () => {
-        setSelectedColor(''); 
+        setSelectedColor('');
     };
 
     const handleAlbumClick = () => {
@@ -107,15 +110,25 @@ export default function CreatePost({ onAddPost }) {
     };
 
     return (
-        <div className="bg-gray-800 p-6 rounded-lg shadow w-full mx-auto max-w-2xl">
+        <div
+            className="rounded-lg shadow-md p-6"
+            style={{
+                backgroundColor: "var(--bg-card)",
+                color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+            }}
+        >
             <h3 className="font-bold text-lg mb-4 text-white">Create Post</h3>
 
             {/* Textarea for post content */}
             <div className="relative mb-4">
                 <textarea
                     placeholder={placeholders[placeholderIndex]}
-                    className={`z rounded-lg w-full p-3 pr-10 text-white focus:ring-blue-500 focus:border-blue-500 resize-none h-24 ${selectedColor}`}
+                    className={`z rounded-lg w-full p-3 pr-10 resize-none h-24 ${selectedColor}`}
                     value={text}
+                    style={{
+                        backgroundColor: "var(--bg-primary)",
+                        color: "var(--text-primary)"
+                    }}
                     onChange={(e) => setText(e.target.value)}
                     onClick={handleTextareaClick}
                 ></textarea>
@@ -125,7 +138,7 @@ export default function CreatePost({ onAddPost }) {
                         className="absolute right-3 top-3 text-white hover:text-gray-900"
                         aria-label="Clear selected color"
                     >
-                        <XMarkIcon className="h-5 w-5" />
+                        <XMarkIcon className="h-4 w-4" />
                     </button>
                 )}
                 {!selectedColor && (
@@ -144,7 +157,7 @@ export default function CreatePost({ onAddPost }) {
                         className="absolute top-2 right-2 p-1 bg-black/50 text-white rounded-full hover:bg-black/70 transition"
                         aria-label="Remove image"
                     >
-                        <XMarkIcon className="h-5 w-5" />
+                        <XMarkIcon className="h-4 w-4" />
                     </button>
                 </div>
             )}
@@ -162,52 +175,58 @@ export default function CreatePost({ onAddPost }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap gap-2 mb-4">
-                <label className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors cursor-pointer">
-                    <CameraIcon className="h-5 w-5" />
+            <div className="flex text-xs flex-wrap gap-2 mb-4"
+                style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
+            >
+                <label style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }} className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors cursor-pointer">
+                    <CameraIcon className="h-4 w-4" />
                     <span>Album</span>
                     {/* Hidden input to handle file selection */}
                     <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                 </label>
                 <button
+                    style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                     onClick={handleSearchButtonClick}
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors"
                 >
-                    <FaceSmileIcon className="h-5 w-5" />
+                    <FaceSmileIcon className="h-4 w-4" />
                     <span>Feelings & Activity</span>
                 </button>
                 <button
+                    style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                     onClick={handleSearchButtonClick}
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors"
                 >
-                    <MapPinIcon className="h-5 w-5" />
+                    <MapPinIcon className="h-4 w-4" />
                     <span>Check In</span>
                 </button>
                 <button
+                    style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                     onClick={handleSearchButtonClick}
-                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full text-white hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors"
                 >
-                    <TagIcon className="h-5 w-5" />
+                    <TagIcon className="h-4 w-4" />
                     <span>Tag Friends</span>
                 </button>
             </div>
 
             {/* Search Box */}
             {showSearchBox && (
-                <div className="relative mb-4">
+                <div style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }} className="relative mb-4">
                     <input
                         type="text"
                         placeholder={searchPlaceholders[searchPlaceholderIndex]}
-                        className="border rounded-lg w-full p-3 pr-10 text-white focus:ring-blue-500 focus:border-blue-500"
+                        className="border rounded-lg w-full p-3 pr-10  focus:ring-blue-500 focus:border-blue-500"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <button
+                        style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                         onClick={handleCloseSearchBox}
-                        className="absolute right-3 top-3 text-white hover:text-gray-900"
+                        className="absolute right-3 top-3"
                         aria-label="Close search box"
                     >
-                        <XMarkIcon className="h-5 w-5" />
+                        <XMarkIcon className="h-4 w-4" />
                     </button>
                 </div>
             )}

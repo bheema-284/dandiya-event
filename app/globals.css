@@ -48,7 +48,7 @@ body {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url('https://themes.pixelstrap.com/friendbook/assets/images/smiley-bg.jpg');
+  background-image: url('/big-simle.PNG');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

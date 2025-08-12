@@ -1,41 +1,19 @@
 'use client';
 import {
-    Plus, ThumbsUp, MoreHorizontal, Heart
+    Plus, ThumbsUp, MoreHorizontal, Heart,
+    PlusCircle
 } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { useTheme } from '../config/themecontext';
-import { useEffect } from 'react';
+import CreatePost from './createpost';
+import DandiyaPartner from './dandiyapartner';
+import ProfileCard from './profilecard';
+import EventCard from './eventcard';
 
-const themeColors = {
-    light: {
-        '--bg-primary': '#ffffff',
-        '--bg-card': '#f9f9ffff', // dark navy like in the image
-        '--text-primary': '#252627ff',
-        '--text-secondary': '#373b40ff',
-        '--accent': '#4F46E5',
-        '--accent-hover': '#4338CA',
-    },
-    dark: {
-        '--bg-primary': '#1f2937',
-        '--bg-card': '#0b0a2b',
-        '--text-primary': '#f9fafb',
-        '--text-secondary': '#d1d5db',
-        '--card-text': '#ffffff',
-        '--accent': '#facc15',
-        '--accent-hover': '#eab308',
-    }
-};
 
 export default function Home() {
     const { theme } = useTheme();
-    useEffect(() => {
-        const root = document.documentElement;
-        const colors = themeColors[theme];
-        for (const key in colors) {
-            root.style.setProperty(key, colors[key]);
-        }
-    }, [theme]);
     const profileData = {
         name: "Kelin Jasen",
         email: "kelin.jasen156@gmail.com",
@@ -69,117 +47,49 @@ export default function Home() {
         <div className="container w-full mx-auto">
             <Swiper
                 spaceBetween={15}
-                slidesPerView={8}
+                breakpoints={{
+                    0: { slidesPerView: 2 },
+                    640: { slidesPerView: 4 },
+                    720: { slidesPerView: 6 },
+                    1024: { slidesPerView: 8 },
+                    1440: { slidesPerView: 10 }
+                }}
                 className="mt-5 px-2"
             >
                 <SwiperSlide>
                     <div
-                        className="w-full aspect-square rounded-lg shadow-md flex items-center justify-center flex-col cursor-pointer"
+                        className="w-full aspect-[1/1.2] rounded-xl shadow-lg flex items-center justify-center flex-col cursor-pointer"
                         style={{
                             backgroundColor: "var(--bg-card)",
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+                            color: theme === "dark" ? "var(--card-text)" : "var(--text-primary)",
                         }}
                     >
-                        <Plus size={32} style={{ color: "var(--accent)" }} />
+                        <PlusCircle size={36} style={{ color: "var(--accent)" }} />
                         <p className="mt-2 text-sm font-semibold">Add Stories</p>
                     </div>
                 </SwiperSlide>
+
                 {storyColors.map((color, index) => (
                     <SwiperSlide key={index}>
                         <div
-                            className="w-full aspect-square rounded-lg shadow-md"
+                            className="w-full aspect-[1/1.2] rounded-xl shadow-lg"
                             style={{ backgroundColor: color }}
-                        ></div>
+                        />
                     </SwiperSlide>
                 ))}
             </Swiper>
 
-            <div className="mt-5 flex flex-col lg:flex-row gap-6 lg:gap-8">
+
+            <div className="mt-5 flex flex-col lg:flex-row gap-2">
                 {/* Left Sidebar */}
                 <div className="w-full lg:w-1/4 flex flex-col gap-6">
-                    <div
-                        className="rounded-lg shadow-md p-6"
-                        style={{
-                            backgroundColor: "var(--bg-card)",
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }}
-                    >
-                        <div className="flex flex-col items-center">
-                            <img
-                                src={profileData.avatar}
-                                alt="Profile"
-                                className="w-24 h-24 rounded-full border-4"
-                                style={{ borderColor: "var(--bg-primary)" }}
-                            />
-                            <div className="text-center mt-4">
-                                <h2 className="font-bold text-xl flex items-center justify-center">
-                                    {profileData.name}{" "}
-                                    <Heart
-                                        className="h-4 w-4 ml-2 text-red-500"
-                                        fill="currentColor"
-                                    />
-                                </h2>
-                                <p style={{ color: "var(--text-secondary)" }}>
-                                    {profileData.email}
-                                </p>
-                                <p
-                                    className="mt-2 text-sm"
-                                >
-                                    {profileData.bio}
-                                </p>
-                            </div>
-                            <div className="flex justify-around w-full mt-6 text-center">
-                                {["Following", "Likes", "Followers"].map((label, idx) => {
-                                    const value = [
-                                        profileData.following,
-                                        profileData.likes,
-                                        profileData.followers
-                                    ][idx];
-                                    return (
-                                        <div key={label}>
-                                            <p className="font-bold">{value}</p>
-                                            <p style={{ color: "var(--text-secondary)" }}>{label}</p>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                            <button
-                                className="mt-6 w-full py-2 font-semibold rounded-full hover:opacity-90 transition-colors"
-                                style={{ backgroundColor: "var(--accent)", color: "var(--text-primary)" }}
-                            >
-                                View Profile
-                            </button>
-                        </div>
-                    </div>
+                    <ProfileCard />
+                    <EventCard />
                 </div>
 
                 {/* Center Content */}
                 <div className="w-full lg:w-1/2 flex flex-col gap-6">
-                    <div
-                        className="rounded-lg shadow-md p-6"
-                        style={{
-                            backgroundColor: "var(--bg-card)",
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }}
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <p className="font-bold">Create Post</p>
-                            <MoreHorizontal
-                                className="cursor-pointer"
-                                style={{ color: "var(--text-secondary)" }}
-                            />
-                        </div>
-                        <textarea
-                            placeholder="Write Something Here..."
-                            className="w-full p-2 rounded-lg focus:outline-none"
-                            style={{
-                                backgroundColor: "var(--bg-primary)",
-                                color: "var(--text-primary)"
-                            }}
-                            rows="3"
-                        ></textarea>
-                    </div>
-
+                    <CreatePost />
                     <div
                         className="rounded-lg shadow-md p-6"
                         style={{
@@ -216,50 +126,7 @@ export default function Home() {
 
                 {/* Right Sidebar */}
                 <div className="w-full lg:w-1/4 flex flex-col gap-6">
-                    <div
-                        className="rounded-lg shadow-md p-4"
-                        style={{
-                            backgroundColor: "var(--bg-card)",
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }}
-                    >
-                        <h2 className="font-bold mb-2">FIND MY DANDIYA PARTNER</h2>
-                        <img
-                            src="https://placehold.co/400x200/F56565/ffffff?text=Dandiya Partner"
-                            alt="Dandiya Partner"
-                            className="rounded-lg w-full"
-                        />
-                    </div>
-                    <div
-                        className="rounded-lg shadow-md p-4"
-                        style={{
-                            backgroundColor: "var(--bg-card)",
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }}
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="font-bold">Friends</span>
-                            <MoreHorizontal className="cursor-pointer" />
-                        </div>
-                        {friendsList.map((friend, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center space-x-3 mb-3"
-                            >
-                                <img
-                                    src={friend.avatar}
-                                    alt="Friend"
-                                    className="w-10 h-10 rounded-full"
-                                />
-                                <div>
-                                    <p className="font-semibold">{friend.name}</p>
-                                    <p style={{ color: "var(--text-secondary)" }}>
-                                        {friend.location}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <DandiyaPartner />
                 </div>
             </div>
         </div>
