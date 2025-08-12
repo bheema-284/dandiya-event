@@ -32,7 +32,7 @@ export default function Navbar() {
         </div>
 
         {/* Event logo */}
-        <div className="h-10 w-34 overflow-hidden flex items-center justify-center bg-transparent rounded-full">
+        <div className="h-10 w-34 overflow-hidden hidden sm:flex flex-1 flex items-center justify-center bg-transparent rounded-full">
           <img
             src="/Dandiya Carnival Logo.png"
             alt="event"

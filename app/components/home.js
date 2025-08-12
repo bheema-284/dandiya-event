@@ -78,17 +78,9 @@ export default function Home() {
                     </SwiperSlide>
                 ))}
             </Swiper>
-
-
             <div className="mt-5 flex flex-col lg:flex-row gap-2">
-                {/* Left Sidebar */}
-                <div className="w-full lg:w-1/4 flex flex-col gap-6">
-                    <ProfileCard />
-                    <EventCard />
-                </div>
-
                 {/* Center Content */}
-                <div className="w-full lg:w-1/2 flex flex-col gap-6">
+                <div className="w-full lg:w-1/2 flex flex-col gap-6 order-1 lg:order-2">
                     <CreatePost />
                     <div
                         className="rounded-lg shadow-md p-6"
@@ -116,7 +108,7 @@ export default function Home() {
                             className="flex items-center mt-4"
                             style={{ color: "var(--text-secondary)" }}
                         >
-                            <ThumbsUp size={16} />{" "}
+                            <ThumbsUp size={16} />
                             <span className="ml-1">
                                 +{postData.reactions} people react this post
                             </span>
@@ -124,8 +116,14 @@ export default function Home() {
                     </div>
                 </div>
 
+                {/* Left Sidebar */}
+                <div className="w-full lg:w-1/4 flex flex-col gap-6 order-2 lg:order-1">
+                    <ProfileCard />
+                    <EventCard />
+                </div>
+
                 {/* Right Sidebar */}
-                <div className="w-full lg:w-1/4 flex flex-col gap-6">
+                <div className="w-full lg:w-1/4 flex flex-col gap-6 order-3 lg:order-3">
                     <DandiyaPartner />
                 </div>
             </div>
