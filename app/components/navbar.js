@@ -11,7 +11,7 @@ export default function Navbar() {
 
   return (
     <header
-      className="w-full flex items-center justify-between px-6 py-1.5"
+      className="w-full flex items-center justify-between px-2 sm:px-6 py-1.5"
       style={{ backgroundColor: '#0b0a2b' }}
     >
       {/* Left Logo + Title */}
@@ -44,7 +44,7 @@ export default function Navbar() {
       {/* Center Nav Icons */}
       <div className="hidden md:flex items-center gap-8 cursor-pointer">
         <img src="/News Feed.png" alt="News" className="h-6 w-auto" />
-        <img src="/Friends.png" alt="Friends" className="h-6 w-auto scale-90" />
+        <img src="/Friends.png" alt="Friends" className="h-6 w-auto scale-75" />
         <img src="/Shop.png" alt="Shop" className="h-6 w-auto" />
         <img src="/Event Icon.png" alt="Events" className="h-6 w-auto" />
       </div>

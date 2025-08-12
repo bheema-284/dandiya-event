@@ -36,9 +36,7 @@ export default function Ticketing() {
                     <img
                         src="/dandiyanight.PNG"
                         alt="dandiya dancers"
-                        width={'full'}
-                        height={'full'}
-                        className="object-contain"
+                        className="object-contain w-[10%] h-full"
                     />
                 </div>
                 <div className="bg-white p-6 border border-gray-600 shadow-md flex flex-col justify-center items-center w-full sm:w-[20%]">

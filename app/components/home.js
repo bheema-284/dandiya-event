@@ -44,7 +44,7 @@ export default function Home() {
     ];
 
     return (
-        <div className="container w-full mx-auto">
+        <div className="container w-full px-2 sm:px-0 mx-auto">
             <Swiper
                 spaceBetween={15}
                 breakpoints={{
@@ -54,7 +54,7 @@ export default function Home() {
                     1024: { slidesPerView: 8 },
                     1440: { slidesPerView: 10 }
                 }}
-                className="mt-5 px-2"
+                className="mt-5 px-2 rounded-xl"
             >
                 <SwiperSlide>
                     <div
