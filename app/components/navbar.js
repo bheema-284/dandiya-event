@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <header
       className="w-full flex items-center justify-between px-2 sm:px-6 py-1.5"
-      style={{ backgroundColor: '#0b0a2b' }}
+      style={{ backgroundColor: '#1a1945ff' }}
     >
       {/* Left Logo + Title */}
       <div className="flex cursor-pointer items-center">
