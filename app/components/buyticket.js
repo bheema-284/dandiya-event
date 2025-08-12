@@ -7,16 +7,16 @@ export default function Ticketing() {
     const { theme } = useTheme();
 
     const colorClasses = [
-        { label: "SEASON PASS", bg: "bg-yellow-400 text-black", hover: "hover:bg-yellow-100 hover:text-yellow-500" },
-        { label: "DAY 1", bg: "bg-red-500 text-white", hover: "hover:bg-red-100 hover:text-red-500" },
-        { label: "DAY 2", bg: "bg-purple-500 text-white", hover: "hover:bg-purple-100 hover:text-purple-500" },
-        { label: "DAY 3", bg: "bg-yellow-500 text-black", hover: "hover:bg-yellow-100 hover:text-yellow-500" },
-        { label: "DAY 4", bg: "bg-green-500 text-white", hover: "hover:bg-green-100 hover:text-green-500" },
-        { label: "DAY 5", bg: "bg-pink-500 text-white", hover: "hover:bg-pink-100 hover:text-pink-500" },
-        { label: "DAY 6", bg: "bg-indigo-500 text-white", hover: "hover:bg-indigo-100 hover:text-indigo-500" },
-        { label: "DAY 7", bg: "bg-emerald-500 text-white", hover: "hover:bg-emerald-100 hover:text-emerald-500" },
-        { label: "DAY 8", bg: "bg-cyan-500 text-white", hover: "hover:bg-cyan-100 hover:text-cyan-500" },
-        { label: "DAY 9", bg: "bg-rose-500 text-white", hover: "hover:bg-rose-100 hover:text-rose-500" }
+        { label: "SEASON PASS", selectedBg: "bg-orange-400 text-black", bg: "bg-orange-100 text-orange-500" },
+        { label: "DAY 1", selectedBg: "bg-red-500 text-white", bg: "bg-red-100 text-red-500" },
+        { label: "DAY 2", selectedBg: "bg-purple-500 text-white", bg: "bg-purple-100 text-purple-500" },
+        { label: "DAY 3", selectedBg: "bg-yellow-500 text-black", bg: "bg-yellow-100 text-yellow-500" },
+        { label: "DAY 4", selectedBg: "bg-green-500 text-white", bg: "bg-green-100 text-green-500" },
+        { label: "DAY 5", selectedBg: "bg-pink-500 text-white", bg: "bg-pink-100 text-pink-500" },
+        { label: "DAY 6", selectedBg: "bg-indigo-500 text-white", bg: "bg-indigo-100 text-indigo-500" },
+        { label: "DAY 7", selectedBg: "bg-emerald-500 text-white", bg: "bg-emerald-100 text-emerald-500" },
+        { label: "DAY 8", selectedBg: "bg-cyan-500 text-white", bg: "bg-cyan-100 text-cyan-500" },
+        { label: "DAY 9", selectedBg: "bg-rose-500 text-white", bg: "bg-rose-100 text-rose-500" }
     ];
 
 
@@ -57,15 +57,15 @@ export default function Ticketing() {
                     {colorClasses.map((item, i) => {
                         const day = i + 1;
                         const isSelected = selectedDays.includes(day) || isAllDaysSelected;
-                        const { bg, hover } = dayColorMap[day];
+                        const { bg, selectedBg } = dayColorMap[day];
                         return (
                             <button
                                 key={day}
                                 onClick={() => handleDayToggle(day)}
                                 disabled={isAllDaysSelected}
-                                className={`px-2 py-1 rounded-full bg-gray-400 text-center border-gray-300 font-semibold text-sm transition-all duration-200 ${isSelected
-                                    ? `${bg} shadow-md`
-                                    : `bg-gray-200 text-gray-700 ${hover}`
+                                className={`px-2 py-0.5 rounded-full cursor-pointer text-center border-2 ${theme === "light" ? "border-gray-300":"border-white"} font-semibold text-sm transition-all duration-200 ${isSelected
+                                    ? `${selectedBg} shadow-md`
+                                    : `hover:gray-400 ${bg}`
                                     } ${isAllDaysSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 {item.label}
@@ -87,10 +87,10 @@ export default function Ticketing() {
                     </div>
                 </div>
 
-                <div  style={{
-                        backgroundColor: "var(--bg-primary)",
-                        color: "var(--text-primary)"
-                    }} className="p-2 shadow-md flex flex-col justify-center items-center w-full lg:w-[20%]">
+                <div style={{
+                    backgroundColor: "var(--bg-primary)",
+                    color: "var(--text-primary)"
+                }} className="p-2 shadow-md flex flex-col justify-center items-center w-full lg:w-[20%]">
                     <h3 className="font-bold text-xl">DAY 1 PASS</h3>
                     <p className="text-center text-sm mt-2">
                         GRAND OPENING ✨<br />

@@ -11,7 +11,7 @@ export default function Navbar() {
 
   return (
     <header
-      className="w-full flex items-center justify-between px-2 sm:px-6 py-1.5"
+      className="w-full fixed h-16 z-50 flex items-center justify-between px-2 sm:px-6 py-1.5"
       style={{ backgroundColor: '#1a1945ff' }}
     >
       {/* Left Logo + Title */}

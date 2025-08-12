@@ -60,7 +60,7 @@ export default function RootLayout({ children }) {
       >
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
           <Navbar />
-          <div className={`w-full sm:w-[80%] m-auto flex flex-1`}>
+          <div className={`w-full sm:w-[80%] m-auto flex flex-1 mt-16`}>
             <main className={`flex-1 overflow-y-auto`}>
               {children}
             </main>
