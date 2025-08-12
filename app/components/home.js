@@ -58,17 +58,18 @@ export default function Home() {
             >
                 <SwiperSlide>
                     <div
-                        className="w-full aspect-[1/1.2] rounded-xl shadow-lg flex items-center justify-center flex-col cursor-pointer"
+                        className="w-full aspect-[1/1.2] rounded-xl border-4 border-gray-400 p-2 flex items-center justify-center flex-col cursor-pointer shadow-lg"
                         style={{
                             backgroundColor: "var(--bg-card)",
                             color: theme === "dark" ? "var(--card-text)" : "var(--text-primary)",
                         }}
                     >
-                        <PlusCircle size={36} style={{ color: "var(--accent)" }} />
-                        <p className="mt-2 text-sm font-semibold">Add Stories</p>
+                        <div className="flex flex-col items-center justify-center">
+                            <PlusCircle size={36} style={{ color: "var(--accent)" }} />
+                            <p className="mt-2 text-sm font-semibold">Add Stories</p>
+                        </div>
                     </div>
                 </SwiperSlide>
-
                 {storyColors.map((color, index) => (
                     <SwiperSlide key={index}>
                         <div

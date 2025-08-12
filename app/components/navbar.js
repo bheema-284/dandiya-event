@@ -54,7 +54,7 @@ export default function Navbar() {
         <img
           src="/Buy Tickets.png"
           alt="Buy Tickets"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover scale:25 sm:scale:90"
         />
       </div>
 
