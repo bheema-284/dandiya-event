@@ -117,7 +117,7 @@ export default function CreatePost({ onAddPost }) {
                 color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
             }}
         >
-            <h3 className="font-bold text-lg mb-4 text-white">Create Post</h3>
+            <h3 className="font-bold text-lg mb-4">Create Post</h3>
 
             {/* Textarea for post content */}
             <div className="relative mb-4">
