@@ -1,38 +1,37 @@
 "use client";
 import { useState } from 'react';
 import {
-    Building2,
-    User,
-    Mail,
-    Phone,
-    MapPin,
+    Table,
+    Tag,
+    Ruler,
+    Zap,
+    IndianRupee,
+    Pencil,
     CheckCircle2,
     AlertCircle,
+    SquareStack
 } from 'lucide-react';
 
 export default function VendorRegistrationPage() {
     const [formData, setFormData] = useState({
-        businessName: '',
-        contactName: '',
-        email: '',
-        phone: '',
-        address: ''
+        stallNo: '',
+        category: '',
+        stallName: '',
+        size: '',
+        powerSupply: '',
+        cost: '',
+        notes: ''
     });
 
-    // New state to manage validation errors
     const [errors, setErrors] = useState({});
-
-    // State to manage the success message after form submission
     const [submissionSuccess, setSubmissionSuccess] = useState(false);
 
-    // Handle changes to the form inputs and clear errors as the user types
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-        // Clear the error for the current field as the user types
         if (errors[name]) {
             setErrors((prevErrors) => ({
                 ...prevErrors,
@@ -41,56 +40,53 @@ export default function VendorRegistrationPage() {
         }
     };
 
-    // Function to validate the form data
     const validateForm = () => {
         const newErrors = {};
 
-        // Basic validation checks
-        if (!formData.businessName.trim()) {
-            newErrors.businessName = 'Business Name is required.';
+        if (!formData.stallNo.trim()) {
+            newErrors.stallNo = 'Stall No. is required.';
         }
-        if (!formData.contactName.trim()) {
-            newErrors.contactName = 'Contact Person is required.';
+        if (!formData.category) {
+            newErrors.category = 'Category is required.';
         }
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email Address is required.';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email Address is invalid.';
+        if (!formData.stallName.trim()) {
+            newErrors.stallName = 'Stall Name is required.';
         }
-        if (!formData.phone.trim()) {
-            newErrors.phone = 'Phone Number is required.';
-        } else if (!/^\d{10}$/.test(formData.phone)) {
-            newErrors.phone = 'Phone Number must be 10 digits.';
+        if (!formData.size.trim()) {
+            newErrors.size = 'Size is required.';
         }
-        if (!formData.address.trim()) {
-            newErrors.address = 'Business Address is required.';
+        if (!formData.powerSupply.trim()) {
+            newErrors.powerSupply = 'Power Supply is required.';
+        } else if (isNaN(formData.powerSupply) || parseFloat(formData.powerSupply) <= 0) {
+            newErrors.powerSupply = 'Power Supply must be a positive number.';
+        }
+        if (!formData.cost.trim()) {
+            newErrors.cost = 'Cost is required.';
+        } else if (isNaN(formData.cost) || parseFloat(formData.cost) <= 0) {
+            newErrors.cost = 'Cost must be a positive number.';
         }
 
         setErrors(newErrors);
-        // Return true if there are no errors, false otherwise
         return Object.keys(newErrors).length === 0;
     };
 
-    // Handle the form submission
     const handleSubmit = (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
+        e.preventDefault();
 
-        // Validate the form before submitting
         if (validateForm()) {
-            // If validation passes, proceed with submission
             console.log('Vendor Registration Data:', formData);
 
-            // Show a success message to the user
             setSubmissionSuccess(true);
 
-            // Reset the form and success message after a short delay
             setTimeout(() => {
                 setFormData({
-                    businessName: '',
-                    contactName: '',
-                    email: '',
-                    phone: '',
-                    address: '',
+                    stallNo: '',
+                    category: '',
+                    stallName: '',
+                    size: '',
+                    powerSupply: '',
+                    cost: '',
+                    notes: '',
                 });
                 setSubmissionSuccess(false);
             }, 3000);
@@ -98,6 +94,15 @@ export default function VendorRegistrationPage() {
             console.log('Form validation failed.');
         }
     };
+
+    const categories = [
+        "Food & Beverages",
+        "Fashion & Accessories",
+        "Games & Activities",
+        "Art & Handicrafts",
+        "Flea Market",
+        "Fun Fair"
+    ];
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
@@ -108,7 +113,7 @@ export default function VendorRegistrationPage() {
                         Vendor Registration
                     </h1>
                     <p className="text-gray-500 text-lg">
-                        Join our network of trusted vendors today.
+                        Please provide details for your vendor stall.
                     </p>
                 </div>
 
@@ -124,144 +129,199 @@ export default function VendorRegistrationPage() {
 
                 {/* Registration Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Business Name Field */}
+                    {/* Stall No. Field */}
                     <div>
-                        <label htmlFor="businessName" className="block text-sm font-medium text-gray-700">
-                            Business Name
+                        <label htmlFor="stallNo" className="block text-sm font-medium text-gray-700">
+                            Stall No.
                         </label>
                         <div className="mt-1 relative rounded-md shadow-sm">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Building2 className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <SquareStack className="h-5 w-5 text-gray-400" aria-hidden="true" />
                             </div>
                             <input
                                 type="text"
-                                name="businessName"
-                                id="businessName"
-                                value={formData.businessName}
+                                name="stallNo"
+                                id="stallNo"
+                                value={formData.stallNo}
                                 onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.businessName ? 'border-red-500' : 'border-gray-300'
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.stallNo ? 'border-red-500' : 'border-gray-300'
                                     } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., Acme Corp"
+                                placeholder="e.g., A-101"
                             />
                         </div>
-                        {errors.businessName && (
+                        {errors.stallNo && (
                             <p className="mt-2 text-sm text-red-600 flex items-center">
                                 <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.businessName}
+                                {errors.stallNo}
                             </p>
                         )}
                     </div>
 
-                    {/* Contact Person Field */}
+                    {/* Category Field */}
                     <div>
-                        <label htmlFor="contactName" className="block text-sm font-medium text-gray-700">
-                            Contact Person
+                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                            Category
                         </label>
                         <div className="mt-1 relative rounded-md shadow-sm">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <User className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <Tag className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            </div>
+                            <select
+                                name="category"
+                                id="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.category ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
+                            >
+                                <option value="" disabled>Select a category</option>
+                                {categories.map((cat) => (
+                                    <option key={cat} value={cat}>
+                                        {cat}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        {errors.category && (
+                            <p className="mt-2 text-sm text-red-600 flex items-center">
+                                <AlertCircle className="h-4 w-4 mr-1" />
+                                {errors.category}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Stall Name Field */}
+                    <div>
+                        <label htmlFor="stallName" className="block text-sm font-medium text-gray-700">
+                            Stall Name
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <Table className="h-5 w-5 text-gray-400" aria-hidden="true" />
                             </div>
                             <input
                                 type="text"
-                                name="contactName"
-                                id="contactName"
-                                value={formData.contactName}
+                                name="stallName"
+                                id="stallName"
+                                value={formData.stallName}
                                 onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.contactName ? 'border-red-500' : 'border-gray-300'
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.stallName ? 'border-red-500' : 'border-gray-300'
                                     } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., Jane Doe"
+                                placeholder="e.g., Happy Bites"
                             />
                         </div>
-                        {errors.contactName && (
+                        {errors.stallName && (
                             <p className="mt-2 text-sm text-red-600 flex items-center">
                                 <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.contactName}
+                                {errors.stallName}
                             </p>
                         )}
                     </div>
 
-                    {/* Email Address Field */}
+                    {/* Size Field */}
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                            Email Address
+                        <label htmlFor="size" className="block text-sm font-medium text-gray-700">
+                            Size
                         </label>
                         <div className="mt-1 relative rounded-md shadow-sm">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Mail className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="you@example.com"
-                            />
-                        </div>
-                        {errors.email && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.email}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Phone Number Field */}
-                    <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                            Phone Number
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Phone className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="tel"
-                                name="phone"
-                                id="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., 5551234567"
-                            />
-                        </div>
-                        {errors.phone && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.phone}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Business Address Field */}
-                    <div>
-                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                            Business Address
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <MapPin className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <Ruler className="h-5 w-5 text-gray-400" aria-hidden="true" />
                             </div>
                             <input
                                 type="text"
-                                name="address"
-                                id="address"
-                                value={formData.address}
+                                name="size"
+                                id="size"
+                                value={formData.size}
                                 onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.address ? 'border-red-500' : 'border-gray-300'
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.size ? 'border-red-500' : 'border-gray-300'
                                     } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., 123 Main St, Anytown, USA"
+                                placeholder="e.g., 10x10 ft"
                             />
                         </div>
-                        {errors.address && (
+                        {errors.size && (
                             <p className="mt-2 text-sm text-red-600 flex items-center">
                                 <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.address}
+                                {errors.size}
                             </p>
                         )}
+                    </div>
+
+                    {/* Power Supply (kW) Field */}
+                    <div>
+                        <label htmlFor="powerSupply" className="block text-sm font-medium text-gray-700">
+                            Power Supply (kW)
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <Zap className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            </div>
+                            <input
+                                type="number"
+                                name="powerSupply"
+                                id="powerSupply"
+                                value={formData.powerSupply}
+                                onChange={handleChange}
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.powerSupply ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
+                                placeholder="e.g., 5"
+                            />
+                        </div>
+                        {errors.powerSupply && (
+                            <p className="mt-2 text-sm text-red-600 flex items-center">
+                                <AlertCircle className="h-4 w-4 mr-1" />
+                                {errors.powerSupply}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Cost per Stall (₹ Lakhs) Field */}
+                    <div>
+                        <label htmlFor="cost" className="block text-sm font-medium text-gray-700">
+                            Cost per Stall (₹ Lakhs)
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <IndianRupee className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            </div>
+                            <input
+                                type="number"
+                                name="cost"
+                                id="cost"
+                                value={formData.cost}
+                                onChange={handleChange}
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.cost ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
+                                placeholder="e.g., 1.5"
+                            />
+                        </div>
+                        {errors.cost && (
+                            <p className="mt-2 text-sm text-red-600 flex items-center">
+                                <AlertCircle className="h-4 w-4 mr-1" />
+                                {errors.cost}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Notes Field */}
+                    <div>
+                        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+                            Notes
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
+                                <Pencil className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            </div>
+                            <textarea
+                                name="notes"
+                                id="notes"
+                                rows="3"
+                                value={formData.notes}
+                                onChange={handleChange}
+                                className={`block w-full pl-10 pr-3 py-2 border ${errors.notes ? 'border-red-500' : 'border-gray-300'
+                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
+                                placeholder="Any additional information..."
+                            ></textarea>
+                        </div>
                     </div>
 
                     {/* Submit Button */}
