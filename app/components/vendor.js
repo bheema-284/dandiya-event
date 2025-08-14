@@ -6,7 +6,13 @@ import VendorRegistrationPage from './vendorform';
 // Main App component for the page
 const VendorRegistration = () => {
     const router = useRouter();
-    const [screen, setScreen] = useState("vendor")
+    const [screen, setScreen] = useState("vendor");
+    const [selectedCategory, setSelectedCategory] = useState('');
+    // Handles category selection and displays the form
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+        setScreen('form');
+    };
     return (
         <div className="min-h-screen bg-gray-100 font-sans">
 
@@ -19,17 +25,17 @@ const VendorRegistration = () => {
                     {/* Category cards - using placeholder images */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                         {/* Food Stall */}
-                        <div onClick={() => setScreen('form')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
                             <img src="https://placehold.co/400x300/F4D03F/ffffff?text=Food+Stall" alt="Food Stall" className="w-full h-auto" />
                         </div>
 
                         {/* Flea Market */}
-                        <div onClick={() => setScreen('form')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
                             <img src="https://placehold.co/400x300/9B59B6/ffffff?text=Flea+Market" alt="Flea Market" className="w-full h-auto" />
                         </div>
 
                         {/* Fun Fair */}
-                        <div onClick={() => setScreen('form')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
                             <img src="https://placehold.co/400x300/E74C3C/ffffff?text=Fun+Fair" alt="Fun Fair" className="w-full h-auto" />
                         </div>
                     </div>
@@ -37,10 +43,10 @@ const VendorRegistration = () => {
 
                 {/* Dandiya Village Section */}
                 <section className="text-center my-16">
-                    <h1 className="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 tracking-wide">
+                    <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 tracking-wide">
                         DANDIYA VILLAGE
                     </h1>
-                    <p className="text-3xl md:text-4xl font-semibold text-gray-700 mt-4 tracking-wider">
+                    <p className="text-xl md:text-2xl font-semibold text-gray-700 mt-4 tracking-wider">
                         FUN | FOOD | FLEA
                     </p>
 
@@ -63,7 +69,7 @@ const VendorRegistration = () => {
                     </div>
                 </section>
             </main>}
-            {screen === "form" && <VendorRegistrationPage />}
+            {screen === "form" && <VendorRegistrationPage selectedCategory={selectedCategory} />}
         </div>
     );
 };

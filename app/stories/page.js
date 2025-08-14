@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { ChatBubbleLeftRightIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '../config/themecontext';
 
 const bgColors = [
     'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-400', 'bg-pink-500',
@@ -36,6 +37,7 @@ export default function Page() {
     const [bgClass, setBgClass] = useState('bg-gray-800');
     const [iconBg, setIconBg] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
+    const { theme } = useTheme();
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -56,7 +58,10 @@ export default function Page() {
     const router = useRouter();
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row font-sans">
+        <div style={{
+            backgroundColor: "var(--bg-card)",
+            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
+        }} className="h-screen flex flex-col md:flex-row font-sans">
             {/* Left Sidebar for User Info (Visible on all devices, but layout changes) */}
             <div className="w-full md:w-1/4 bg-gray-800 p-4 shadow-md flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-200">
                 <div className="flex items-center justify-between w-full mb-4 md:mb-6">

@@ -10,10 +10,12 @@ import CreatePost from './createpost';
 import DandiyaPartner from './dandiyapartner';
 import ProfileCard from './profilecard';
 import EventCard from './eventcard';
+import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
     const { theme } = useTheme();
+    const router = useRouter()
     const profileData = {
         name: "Kelin Jasen",
         email: "kelin.jasen156@gmail.com",
@@ -64,7 +66,7 @@ export default function Home() {
                             color: theme === "dark" ? "var(--card-text)" : "var(--text-primary)",
                         }}
                     >
-                        <div className="flex flex-col items-center justify-center">
+                        <div onClick={() => router.push("/stories")} className="flex flex-col items-center justify-center">
                             <PlusCircle size={36} style={{ color: "var(--accent)" }} />
                             <p className="mt-2 text-sm font-semibold">Add Stories</p>
                         </div>

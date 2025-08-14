@@ -10,63 +10,66 @@ export default function Navbar() {
 
   return (
     <header
-      className="w-full fixed h-16 z-50 flex items-center justify-between px-2 sm:px-6 py-1.5"
+      className="w-full h-16 fixed z-50 flex items-center justify-center"
       style={{ backgroundColor: '#1a1945ff' }}
     >
-      {/* Left Logo + Title */}
-      <div className="flex cursor-pointer items-center">
-        {/* Durga icon cropped */}
-        <div
-          onClick={() => router.push('/')}
-          className="h-14 w-auto flex items-center justify-center bg-transparent"
-        >
+      {/* Content wrapper with a max-width and centering */}
+      <div className="w-full sm:w-[80%] flex items-center justify-between">
+        {/* Left Logo + Title */}
+        <div className="flex cursor-pointer items-center">
+          {/* Durga icon cropped */}
+          <div
+            onClick={() => router.push('/')}
+            className="h-14 w-auto flex items-center justify-center bg-transparent"
+          >
+            <img
+              src="/Durga.png"
+              alt="Durga"
+              className="h-full w-full object-contain"
+              style={{
+                filter: "drop-shadow(0 0 1px white) drop-shadow(0 0 3px white) drop-shadow(0 0 6px white)"
+              }}
+            />
+          </div>
+
+          {/* Event logo */}
+          <div className="h-12 w-40 overflow-hidden hidden sm:flex flex-1 items-center justify-center bg-transparent rounded-full">
+            <img
+              src="/Dandiya Carnival Logo.png"
+              alt="event"
+              className="h-full w-full object-contain"
+            />
+          </div>
+        </div>
+
+        {/* Center Nav Icons */}
+        <div className="hidden md:flex items-center gap-8 cursor-pointer">
+          <img src="/News Feed.png" alt="News" className="h-8 w-auto" />
+          <img src="/Friends.png" alt="Friends" className="h-8 w-auto scale-75" />
+          <img src="/Shop.png" alt="Shop" className="h-8 w-auto" />
+          <img onClick={() => router.push('/vendor')} src="/shop1.jpeg" alt="Events" className="h-7 w-auto" />
+        </div>
+
+        {/* Ticket Icon cropped */}
+        <div onClick={() => router.push('/ticketing')} className="h-14 w-auto cursor-pointer overflow-hidden flex items-center justify-center bg-transparent rounded-lg">
           <img
-            src="/Durga.png"
-            alt="Durga"
-            className="h-full w-full object-contain"
-            style={{
-              filter: "drop-shadow(0 0 1px white) drop-shadow(0 0 3px white) drop-shadow(0 0 6px white)"
-            }}
+            src="/Buy Tickets.png"
+            alt="Buy Tickets"
+            className="h-full w-full object-cover scale-75"
           />
         </div>
 
-        {/* Event logo */}
-        <div className="h-12 w-40 overflow-hidden hidden sm:flex flex-1 flex items-center justify-center bg-transparent rounded-full">
-          <img
-            src="/Dandiya Carnival Logo.png"
-            alt="event"
-            className="h-full w-full object-contain"
-          />
+        {/* Right Icons */}
+        <div className="flex items-center gap-6 cursor-pointer">
+          <img src="/Chat icon.png" alt="Chat" className="h-7 w-auto" />
+          <img src="/Notifications.png" alt="Notifications" className="h-7 w-auto" />
+          <button onClick={toggleTheme} className="flex items-center cursor-pointer">
+            {theme === 'light'
+              ? <MoonIcon className="w-7 text-yellow-500" />
+              : <SunIcon className="w-7 text-yellow-500" />}
+          </button>
+          <img src="/Profile Icon.jpg" alt="Profile" className="h-7 w-7 rounded-full object-cover" />
         </div>
-      </div>
-
-      {/* Center Nav Icons */}
-      <div className="hidden md:flex items-center gap-8 cursor-pointer">
-        <img src="/News Feed.png" alt="News" className="h-8 w-auto" />
-        <img src="/Friends.png" alt="Friends" className="h-8 w-auto scale-75" />
-        <img src="/Shop.png" alt="Shop" className="h-8 w-auto" />
-        <img onClick={() => router.push('/vendor')} src="/shop1.jpeg" alt="Events" className="h-7 w-auto" />
-      </div>
-
-      {/* Ticket Icon cropped */}
-      <div onClick={() => router.push('/ticketing')} className="h-14 w-auto cursor-pointer overflow-hidden flex items-center justify-center bg-transparent rounded-lg">
-        <img
-          src="/Buy Tickets.png"
-          alt="Buy Tickets"
-          className="h-full w-full object-cover scale-75"
-        />
-      </div>
-
-      {/* Right Icons */}
-      <div className="flex items-center gap-6 cursor-pointer">
-        <img src="/Chat icon.png" alt="Chat" className="h-7 w-auto" />
-        <img src="/Notifications.png" alt="Notifications" className="h-7 w-auto" />
-        <button onClick={toggleTheme} className="flex items-center cursor-pointer">
-          {theme === 'light'
-            ? <MoonIcon className="w-7 text-yellow-500" />
-            : <SunIcon className="w-7 text-yellow-500" />}
-        </button>
-        <img src="/Profile Icon.jpg" alt="Profile" className="h-7 w-7 rounded-full object-cover" />
       </div>
     </header>
   );

@@ -45,6 +45,13 @@ export default function Ticketing() {
         10: "Day 9 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Grand Navratri finale with ultimate dandiya energy."
     };
 
+    const artists = useMemo(() => [
+        { name: "DJ Ananya", img: "https://randomuser.me/api/portraits/women/10.jpg" },
+        { name: "DJ Rohan", img: "https://randomuser.me/api/portraits/men/12.jpg" },
+        { name: "DJ Zara", img: "https://randomuser.me/api/portraits/women/24.jpg" },
+        { name: "DJ Arjun", img: "https://randomuser.me/api/portraits/men/33.jpg" },
+    ], []);
+
     const seasonSelected = selectedDays.includes(1);
 
     const handleDayToggle = (day) => {
@@ -91,6 +98,21 @@ export default function Ticketing() {
             ? "Selected Passes"
             : "No Pass Selected";
 
+
+    const termsAndConditions = [
+        "Pass Validity: Entry is valid only for the date and day mentioned on the pass.",
+        "Entry Time: Gates open at 6:16 PM and close at 1:11 AM. Late entries may not be permitted.",
+        "Non-Transferable: Passes are strictly non-transferable and non-refundable.",
+        "Age Restrictions: Children below 5 years are allowed free with parents; above 5 years require a valid pass.",
+        "Dress Code: Traditional/ethnic attire is encouraged; management reserves the right to deny entry for inappropriate dressing.",
+        "Security Check: All guests are subject to security checks. Outside food, beverages, sharp objects, and prohibited substances are not allowed.",
+        "On-Ground Conduct: Any unruly behavior, intoxication, or misconduct will lead to immediate removal without refund.",
+        "Photography/Videography: The event may be photographed or recorded; entry implies consent to be featured in promotional material.",
+        "Pass Misuse: Lost or damaged passes will not be reissued. Duplicate entries are strictly prohibited.",
+        "Event Rights: Organizers reserve the right to make changes to the program, artist lineup, or schedule without prior notice.",
+        "Risk Disclaimer: Attendees participate at their own risk; organizers are not liable for personal injury, loss, or damage to property."
+    ];
+
     return (
         <div style={{
             backgroundColor: "var(--bg-card)",
@@ -123,14 +145,14 @@ export default function Ticketing() {
             </div>
 
             {/* Banner */}
-            <div className="flex flex-col lg:flex-row bg-yellow-200 w-full">
+            <div className="flex flex-col lg:flex-row bg-yellow-200 w-full h-[75vh]">
                 {/* Left side - Image (60%) */}
-                <div className="w-full lg:w-3/5 h-[250px]">
+                <div className="w-full lg:w-3/5 h-full">
                     <div className="flex-1 flex justify-center items-center w-full h-full">
                         <img
                             src="/dandiyanight.PNG"
                             alt="dandiya dancers"
-                            className="w-full h-full"
+                            className="w-full h-full object-cover"
                         />
                     </div>
                 </div>
@@ -141,9 +163,11 @@ export default function Ticketing() {
                         backgroundColor: "var(--bg-primary)",
                         color: "var(--text-primary)",
                     }}
-                    className="shadow-md flex flex-col w-full lg:w-2/5 h-[250px] relative"
+                    className="shadow-md flex flex-col w-full lg:w-2/5 h-full relative"
                 >
-                    <h3 className="font-bold text-sm md:text-md text-center border-b border-dotted border-yellow-500 pb-1">{eventTitle}</h3>
+                    <h3 className="font-bold text-sm md:text-md text-center border-b border-dotted border-yellow-500 pb-1">
+                        {eventTitle}
+                    </h3>
                     <div className="mt-3 flex-1 pb-14 overflow-y-auto">
                         {Object.keys(selectedInfoList).length > 0 ? (
                             <ul className="list-disc pl-6 space-y-3 text-xs">
@@ -164,24 +188,25 @@ export default function Ticketing() {
                     </div>
 
                     {/* Book Now Button */}
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="sticky bottom-0 left-0 w-full flex items-center justify-center gap-2 py-2 
-                        bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 
-                        text-white font-bold text-sm md:text-base shadow-lg 
-                        rounded-t-lg border-t-4 border-yellow-200"
-                    >
-                        <Ticket size={18} />
-                        Book Your Ticket Now
-                    </motion.button>
+                    <div className="flex justify-center mt-4">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center justify-center gap-2 py-2 px-4
+                    bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 
+                    text-white font-bold text-sm md:text-base shadow-lg 
+                    rounded-t-lg border-t-4 border-yellow-200"
+                        >
+                            <Ticket size={18} />
+                            Book Your Ticket Now
+                        </motion.button>
+                    </div>
                 </div>
-
             </div>
 
             {/* About */}
             <section className="px-6 py-8">
-                <h2 className="text-xl font-bold mb-4">ABOUT THE EVENT</h2>
+                <h2 className="text-xl font-bold mb-4 text-center">ABOUT THE EVENT</h2>
                 <p>
                     This Navratri, Hyderabad’s nights will sparkle like never before as
                     the International Dandiya Carnival takes over the city for 9
@@ -191,68 +216,73 @@ export default function Ticketing() {
                 </p>
             </section>
 
+            {/* Artists Section */}
+            <section className="px-6 py-8">
+                <h2 className="text-2xl font-bold mb-4 text-center">ARTISTS</h2>
+                <div className="flex flex-wrap justify-center gap-6">
+                    {artists.map((artist, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                            <img src={artist.img} alt={artist.name} className="h-24 w-24 rounded-full object-cover border-4 border-yellow-400" />
+                            <p className="mt-2 text-sm font-semibold">{artist.name}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+
+            {/* Map Location */}
+            <section className="px-6 pb-10">
+                <h2 className="uppercase text-xl font-bold mb-4 text-center">Map Location</h2>
+                <div className="flex justify-center w-full">
+                    <img src="/googlemap.png" alt="Google Maps QR Code" className="h-52 w-52 md:h-80 md:w-80" />
+                </div>
+            </section>
+
             {/* Facilities */}
             <section className="px-6 pb-10">
-                <h2 className="text-xl font-bold mb-4">EVENT FACILITIES</h2>
-                <div className="flex flex-wrap gap-6 text-3xl">
+                <h2 className="text-xl font-bold mb-4 text-center">EVENT FACILITIES</h2>
+                <div className="flex flex-wrap gap-6 text-3xl justify-center">
                     <img src="/Parking.png" alt="parking" className="h-8 w-auto" />
                     <img src="/Taxi.png" alt="taxi" className="h-8 w-auto" />
                     <img src="/hotel.png" alt="hotel" className="h-8 w-auto" />
                     <img src="/All age groups.png" alt="all age groups" className="h-8 w-auto" />
                     <img src="/rest rooms.png" alt="rest rooms" className="h-8 w-auto" />
-                    <img src="/Non liquor zone.jpg" alt="liquor" className="h-8 w-auto" />
-                    <img src="/no drugs icon.jpg" alt="drugs" className="h-8 w-auto" />
                     <img src="/Pet friendly.png" alt="pet" className="h-8 w-auto" />
                 </div>
             </section>
 
-            {/* Map Location */}
+            {/* Restrictions */}
             <section className="px-6 pb-10">
-                <h2 className="uppercase text-xl font-bold mb-4">Map Location</h2>
-                <div className="w-full h-64 md:h-96 rounded-lg overflow-hidden shadow-lg border border-gray-300">
-                    <iframe
-                        title="Event Location"
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d154.9878534538957!2d78.6824388!3d17.3115014!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb986080dbd4f7%3A0x0000000000000000!2z17.3115014%2C78.6824388!5e0!3m2!1sen!2sin!4v1691691691691!5m2!1sen!2sin"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                </div>
-
-                {/* Optional: Button to open directions in Google Maps */}
-                <div className="mt-4 text-center">
-                    <a
-                        href="https://www.google.com/maps/dir//17.3115014,78.6824388/@17.3116206,78.681884,172m/data=!3m1!1e3!4m5!4m4!1m0!1m1!4e1!3e0?entry=ttu"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-                    >
-                        View in Google Maps
-                    </a>
+                <h2 className="text-xl font-bold mb-4 text-center uppercase">Restrictions</h2>
+                <div className="flex flex-wrap gap-6 text-3xl justify-center">
+                    <img src="/Non liquor zone.jpg" alt="liquor" className="h-8 w-auto" />
+                    <img src="/no drugs icon.jpg" alt="drugs" className="h-8 w-auto" />
                 </div>
             </section>
-
 
             {/* Terms & Conditions */}
-            <section className="px-6 pb-10">
+            <section className="px-6 pb-10 text-center">
                 <h2 className="uppercase text-xl font-bold mb-4">Terms & Conditions</h2>
-                <ul className="list-disc pl-6 space-y-3 text-sm">
-                    <li><strong>Pass Validity:</strong> Entry is valid only for the date and day mentioned on the pass.</li>
-                    <li><strong>Entry Time:</strong> Gates open at 6:16 PM and close at 1:11 AM. Late entries may not be permitted.</li>
-                    <li><strong>Non-Transferable:</strong> Passes are strictly non-transferable and non-refundable.</li>
-                    <li><strong>Age Restrictions:</strong> Children below 5 years are allowed free with parents; above 5 years require a valid pass.</li>
-                    <li><strong>Dress Code:</strong> Traditional/ethnic attire is encouraged; management reserves the right to deny entry for inappropriate dressing.</li>
-                    <li><strong>Security Check:</strong> All guests are subject to security checks. Outside food, beverages, sharp objects, and prohibited substances are not allowed.</li>
-                    <li><strong>On-Ground Conduct:</strong> Any unruly behavior, intoxication, or misconduct will lead to immediate removal without refund.</li>
-                    <li><strong>Photography/Videography:</strong> The event may be photographed or recorded; entry implies consent to be featured in promotional material.</li>
-                    <li><strong>Pass Misuse:</strong> Lost or damaged passes will not be reissued. Duplicate entries are strictly prohibited.</li>
-                    <li><strong>Event Rights:</strong> Organizers reserve the right to make changes to the program, artist lineup, or schedule without prior notice.</li>
-                    <li><strong>Risk Disclaimer:</strong> Attendees participate at their own risk; organizers are not liable for personal injury, loss, or damage to property.</li>
-                </ul>
+                <div className="space-y-4">
+                    {termsAndConditions.map((term, index) => {
+                        if (term.includes("inappropriate dressing")) {
+                            const [before, after] = term.split("inappropriate dressing");
+                            return (
+                                <p key={index} className="text-sm">
+                                    {before}
+                                    <span className="text-red-600 font-bold">inappropriate dressing</span>
+                                    {after}
+                                </p>
+                            );
+                        }
+                        return (
+                            <p key={index} className="text-sm">
+                                {term}
+                            </p>
+                        );
+                    })}
+                </div>
             </section>
-        </div >
+        </div>
     );
 }

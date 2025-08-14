@@ -1,340 +1,329 @@
 "use client";
-import { useState } from 'react';
-import {
-    Table,
-    Tag,
-    Ruler,
-    Zap,
-    IndianRupee,
-    Pencil,
-    CheckCircle2,
-    AlertCircle,
-    SquareStack
-} from 'lucide-react';
+import { useState } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import { motion } from "framer-motion";
+import { CheckIcon } from "@heroicons/react/20/solid";
 
-export default function VendorRegistrationPage() {
+const stallData = {
+    'Food Court': [
+        "Rajasthani Thali House", "Gujarati Thali House", "Punjabi Thali House", "South Indian Thali House",
+        "Bengali Thali House", "Maharashtrian Thali House", "Chaats & Snacks Corner", "Vada Pav Junction",
+        "Momo Mania", "Biryani & Kebabs", "Noodle Station", "Dosa King", "Pani Puri Paradise",
+        "Jalebi & Rabri", "Gulab Jamun & Kala Jamun", "Matka Kulfi Studio", "Royal Falooda Factory",
+        "Traditional Ice Creams", "Sugarcane Juice Press", "Fresh Fruit Juices"
+    ],
+    'Flea Market': [
+        "Banarasi Saree House", "Ajrakh & Bagru Prints", "Ikat Handloom Corner", "Men’s Kurta & Dhoti",
+        "Banjara Embroidery Boutique", "Kids’ Ethnic Wear", "Khadi & Cotton Bazaar", "Designer Blouse & Dupattas",
+        "Oxidized Jewelry Hub", "Handcrafted Silver Gems", "Terracotta Earrings", "Beaded & Thread Jewelry",
+        "Mojari & Jutti Store", "Potli Bag Emporium", "Hand-painted Clutches", "Folk Instruments Corner",
+        "Resin Art (Folk Motifs)", "Rudraksha & Spiritual Beads", "Attars & Ittar Oils", "Jaggery & Festive Sweets",
+        "Shola Pith Crafts", "Herbal Skincare Products"
+    ],
+    'Fun Zone': [
+        "Giant Wheel", "Carousel (Merry-Go-Round)", "Bungee Trampoline", "Mechanical Bull Ride",
+        "Meltdown Sweeper", "Kids Soft Play Zone", "Ball Pit & Slides", "Archery & Shooting",
+        "Darts & Ring Toss", "Break the Pot", "Balloon Shooting", "Human Claw Machine",
+        "Folk Costume Photo Booth", "Henna & Temporary Tattoos", "Puppet Show Theatre",
+        "Street Magic Stage", "Pottery Wheel Experience", "Rangoli Workshop", "Kite Making Corner",
+        "Face Painting Kiosk"
+    ]
+};
+
+const steps = ["Personal Info", "Stall Selection", "Review & Submit"];
+
+const colors = {
+    primary: "bg-[#0b1d51]", // Navy blue
+    saffron: "bg-[#ff9933]", // Saffron
+    gold: "bg-[#ffd700]", // Gold
+    maroonText: "text-[#800000]", // Maroon
+    lightBg: "bg-[#fff9f0]", // Cream background
+};
+
+export default function VendorRegistration({ selectedCategory = "Food Court" }) {
+    const [step, setStep] = useState(0);
     const [formData, setFormData] = useState({
-        stallNo: '',
-        category: '',
-        stallName: '',
-        size: '',
-        powerSupply: '',
-        cost: '',
-        notes: ''
+        vendorName: "",
+        email: "",
+        contactNumber: "",
+        stallChoice: "",
+        additionalNotes: "",
     });
-
     const [errors, setErrors] = useState({});
-    const [submissionSuccess, setSubmissionSuccess] = useState(false);
+    const [success, setSuccess] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-        if (errors[name]) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                [name]: null,
-            }));
-        }
-    };
-
-    const validateForm = () => {
+    const validateStep = () => {
         const newErrors = {};
-
-        if (!formData.stallNo.trim()) {
-            newErrors.stallNo = 'Stall No. is required.';
+        if (step === 0) {
+            if (!/^[a-zA-Z\s]+$/.test(formData.vendorName.trim())) {
+                newErrors.vendorName = "Valid Vendor Name is required.";
+            }
+            if (!/^\d{10}$/.test(formData.contactNumber)) {
+                newErrors.contactNumber = "Enter a valid 10-digit number.";
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+                newErrors.email = "Enter a valid email.";
+            }
         }
-        if (!formData.category) {
-            newErrors.category = 'Category is required.';
+        if (step === 1) {
+            if (!formData.stallChoice) {
+                newErrors.stallChoice = "Please select a stall.";
+            }
         }
-        if (!formData.stallName.trim()) {
-            newErrors.stallName = 'Stall Name is required.';
-        }
-        if (!formData.size.trim()) {
-            newErrors.size = 'Size is required.';
-        }
-        if (!formData.powerSupply.trim()) {
-            newErrors.powerSupply = 'Power Supply is required.';
-        } else if (isNaN(formData.powerSupply) || parseFloat(formData.powerSupply) <= 0) {
-            newErrors.powerSupply = 'Power Supply must be a positive number.';
-        }
-        if (!formData.cost.trim()) {
-            newErrors.cost = 'Cost is required.';
-        } else if (isNaN(formData.cost) || parseFloat(formData.cost) <= 0) {
-            newErrors.cost = 'Cost must be a positive number.';
-        }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleNext = (e) => {
         e.preventDefault();
-
-        if (validateForm()) {
-            console.log('Vendor Registration Data:', formData);
-
-            setSubmissionSuccess(true);
-
-            setTimeout(() => {
-                setFormData({
-                    stallNo: '',
-                    category: '',
-                    stallName: '',
-                    size: '',
-                    powerSupply: '',
-                    cost: '',
-                    notes: '',
-                });
-                setSubmissionSuccess(false);
-            }, 3000);
-        } else {
-            console.log('Form validation failed.');
+        setSuccess(false); // ✅ ensure no success message when just moving steps
+        if (validateStep()) {
+            setStep((prev) => prev + 1);
         }
     };
 
-    const categories = [
-        "Food & Beverages",
-        "Fashion & Accessories",
-        "Games & Activities",
-        "Art & Handicrafts",
-        "Flea Market",
-        "Fun Fair"
-    ];
+    const handlePrev = () => {
+        setSuccess(false); // ✅ same for going back
+        setStep((prev) => prev - 1);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validateStep() && step === 2) {
+            console.log("Form Submitted:", { ...formData, category: selectedCategory });
+            setSuccess(true); // ✅ only here!
+            setTimeout(() => {
+                setFormData({
+                    vendorName: "",
+                    email: "",
+                    contactNumber: "",
+                    stallChoice: "",
+                    additionalNotes: "",
+                });
+                setStep(0);
+                setSuccess(false);
+            }, 3000);
+        }
+    };
+
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full">
-                {/* Page Header */}
+        <div className={`${colors.lightBg} min-h-screen flex items-center justify-center p-6`}>
+            <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-6">
+
+                {/* Header */}
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
+                    <h1 className={`text-3xl font-extrabold ${colors.maroonText}`}>
                         Vendor Registration
                     </h1>
-                    <p className="text-gray-500 text-lg">
-                        Please provide details for your vendor stall.
-                    </p>
+                    <p className="text-gray-600">Register for the {selectedCategory}.</p>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="relative mb-8">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                            className={`h-2 rounded-full bg-gradient-to-r from-[#ff9933] to-[#ffd700]`}
+                            style={{
+                                width: `${(step / (steps.length - 1)) * 100}%`, // ✅ correct scaling
+                            }}
+                        ></div>
+                    </div>
+                    <div className="flex justify-between text-xs font-semibold mt-2">
+                        {steps.map((label, index) => (
+                            <span
+                                key={index}
+                                className={index <= step ? colors.maroonText : "text-gray-400"} // ✅ highlight current
+                            >
+                                {label}
+                            </span>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Success Message */}
-                {submissionSuccess && (
-                    <div className="flex items-center justify-center p-4 mb-6 text-green-700 bg-green-100 rounded-lg">
-                        <CheckCircle2 className="w-6 h-6 mr-3" />
-                        <span className="font-medium">
-                            Registration submitted successfully!
-                        </span>
+                {success && (
+                    <div className="p-4 mb-4 text-green-700 bg-green-100 rounded-lg text-center font-semibold">
+                        ✅ Registration submitted successfully!
                     </div>
                 )}
 
-                {/* Registration Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Stall No. Field */}
-                    <div>
-                        <label htmlFor="stallNo" className="block text-sm font-medium text-gray-700">
-                            Stall No.
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <SquareStack className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="text"
-                                name="stallNo"
-                                id="stallNo"
-                                value={formData.stallNo}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.stallNo ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., A-101"
+                <form onSubmit={handleSubmit}>
+                    {/* Step 1 - Personal Info */}
+                    {step === 0 && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                            <InputField
+                                label="Vendor Name"
+                                name="vendorName"
+                                value={formData.vendorName}
+                                onChange={(e) => setFormData({ ...formData, vendorName: e.target.value })}
+                                error={errors.vendorName}
                             />
-                        </div>
-                        {errors.stallNo && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.stallNo}
-                            </p>
-                        )}
-                    </div>
+                            <InputField
+                                label="Email"
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                error={errors.email}
+                            />
+                            <InputField
+                                label="Contact Number"
+                                type="tel"
+                                name="contactNumber"
+                                value={formData.contactNumber}
+                                onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
+                                error={errors.contactNumber}
+                            />
+                        </motion.div>
+                    )}
 
-                    {/* Category Field */}
-                    <div>
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                            Category
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Tag className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <select
-                                name="category"
-                                id="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.category ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
+                    {/* Step 2 - Stall Selection */}
+                    {step === 1 && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                            <Listbox value={formData.stallChoice} onChange={(val) => setFormData({ ...formData, stallChoice: val })}>
+                                {({ open }) => (
+                                    <div>
+                                        <Listbox.Label className="block text-sm font-medium text-gray-700">
+                                            Choose {selectedCategory === "Fun Zone" ? "Attraction" : "Stall"}
+                                        </Listbox.Label>
+                                        <div className="relative mt-1">
+                                            <Listbox.Button className="relative w-full bg-white border border-yellow-300 rounded-md py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                                                <span className="block truncate">{formData.stallChoice || "Select an option"}</span>
+                                            </Listbox.Button>
+                                            <Transition
+                                                show={open}
+                                                as="div"
+                                                leave="transition ease-in duration-100"
+                                                leaveFrom="opacity-100"
+                                                leaveTo="opacity-0"
+                                            >
+                                                <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md text-base ring-1 ring-yellow-300 ring-opacity-5 overflow-auto sm:text-sm">
+                                                    {stallData[selectedCategory].map((stall, idx) => (
+                                                        <Listbox.Option
+                                                            key={idx}
+                                                            className={({ active }) =>
+                                                                `${active ? "text-white bg-yellow-600" : "text-gray-900"}
+                              cursor-pointer select-none relative py-2 pl-10 pr-4`
+                                                            }
+                                                            value={stall}
+                                                        >
+                                                            {({ selected, active }) => (
+                                                                <>
+                                                                    <span className={`${selected ? "font-semibold" : "font-normal"} block truncate`}>
+                                                                        {stall}
+                                                                    </span>
+                                                                    {selected ? (
+                                                                        <span
+                                                                            className={`${active ? "text-white" : "text-yellow-600"}
+                                    absolute inset-y-0 left-0 flex items-center pl-3`}
+                                                                        >
+                                                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                        </span>
+                                                                    ) : null}
+                                                                </>
+                                                            )}
+                                                        </Listbox.Option>
+                                                    ))}
+                                                </Listbox.Options>
+                                            </Transition>
+                                        </div>
+                                    </div>
+                                )}
+                            </Listbox>
+                            {errors.stallChoice && <ErrorText>{errors.stallChoice}</ErrorText>}
+                            <TextAreaField
+                                label="Additional Notes"
+                                name="additionalNotes"
+                                value={formData.additionalNotes}
+                                onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
+                            />
+                        </motion.div>
+                    )}
+
+                    {/* Step 3 - Review & Submit */}
+                    {step === 2 && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                            <h3 className="text-lg font-semibold text-gray-800">Review Your Details</h3>
+                            <ul className="text-gray-700 space-y-2">
+                                <li><strong>Vendor Name:</strong> {formData.vendorName}</li>
+                                <li><strong>Email:</strong> {formData.email}</li>
+                                <li><strong>Contact Number:</strong> {formData.contactNumber}</li>
+                                <li><strong>Stall Choice:</strong> {formData.stallChoice}</li>
+                                <li><strong>Additional Notes:</strong> {formData.additionalNotes || "None"}</li>
+                            </ul>
+                        </motion.div>
+                    )}
+
+                    {/* Navigation Buttons */}
+                    <div className="mt-6 flex justify-between">
+                        {step > 0 ? (
+                            <button
+                                type="button"
+                                onClick={handlePrev}
+                                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
                             >
-                                <option value="" disabled>Select a category</option>
-                                {categories.map((cat) => (
-                                    <option key={cat} value={cat}>
-                                        {cat}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        {errors.category && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.category}
-                            </p>
+                                Back
+                            </button>
+                        ) : <div />}
+
+                        {step < steps.length - 1 ? (
+                            <button
+                                type="button" // ✅ prevents accidental form submit
+                                onClick={handleNext}
+                                className={`px-4 py-2 rounded-md ${colors.primary} text-white hover:bg-[#13294b]`}
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            <button
+                                type="submit" // ✅ will trigger handleSubmit only here
+                                className="px-4 py-2 rounded-md bg-gradient-to-r from-[#ff9933] to-[#ffd700] text-white font-bold"
+                            >
+                                Submit
+                            </button>
                         )}
                     </div>
 
-                    {/* Stall Name Field */}
-                    <div>
-                        <label htmlFor="stallName" className="block text-sm font-medium text-gray-700">
-                            Stall Name
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Table className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="text"
-                                name="stallName"
-                                id="stallName"
-                                value={formData.stallName}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.stallName ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., Happy Bites"
-                            />
-                        </div>
-                        {errors.stallName && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.stallName}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Size Field */}
-                    <div>
-                        <label htmlFor="size" className="block text-sm font-medium text-gray-700">
-                            Size
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Ruler className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="text"
-                                name="size"
-                                id="size"
-                                value={formData.size}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.size ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., 10x10 ft"
-                            />
-                        </div>
-                        {errors.size && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.size}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Power Supply (kW) Field */}
-                    <div>
-                        <label htmlFor="powerSupply" className="block text-sm font-medium text-gray-700">
-                            Power Supply (kW)
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <Zap className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="number"
-                                name="powerSupply"
-                                id="powerSupply"
-                                value={formData.powerSupply}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.powerSupply ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., 5"
-                            />
-                        </div>
-                        {errors.powerSupply && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.powerSupply}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Cost per Stall (₹ Lakhs) Field */}
-                    <div>
-                        <label htmlFor="cost" className="block text-sm font-medium text-gray-700">
-                            Cost per Stall (₹ Lakhs)
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <IndianRupee className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <input
-                                type="number"
-                                name="cost"
-                                id="cost"
-                                value={formData.cost}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.cost ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="e.g., 1.5"
-                            />
-                        </div>
-                        {errors.cost && (
-                            <p className="mt-2 text-sm text-red-600 flex items-center">
-                                <AlertCircle className="h-4 w-4 mr-1" />
-                                {errors.cost}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Notes Field */}
-                    <div>
-                        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-                            Notes
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                            <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
-                                <Pencil className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </div>
-                            <textarea
-                                name="notes"
-                                id="notes"
-                                rows="3"
-                                value={formData.notes}
-                                onChange={handleChange}
-                                className={`block w-full pl-10 pr-3 py-2 border ${errors.notes ? 'border-red-500' : 'border-gray-300'
-                                    } rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 sm:text-sm`}
-                                placeholder="Any additional information..."
-                            ></textarea>
-                        </div>
-                    </div>
-
-                    {/* Submit Button */}
-                    <div>
-                        <button
-                            type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-                        >
-                            Register
-                        </button>
-                    </div>
                 </form>
             </div>
         </div>
     );
+}
+
+/* ---------- Reusable Components ---------- */
+function InputField({ label, type = "text", name, value, onChange, error }) {
+    return (
+        <div>
+            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                className={`mt-1 block p-2 w-full rounded-md border-2 ${error ? "border-red-500" : "border-gray-300"
+                    } shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm`}
+            />
+            {error && <ErrorText>{error}</ErrorText>}
+        </div>
+    );
+}
+
+function TextAreaField({ label, name, value, onChange }) {
+    return (
+        <div>
+            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <textarea
+                name={name}
+                value={value}
+                onChange={onChange}
+                rows="3"
+                className="mt-1 block w-full rounded-md p-2 border-2 border-gray-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm"
+            ></textarea>
+        </div>
+    );
+}
+
+function ErrorText({ children }) {
+    return <p className="mt-1 text-sm text-red-600">{children}</p>;
 }
