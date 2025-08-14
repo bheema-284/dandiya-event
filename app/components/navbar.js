@@ -42,9 +42,9 @@ export default function Navbar() {
 
       {/* Center Nav Icons */}
       <div className="hidden md:flex items-center gap-8 cursor-pointer">
-        <img src="/News Feed.png" alt="News" className="h-7 w-auto" />
-        <img src="/Friends.png" alt="Friends" className="h-7 w-auto scale-75" />
-        <img src="/Shop.png" alt="Shop" className="h-7 w-auto" />
+        <img src="/News Feed.png" alt="News" className="h-8 w-auto" />
+        <img src="/Friends.png" alt="Friends" className="h-8 w-auto scale-75" />
+        <img src="/Shop.png" alt="Shop" className="h-8 w-auto" />
         <img onClick={() => router.push('/vendor')} src="/shop1.jpeg" alt="Events" className="h-7 w-auto" />
       </div>
 
