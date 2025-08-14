@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../config/themecontext';
 import { useRouter } from 'next/navigation';
 import { MoonIcon, SunIcon } from '@heroicons/react/20/solid';
@@ -46,7 +45,7 @@ export default function Navbar() {
         <img src="/News Feed.png" alt="News" className="h-7 w-auto" />
         <img src="/Friends.png" alt="Friends" className="h-7 w-auto scale-75" />
         <img src="/Shop.png" alt="Shop" className="h-7 w-auto" />
-        <img src="/Event Icon.png" alt="Events" className="h-7 w-auto" />
+        <img onClick={() => router.push('/vendor')} src="/Event Icon.png" alt="Events" className="h-7 w-auto" />
       </div>
 
       {/* Ticket Icon cropped */}

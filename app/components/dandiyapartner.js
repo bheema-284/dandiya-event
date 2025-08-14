@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Sun, Search, ChevronDown, Bell, MessageSquare } from 'lucide-react';
 import { useTheme } from '../config/themecontext';
+import { motion } from 'framer-motion';
 
 const users = [
     { id: 1, name: 'Paige Turner', location: 'Alabama, USA', status: 'online', avatar: 'https://randomuser.me/api/portraits/women/14.jpg' },
@@ -54,7 +55,17 @@ export default function DandiyaPartner() {
             <div style={{
                 color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
             }} className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow w-full">
-                <h2 className="font-semibold text-lg sm:text-sm text-center">FIND MY DANDIYA PARTNER</h2>
+                {/* <h2 className="font-semibold text-lg sm:text-sm text-center">FIND MY DANDIYA PARTNER</h2> */}
+                <motion.button
+                    whileHover={{ scale: 1 }}
+                    whileTap={{ scale: 0.65 }}
+                    className="sticky bottom-0 cursor-pointer left-0 w-full flex items-center justify-center gap-2 py-2 
+                                       bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 
+                                       text-white font-bold text-sm md:text-base shadow-lg 
+                                       rounded-t-lg border-t-4 border-yellow-200"
+                >
+                    FIND MY DANDIYA PARTNER
+                </motion.button>
                 <div className="flex items-center space-x-3 mb-2 justify-center p-6">
                     <img src={'/dandiya.png'} />
                 </div>
