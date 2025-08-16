@@ -60,10 +60,13 @@ export default function RegistrationForm() {
             gender,
             role: "user",
             date_of_birth: formatDOB(),
-            mobile: isMobile ? contact.trim() : "",
-            email: isEmail ? contact.trim() : "",
         };
-
+        if (isMobile) {
+            newUser.mobile = contact.trim()
+        }
+        if (isEmail) {
+            newUser.email = contact.trim()
+        }
         try {
             const res = await fetch('/api/users', {
                 method: 'POST',
