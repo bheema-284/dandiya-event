@@ -2,6 +2,7 @@
 import React, { useContext, useState } from 'react';
 import RootContext from './config/rootcontext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function RegistrationForm() {
     const [firstName, setFirstName] = useState('');
@@ -223,17 +224,17 @@ export default function RegistrationForm() {
 
                     <p className="text-xs text-gray-600 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                         People who use our service may have uploaded your contact information to Facebook.
-                        <a href="#" className="text-blue-500 inline"> Learn more</a>.
+                        <Link href="#" className="text-blue-500 inline"> Learn more</Link>.
                     </p>
                     <p className="text-xs text-gray-600 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
                         By clicking Sign Up, you agree to our
-                        <a href="#" className="text-blue-500 inline"> Terms</a>,
-                        <a href="#" className="text-blue-500 inline"> Privacy Policy</a> and
-                        <a href="#" className="text-blue-500 inline"> Cookies Policy</a>.
+                        <Link href="#" className="text-blue-500 inline"> Terms</Link>,
+                        <Link href="#" className="text-blue-500 inline"> Privacy Policy</Link> and
+                        <Link href="#" className="text-blue-500 inline"> Cookies Policy</Link>.
                         You may receive SMS notifications from us and can opt out at any time.
                     </p>
                     <div className="text-center">
-                        <a href="/" className="text-blue-500 text-sm">Already have an account?</a>
+                        <Link href="/" className="text-blue-500 text-sm">Already have an account?</Link>
                     </div>
                 </form>
             </div>
