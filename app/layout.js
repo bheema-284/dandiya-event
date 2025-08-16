@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased">
+      <body className="bg-image antialiased">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>

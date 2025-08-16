@@ -4,6 +4,7 @@ import RootContext from './config/rootcontext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import Loader from './common/loader';
 
 export default function RegistrationForm() {
     const [firstName, setFirstName] = useState('');
@@ -18,7 +19,7 @@ export default function RegistrationForm() {
     const { rootContext, setRootContext } = useContext(RootContext);
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-
+    const [serviceCall, setServiceCall] = useState(false);
     // Format DOB into "DD-MM-YYYY" for backend
     const formatDOB = () => {
         if (dobDay === 'Day' || dobMonth === 'Month' || dobYear === 'Year') return '';
@@ -52,6 +53,7 @@ export default function RegistrationForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setServiceCall(true)
         if (!validateForm()) return;
 
         const isMobile = /^\d+$/.test(contact.trim());
@@ -99,7 +101,7 @@ export default function RegistrationForm() {
                     message: "Registration Successful!",
                 },
             });
-
+            setServiceCall(false)
             // Reset form
             setFirstName('');
             setSurname('');
@@ -131,7 +133,8 @@ export default function RegistrationForm() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="flex items-center justify-center min-h-screen p-4">
+            {serviceCall && <Loader />}
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl font-inter">
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-800">Create a new account</h1>

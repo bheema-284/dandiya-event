@@ -140,12 +140,12 @@ body {
   animation: fill 3s linear forwards;
 }
 
-.bg-smile {
+.bg-image {
   position: relative;
   z-index: 0;
 }
 
-.bg-smile::before {
+.bg-image::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -156,7 +156,7 @@ body {
   z-index: -2;
 }
 
-.bg-smile::after {
+.bg-image::after {
   content: "";
   position: fixed;
   inset: 0;

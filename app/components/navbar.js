@@ -89,7 +89,6 @@ export default function Navbar() {
             className="flex items-center gap-1 cursor-pointer"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <UserIcon className="w-6 h-6 sm:h-8 sm:h-8 text-yellow-400" />
             <div className="text-sm flex flex-col sm:flex-row sm:items-center gap-1">
               {/* Small screen: initial in a circle */}
               <div className="sm:hidden w-6 h-6 rounded-full bg-indigo-900 text-white flex items-center justify-center font-semibold">
