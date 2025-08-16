@@ -12,7 +12,6 @@ export default function RegistrationForm() {
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [mobile, setMobile] = useState('');
     const { rootContext, setRootContext } = useContext(RootContext);
     const router = useRouter();
     // Format DOB into "DD-MM-YYYY" for Joi validation
@@ -29,14 +28,19 @@ export default function RegistrationForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Determine what the user entered
+        const isMobile = /^\d{10}$/.test(email); // if 10 digits → treat as mobile
+        const isEmail = /\S+@\S+\.\S+/.test(email); // if email format → treat as email
+
+        // Construct payload
         const newUser = {
             name: `${firstName} ${surname}`.trim(),
-            email,
             password,
             gender,
-            mobile,
-            role: "user", // default
+            role: "user",
             date_of_birth: formatDOB(),
+            mobile: isMobile ? email : "", // if mobile, set mobile key
+            email: isEmail ? email : "",   // if email, set email key
         };
 
         try {
@@ -48,26 +52,20 @@ export default function RegistrationForm() {
 
             const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.error || 'Failed to register');
-            }
+            if (!res.ok) throw new Error(data.error || 'Failed to register');
 
-            // setMessage(`✅ User created! ID: ${data.insertedId}`);
-            router.push("/")
-            const resp = {
+            // Update rootContext & redirect
+            router.push("/");
+            setRootContext({
                 ...rootContext,
                 authenticated: true,
                 loader: false,
                 user: {
                     name: `${firstName} ${surname}`.trim(),
-                    email: email,
-                    password: password,
-                    mobile: mobile,
+                    email: newUser.email,
+                    mobile: newUser.mobile,
                     token: "token",
                 },
-            };
-            setRootContext({
-                ...resp,
                 toast: {
                     show: true,
                     dismiss: true,
@@ -76,6 +74,7 @@ export default function RegistrationForm() {
                     message: "Registration Successful!",
                 },
             });
+
             // Reset form
             setFirstName('');
             setSurname('');
@@ -85,9 +84,10 @@ export default function RegistrationForm() {
             setGender('');
             setEmail('');
             setPassword('');
+
         } catch (err) {
-            setRootContext((prevContext) => ({
-                ...prevContext,
+            setRootContext((prev) => ({
+                ...prev,
                 toast: {
                     show: true,
                     dismiss: true,
@@ -173,17 +173,9 @@ export default function RegistrationForm() {
                     {/* Email & Password */}
                     <input
                         type="email"
-                        placeholder="Email"
+                        placeholder="Mobile number or email address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
-                    />
-                    <input
-                        type="mobile"
-                        placeholder="Mobile"
-                        value={mobile}
-                        onChange={(e) => setMobile(e.target.value)}
                         required
                         className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
                     />
@@ -197,10 +189,26 @@ export default function RegistrationForm() {
                     />
 
                     {/* Sign Up button */}
-                    <div className="text-center mt-6">
+                    <div className="text-center my-6">
                         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-16 rounded-lg">
                             Sign Up
                         </button>
+                    </div>
+                    {/* Info paragraphs (forced to single line each) */}
+                    <p className="text-xs text-gray-600 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                        People who use our service may have uploaded your contact information to Facebook.
+                        <a href="#" className="text-blue-500 inline"> Learn more</a>.
+                    </p>
+
+                    <p className="text-xs text-gray-600 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                        By clicking Sign Up, you agree to our
+                        <a href="#" className="text-blue-500 inline"> Terms</a>,
+                        <a href="#" className="text-blue-500 inline"> Privacy Policy</a> and
+                        <a href="#" className="text-blue-500 inline"> Cookies Policy</a>.
+                        You may receive SMS notifications from us and can opt out at any time.
+                    </p>
+                    <div className="text-center">
+                        <a href="/" className="text-blue-500 text-sm">Already have an account?</a>
                     </div>
                 </form>
             </div>

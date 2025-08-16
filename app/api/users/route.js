@@ -3,15 +3,19 @@ import clientPromise from "../../lib/db";
 
 const userPostSchema = Joi.object({
     googleId: Joi.string().optional(),
-    email: Joi.string().email().required(),
     name: Joi.string().min(2).max(50).required(),
     role: Joi.string().valid("user", "admin").default("user").optional(),
     date_of_birth: Joi.string()
         .pattern(/^\d{2}-\d{2}-\d{4}$/) // matches "DD-MM-YYYY"
         .optional(),
     gender: Joi.string().valid("male", "female", "other").optional(),
-    password: Joi.string().min(6).required(), // must hash before saving
-});
+    password: Joi.string().min(6).required(),
+})
+    .xor("email", "mobile")
+    .keys({
+        email: Joi.string().email(),
+        mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
+    });
 
 
 export async function GET() {
