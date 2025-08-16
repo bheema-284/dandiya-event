@@ -26,6 +26,7 @@ const Login = () => {
     const onSave = (e) => {
         e.preventDefault(); // Prevent page refresh
         setIsLoading(true);
+        const user = data.find((user) => (user.email === formData.email || user.mobile === formData.email));
         const userByEmail = data.find((user) => (user.email === formData.email || user.mobile === formData.email));
         const userByPassword = data.find((user) => user.password === formData.password);
         if (!userByEmail && !userByPassword) {
@@ -72,8 +73,8 @@ const Login = () => {
 
         } else {
             // Email and password correct
-            const username = formData.name || userByEmail.email.split("@")[0];
-
+            const username = user.name || userByEmail.email.split("@")[0];
+            console.log("username", username)
             const resp = {
                 ...rootContext,
                 authenticated: true,
@@ -105,13 +106,13 @@ const Login = () => {
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center">
-                <div className="flex-1 text-center">
+                <div className="flex-1 text-center my-5">
                     <h1 className="text-3xl text-center font-bold text-fuchsia-600 mb-2">Dandiya Match</h1>
                     <p className="text-xl text-center text-gray-800">
                         Find your perfect rhythm and partner for the Navratri season.
                     </p>
                 </div>
-                <form onSubmit={onSave} className="mt-4 w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <form onSubmit={onSave} className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                             Sign in to your account

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     FaceSmileIcon,
     HeartIcon,
@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { ChatBubbleLeftRightIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import RootContext from '../components/config/rootcontext';
 
 const bgColors = [
     'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-400', 'bg-pink-500',
@@ -36,6 +37,7 @@ export default function Page() {
     const [bgClass, setBgClass] = useState('bg-gray-800');
     const [iconBg, setIconBg] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
+    const { rootContext } = useContext(RootContext);
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -51,7 +53,7 @@ export default function Page() {
         setShowConfirm(false);
     };
 
-    const userName = "Bheema Guguloth";
+    const userName = rootContext?.user?.name || "Bheema Guguloth";
     const userProfilePic = "https://placehold.co/40x40/000000/FFFFFF?text=BG";
     const router = useRouter();
 
@@ -70,7 +72,7 @@ export default function Page() {
                         className="w-10 h-10 rounded-full object-cover"
                         onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/40x40/CCCCCC/000000?text=User"; }}
                     />
-                    <span className="font-semibold text-gray-700">{userName}</span>
+                    <span className="font-semibold text-white hover:text-gray-500">{userName}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-auto text-gray-500 hidden md:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="3" />
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1.51-1V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />

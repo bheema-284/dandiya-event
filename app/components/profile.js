@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     ClockIcon,
     UserCircleIcon,
@@ -16,7 +16,7 @@ import {
     PhotoIcon as PhotoIconSolid,
     RssIcon as RssIconSolid
 } from '@heroicons/react/24/solid';
-import HomePage from './home';
+import RootContext from './config/rootcontext';
 
 
 // Dummy data for friends
@@ -40,7 +40,7 @@ const dummyFriends = [
 
 // Content for the About tab
 const AboutContent = () => (
-    <div className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">About Kelin Jasen</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -64,13 +64,13 @@ const AboutContent = () => (
 
 // Content for the Friends tab
 const FriendsContent = () => (
-    <div className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">Friends ({dummyFriends.length})</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {dummyFriends.map((friend, index) => (
                 <div key={index} className="flex flex-col items-center p-2 border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <img src={friend.avatar} alt={friend.name} className="w-16 h-16 rounded-full object-cover mb-2" />
-                    <p className="text-sm font-semibold text-center">{friend.name}</p>
+                    <img src={friend?.avatar} alt={friend?.name} className="w-16 h-16 rounded-full object-cover mb-2" />
+                    <p className="text-sm font-semibold text-center">{friend?.name}</p>
                 </div>
             ))}
         </div>
@@ -79,7 +79,7 @@ const FriendsContent = () => (
 
 // Content for the Photos tab
 const PhotosContent = () => (
-    <div className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">Photos</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 12 }).map((_, index) => (
@@ -95,19 +95,19 @@ const PhotosContent = () => (
 const TimelineContent = ({ posts }) => (
     <div className="flex flex-col gap-6">
         {posts.map((post) => (
-            <div key={post.id} className="bg-gray-800 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div key={post.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
                 <div className="flex items-center gap-3 mb-4">
                     <img src={post.avatar} alt={post.author} className="w-10 h-10 rounded-full" />
                     <div>
                         <p className="font-bold">{post.author}</p>
-                        <p className="text-sm text-gray-500">{post.timestamp}</p>
+                        <p className="text-sm text-gray-200">{post.timestamp}</p>
                     </div>
                 </div>
                 <p className="mb-4">{post.content}</p>
                 {post.image && (
                     <img src={post.image} alt="Post content" className="w-full rounded-lg mb-4" />
                 )}
-                <div className="flex justify-between text-gray-500 text-sm">
+                <div className="flex justify-between text-gray-200 text-sm">
                     <span>{post.likes} Likes</span>
                     <span>{post.comments} Comments</span>
                 </div>
@@ -116,9 +116,10 @@ const TimelineContent = ({ posts }) => (
     </div>
 );
 
-export default function FriendProfilePage({ friend }) {
+export default function FriendProfilePage() {
     const [activeTab, setActiveTab] = useState('Timeline');
-
+    const { rootContext } = useContext(RootContext)
+    const friend = rootContext.user.name || "Un Know"
     // Define the tabs for the navigation bar
     const tabs = [
         { name: 'Timeline', icon: ClockIcon, solidIcon: ClockIconSolid },
@@ -130,8 +131,7 @@ export default function FriendProfilePage({ friend }) {
     const dummyPosts = [
         {
             id: 1,
-            author: friend.name,
-            avatar: friend.profileImage,
+            author: friend?.name,
             timestamp: '2 hours ago',
             content: 'Just uploaded a new cover photo! What do you guys think?',
             image: 'https://picsum.photos/800/600?random=2',
@@ -140,8 +140,7 @@ export default function FriendProfilePage({ friend }) {
         },
         {
             id: 2,
-            author: friend.name,
-            avatar: friend.profileImage,
+            author: friend?.name,
             timestamp: '5 hours ago',
             content: 'Had a great time at the event last night. Dandiya night was amazing!',
             image: null,
@@ -150,8 +149,7 @@ export default function FriendProfilePage({ friend }) {
         },
         {
             id: 3,
-            author: friend.name,
-            avatar: friend.profileImage,
+            author: friend?.name,
             timestamp: '1 day ago',
             content: 'Throwback to last year\'s celebration. So much fun!',
             image: 'https://picsum.photos/800/600?random=3',
@@ -179,13 +177,13 @@ export default function FriendProfilePage({ friend }) {
 
     return (
         <div>
-            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-4 sm:p-6 lg:p-8">
+            <div className="min-h-screen bg-gray-100 text-white dark:text-white p-4 sm:p-6 lg:p-8">
                 {/* Cover Photo and Profile Card Section */}
-                <div className="relative bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                <div className="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden">
                     {/* Cover Photo */}
                     <div
                         className="relative w-full h-48 md:h-64 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${friend.coverImage})` }}
+                        style={{ backgroundImage: `url(${friend?.coverImage || ""})` }}
                     >
                         <div className="absolute inset-0 bg-black/30 flex items-end justify-end p-4">
                             <button className="flex items-center gap-1 text-white bg-black/50 hover:bg-black/70 px-4 py-2 rounded-full backdrop-blur-sm transition-colors">
@@ -195,30 +193,30 @@ export default function FriendProfilePage({ friend }) {
                     </div>
 
                     {/* Profile Details Card */}
-                    <div className="relative -mt-20 md:-mt-24 ml-4 md:ml-8 lg:ml-12 p-4 md:p-6 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-xl w-[95%] sm:w-3/4 md:w-2/3 lg:w-1/3">
+                    <div className="relative -mt-20 md:-mt-24 ml-4 md:ml-8 lg:ml-12 p-4 md:p-6 bg-gray-800 rounded-lg shadow-xl w-[95%] sm:w-3/4 md:w-2/3 lg:w-1/3">
                         <div className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0">
-                            <img src={friend.profileImage} alt="Profile" className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white dark:border-gray-800 shadow-lg" />
+                            <img src={friend?.profileImage || ""} alt="Profile" className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white dark:border-gray-800 shadow-lg" />
                         </div>
 
                         <div className="mt-10 md:mt-16 text-center md:text-left">
                             <h2 className="text-2xl font-bold flex items-center justify-center md:justify-start gap-2">
-                                {friend.name} ❤️
+                                {friend?.name} ❤️
                             </h2>
-                            <p className="text-gray-500 dark:text-gray-400">{friend.email}</p>
+                            <p className="text-gray-200 dark:text-gray-400">{friend?.email}</p>
 
                             {/* Social Stats */}
                             <div className="flex justify-around md:justify-start gap-4 my-4">
                                 <div className="text-center">
-                                    <p className="font-bold">{friend.following}</p>
-                                    <p className="text-sm text-gray-500">Following</p>
+                                    <p className="font-bold">{friend?.following}</p>
+                                    <p className="text-sm text-gray-200">Following</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="font-bold">{friend.likes}</p>
-                                    <p className="text-sm text-gray-500">Likes</p>
+                                    <p className="font-bold">{friend?.likes}</p>
+                                    <p className="text-sm text-gray-200">Likes</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="font-bold">{friend.followers}</p>
-                                    <p className="text-sm text-gray-500">Followers</p>
+                                    <p className="font-bold">{friend?.followers}</p>
+                                    <p className="text-sm text-gray-200">Followers</p>
                                 </div>
                             </div>
 
@@ -232,7 +230,7 @@ export default function FriendProfilePage({ friend }) {
                 {/* Navigation and Main Content Section */}
                 <div className="mt-8">
                     {/* Navigation Tabs */}
-                    <div className="bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md mb-6 p-4">
+                    <div className="bg-gray-800 rounded-lg shadow-md mb-6 p-4">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                             {tabs.map((tab) => {
                                 const isActive = activeTab === tab.name;
@@ -243,7 +241,7 @@ export default function FriendProfilePage({ friend }) {
                                         onClick={() => setActiveTab(tab.name)}
                                         className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${isActive
                                             ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300'
-                                            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                                            : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                                             }`}
                                     >
                                         <IconComponent className="h-5 w-5" />
@@ -251,7 +249,7 @@ export default function FriendProfilePage({ friend }) {
                                     </button>
                                 );
                             })}
-                            <div className="relative flex-grow">
+                            <div className="relative flex-grow text-gray-700">
                                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                                 <input
                                     type="text"
@@ -268,7 +266,6 @@ export default function FriendProfilePage({ friend }) {
                     </div>
                 </div>
             </div>
-            <HomePage />
         </div>
     );
 }
