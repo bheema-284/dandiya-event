@@ -1,13 +1,12 @@
 "use client"
 import React, { useContext, useState } from "react";
-import { useRouter } from "next/navigation";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import RootContext from "../config/rootcontext";
 import { useSWRFetch } from "../config/useswrfetch";
+import Link from "next/link";
 
 const Login = () => {
     const { rootContext, setRootContext } = useContext(RootContext);
-    const router = useRouter();
 
     const { data, error } = useSWRFetch(`/api/users`)
     //const mutated = Mutated(`/api/masters/hotels/boardtype?search_text=${searchText}`)
@@ -74,7 +73,6 @@ const Login = () => {
         } else {
             // Email and password correct
             const username = user.name || userByEmail.email.split("@")[0];
-            console.log("username", username)
             const resp = {
                 ...rootContext,
                 authenticated: true,
@@ -107,8 +105,8 @@ const Login = () => {
         <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center">
                 <div className="flex-1 text-center my-5">
-                    <h1 className="text-3xl text-center font-bold text-fuchsia-600 mb-2">Dandiya Match</h1>
-                    <p className="text-xl text-center text-gray-800">
+                    <h1 className="text-3xl text-center font-bold text-fuchsia-600 mb-2">Dandiya Carnival</h1>
+                    <p className="text-md italic text-center text-gray-800">
                         Find your perfect rhythm and partner for the Navratri season.
                     </p>
                 </div>
@@ -158,11 +156,11 @@ const Login = () => {
                             >
                                 {isLoading ? 'Loading...' : 'Log In'}
                             </button>
-                            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                            <p className="text-sm font-light text-gray-500 text-center dark:text-gray-400">
                                 New User ?{" "}
-                                <span onClick={() => router.push("/signup")} className="font-medium cursor-pointer text-purple-500 hover:underline dark:text-primary-500">
+                                <Link href={'/signup'} className="font-medium inline cursor-pointer text-purple-500 hover:underline dark:text-primary-500">
                                     Sign up Now
-                                </span>
+                                </Link>
                             </p>
                         </div>
                     </div>

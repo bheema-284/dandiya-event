@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import RootContext from './config/rootcontext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
 export default function RegistrationForm() {
     const [firstName, setFirstName] = useState('');
@@ -16,6 +17,7 @@ export default function RegistrationForm() {
     const [errors, setErrors] = useState({});
     const { rootContext, setRootContext } = useContext(RootContext);
     const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
 
     // Format DOB into "DD-MM-YYYY" for backend
     const formatDOB = () => {
@@ -121,6 +123,12 @@ export default function RegistrationForm() {
             }));
         }
     };
+    const getColor = (g) => {
+        if (g === "male") return "bg-red-500";
+        if (g === "female") return "bg-yellow-400";
+        if (g === "custom") return "bg-gradient-to-r from-red-500 to-yellow-400";
+        return "bg-white";
+    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -141,7 +149,7 @@ export default function RegistrationForm() {
                                 placeholder="First name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
-                                className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
                         </div>
@@ -151,7 +159,7 @@ export default function RegistrationForm() {
                                 placeholder="Surname"
                                 value={surname}
                                 onChange={(e) => setSurname(e.target.value)}
-                                className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.surname && <p className="text-red-500 text-xs mt-1">{errors.surname}</p>}
                         </div>
@@ -182,9 +190,13 @@ export default function RegistrationForm() {
                         <label className="block text-sm font-medium text-gray-600 mb-1">Gender</label>
                         <div className="flex gap-2">
                             {['female', 'male', 'custom'].map(g => (
-                                <label key={g} className="flex-1 flex justify-between border px-2 py-1.5 rounded-lg cursor-pointer">
+                                <label key={g} className="flex-1 items-center flex justify-between border px-2 py-1.5 rounded-lg cursor-pointer">
                                     {g.charAt(0).toUpperCase() + g.slice(1)}
-                                    <input type="radio" name="gender" value={g} checked={gender === g} onChange={(e) => setGender(e.target.value)} />
+                                    <input type="radio" className='hidden' name="gender" value={g} checked={gender === g} onChange={(e) => setGender(e.target.value)} />
+                                    <span
+                                        className={`w-4 h-4 rounded-full border-2 border-gray-400 flex-shrink-0 
+            ${gender === g ? getColor(g) : "bg-white"}`}
+                                    ></span>
                                 </label>
                             ))}
                         </div>
@@ -198,20 +210,33 @@ export default function RegistrationForm() {
                             placeholder="Mobile number or email address"
                             value={contact}
                             onChange={(e) => setContact(e.target.value)}
-                            className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
+                            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                         />
                         {errors.contact && <p className="text-red-500 text-xs mt-1">{errors.contact}</p>}
                     </div>
 
                     {/* Password */}
                     <div>
-                        <input
-                            type="password"
-                            placeholder="Enter password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Password"
+                                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                            >
+                                {showPassword ? (
+                                    <EyeIcon className="w-4 h-4 text-gray-400" />
+                                ) : (
+                                    <EyeSlashIcon className="w-4 h-4 text-gray-400" />
+                                )}
+                            </span>
+                        </div>
                         {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                     </div>
 
