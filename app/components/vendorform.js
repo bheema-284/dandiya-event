@@ -243,9 +243,9 @@ export default function VendorRegistration({ selectedCategory = "Food Court" }) 
 
                     {/* Step 3 - Review & Submit */}
                     {step === 2 && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                            <h3 className="text-lg font-semibold text-gray-800">Review Your Details</h3>
-                            <ul className="text-gray-700 space-y-2">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 bg-green-100 rounded-lg p-3">
+                            <h3 className="text-lg font-semibold">Review Your Details</h3>
+                            <ul className="space-y-2">
                                 <li><strong>Vendor Name:</strong> {formData.vendorName}</li>
                                 <li><strong>Email:</strong> {formData.email}</li>
                                 <li><strong>Contact Number:</strong> {formData.contactNumber}</li>
@@ -293,9 +293,10 @@ export default function VendorRegistration({ selectedCategory = "Food Court" }) 
 
 /* ---------- Reusable Components ---------- */
 function InputField({ label, type = "text", name, value, onChange, error }) {
+
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <label className="block text-sm font-medium">{label}</label>
             <input
                 type={type}
                 name={name}
@@ -312,13 +313,13 @@ function InputField({ label, type = "text", name, value, onChange, error }) {
 function TextAreaField({ label, name, value, onChange }) {
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <label className="block text-sm font-medium">{label}</label>
             <textarea
                 name={name}
                 value={value}
                 onChange={onChange}
                 rows="3"
-                className="mt-1 block w-full rounded-md p-2 border-2 border-gray-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm"
+                className={`mt-1 block w-full rounded-md p-2 border-2 border-yellow-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm`}
             ></textarea>
         </div>
     );

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Sun, Search, ChevronDown, Bell, MessageSquare } from 'lucide-react';
-import { useTheme } from '../config/themecontext';
 import { motion } from 'framer-motion';
 
 const users = [
@@ -15,7 +14,6 @@ export default function DandiyaPartner() {
     const [activeTab, setActiveTab] = useState('friends');
     const [showFriends, setShowFriends] = useState(true);
     const [showRecents, setShowRecents] = useState(true);
-    const { theme } = useTheme();
 
     const toggleFriends = () => setShowFriends(!showFriends);
     const toggleRecents = () => setShowRecents(!showRecents);
@@ -52,9 +50,7 @@ export default function DandiyaPartner() {
 
     return (
         <div>
-            <div style={{
-                color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-            }} className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow w-full">
+            <div className="bg-gradient-to-r from-orange-400 to-red-500 rounded-lg shadow w-full">
                 {/* <h2 className="font-semibold text-lg sm:text-sm text-center">FIND MY DANDIYA PARTNER</h2> */}
                 <motion.button
                     whileHover={{ scale: 1 }}
@@ -70,19 +66,14 @@ export default function DandiyaPartner() {
                     <img src={'/dandiya.png'} />
                 </div>
             </div>
-            <div style={{
-                backgroundColor: "var(--bg-card)",
-                color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-            }} className="max-w-md mx-auto rounded-2xl shadow-lg overflow-hidden mt-5">
+            <div className="max-w-md mx-auto bg-gray-700 text-white rounded-2xl shadow-lg overflow-hidden mt-5">
                 {/* Header Section */}
                 <div className="p-6">
                     <div className="flex justify-between items-center">
                         <div className="space-y-1">
                             <h1 className="text-lg font-bold ">Friends</h1>
                         </div>
-                        <button style={{
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }} className={`p-2 ${theme === "dark" ? "bg-gray-200 text-gray-400" : "bg-gray-300 text-white"} rounded-xl cursor-pointer transition-colors duration-200`}>
+                        <button className={`p-2 rounded-xl cursor-pointer transition-colors duration-200`}>
                             <Sun size={20} />
                         </button>
                     </div>
@@ -90,10 +81,6 @@ export default function DandiyaPartner() {
                     {/* Search Bar */}
                     <div className="relative">
                         <input
-                            style={{
-                                backgroundColor: "var(--bg-card)",
-                                color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                            }}
                             type="text"
                             placeholder="Find Friends..."
                             className="w-full pl-10 pr-4 py-3 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"

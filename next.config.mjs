@@ -1,16 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverActions: true,
-    },
-    api: {
-        bodyParser: true, // this is the default
-    },
     images: {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: '*'
+                hostname: '**'
 
             },
         ],

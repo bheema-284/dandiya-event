@@ -9,7 +9,6 @@ import {
 } from '@heroicons/react/24/solid';
 import { ChatBubbleLeftRightIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
-import { useTheme } from '../config/themecontext';
 
 const bgColors = [
     'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-400', 'bg-pink-500',
@@ -37,7 +36,6 @@ export default function Page() {
     const [bgClass, setBgClass] = useState('bg-gray-800');
     const [iconBg, setIconBg] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
-    const { theme } = useTheme();
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -58,10 +56,7 @@ export default function Page() {
     const router = useRouter();
 
     return (
-        <div style={{
-            backgroundColor: "var(--bg-card)",
-            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-        }} className="h-screen flex flex-col md:flex-row font-sans">
+        <div className="h-screen flex flex-col md:flex-row font-sans">
             {/* Left Sidebar for User Info (Visible on all devices, but layout changes) */}
             <div className="w-full md:w-1/4 bg-gray-800 p-4 shadow-md flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-200">
                 <div className="flex items-center justify-between w-full mb-4 md:mb-6">
@@ -114,7 +109,7 @@ export default function Page() {
 
                     {type === 'photo' && (
                         <div className="mt-6 flex flex-col items-center w-full max-w-lg">
-                            <label className="flex items-center justify-center p-4 bg-gray-800 text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 transition w-full">
+                            <label className="flex items-center justify-center p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 transition w-full">
                                 <PhotoIcon className="h-5 w-5 mr-2" />
                                 <span>Upload a Photo</span>
                                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -123,7 +118,7 @@ export default function Page() {
                                 <img src={photo} alt="Preview" className="mt-4 w-full h-auto object-cover max-h-96 rounded shadow-lg" />
                             )}
                             <div className="mt-4 flex gap-4 w-full justify-end">
-                                <button onClick={() => setShowConfirm(true)} className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">Discard</button>
+                                <button onClick={() => setShowConfirm(true)} className="px-4 py-2 rounded hover:bg-gray-400 transition">Discard</button>
                                 <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Share Story</button>
                             </div>
                         </div>
@@ -139,7 +134,7 @@ export default function Page() {
                                         placeholder="Write your story..."
                                         className="w-full p-4 text-base md:text-xl rounded resize-none h-32 md:h-40 shadow text-gray-800 focus:outline-none"
                                     />
-                                    <h3 className="mt-4 font-semibold text-gray-800">Choose Background</h3>
+                                    <h3 className="mt-4 font-semibold">Choose Background</h3>
                                     <div className="grid grid-cols-5 md:grid-cols-6 gap-2 mt-2">
                                         {bgColors.map((bg, i) => (
                                             <div
@@ -149,12 +144,12 @@ export default function Page() {
                                             />
                                         ))}
                                     </div>
-                                    <h3 className="mt-4 font-semibold text-gray-800">Or Choose an Icon Background</h3>
+                                    <h3 className="mt-4 font-semibold">Or Choose an Icon Background</h3>
                                     <div className="flex flex-wrap gap-2 mt-2">
                                         {iconBgs.map(({ key, icon }) => (
                                             <div
                                                 key={key}
-                                                className={`cursor-pointer w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-gray-800 rounded-full border-2 hover:scale-110 transition ${iconBg && iconBg.key === key ? 'border-blue-500' : 'border-transparent'}`}
+                                                className={`cursor-pointer w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full border-2 hover:scale-110 transition ${iconBg && iconBg.key === key ? 'border-blue-500' : 'border-transparent'}`}
                                                 onClick={() => { setIconBg({ key, icon }); setBgClass('bg-gray-800'); }}
                                             >
                                                 {icon}
@@ -170,7 +165,7 @@ export default function Page() {
                                 </div>
                             </div>
                             <div className="flex justify-end gap-4 mt-4">
-                                <button onClick={() => setShowConfirm(true)} className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">Discard</button>
+                                <button onClick={() => setShowConfirm(true)} className="px-4 py-2  rounded hover:bg-gray-400 transition">Discard</button>
                                 <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Share Story</button>
                             </div>
                         </div>
@@ -180,14 +175,14 @@ export default function Page() {
 
             {/* Discard Confirmation Modal */}
             {showConfirm && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
+                <div className="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50 p-4">
                     <div className="bg-gray-800 p-6 rounded shadow-lg max-w-sm w-full text-center">
                         <p className="text-lg font-semibold mb-2">Are you sure you want to discard this story?</p>
                         <p className="text-sm text-gray-600 mb-6">Your story won&apos;t be saved.</p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
                             <button
                                 onClick={() => setShowConfirm(false)}
-                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
+                                className="px-4 py-2 rounded hover:bg-gray-300 transition"
                             >
                                 Continue Editing
                             </button>

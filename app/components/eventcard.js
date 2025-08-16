@@ -1,14 +1,9 @@
-import { UsersIcon, CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import { useTheme } from '../config/themecontext';
+import { UsersIcon } from '@heroicons/react/20/solid'
 
 export default function EventCard() {
-  const { theme } = useTheme();
 
   return (
-    <div style={{
-      backgroundColor: "var(--bg-card)",
-      color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-    }} className="rounded-xl shadow-md overflow-hidden">
+    <div className="rounded-xl bg-gray-700 text-white shadow-md overflow-hidden">
       <div>
         <img
           className="h-48 w-full object-cover"
@@ -17,9 +12,9 @@ export default function EventCard() {
         />
       </div>
       <div className="p-2">
-        <div className="tracking-wide text-md font-semibold">Christmas 2025</div>
+        <div className="tracking-wide text-md font-semibold">Dandiya 2025</div>
         <a href="#" className="block mt-1 text-sm leading-tight hover:underline">
-          26 January 2025
+          26 Sept 2025
         </a>
         <p className="mt-2 text-slate-500">
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
@@ -31,7 +26,7 @@ export default function EventCard() {
         <div className="mt-4 flex space-x-2">
           <button className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-md">
             <span className="text-blue-800">Going/Not Going</span>
-          </button>         
+          </button>
         </div>
       </div>
     </div>

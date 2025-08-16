@@ -1,16 +1,28 @@
 'use client';
-import React from 'react';
-import { useTheme } from '../config/themecontext';
+import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { MoonIcon, SunIcon } from '@heroicons/react/20/solid';
+import { UserIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import RootContext from './config/rootcontext';
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useTheme();
   const router = useRouter();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { rootContext, setRootContext } = useContext(RootContext);
 
+  const logOut = () => {
+    localStorage.clear();
+    const updatedContext = {
+      ...rootContext,
+      authenticated: false,
+    };
+
+    setRootContext(updatedContext);
+    router.push(`/`);
+  };
   return (
     <header
-      className="w-full h-16 fixed z-50 flex items-center justify-center"
+      className="w-full h-16 fixed z-50 top-0 flex items-center justify-center"
       style={{ backgroundColor: '#1a1945ff' }}
     >
       {/* Content wrapper with a max-width and centering */}
@@ -60,15 +72,34 @@ export default function Navbar() {
         </div>
 
         {/* Right Icons */}
-        <div className="flex items-center gap-6 cursor-pointer">
+        <div className="flex items-center gap-6 cursor-pointer text-white capitalize">
           <img src="/Chat icon.png" alt="Chat" className="h-7 w-auto" />
           <img src="/Notifications.png" alt="Notifications" className="h-7 w-auto" />
-          <button onClick={toggleTheme} className="flex items-center cursor-pointer">
-            {theme === 'light'
-              ? <MoonIcon className="w-7 text-yellow-500" />
-              : <SunIcon className="w-7 text-yellow-500" />}
-          </button>
-          <img src="/Profile Icon.jpg" alt="Profile" className="h-7 w-7 rounded-full object-cover" />
+          <div className="flex items-center gap-1 cursor-pointer" onClick={() => setShowDropdown(!showDropdown)}>
+            <UserIcon className="w-4 h-4 text-gray-400" />
+            <div className="text-sm flex flex-col sm:flex-row sm:items-center gap-1">
+              {/* 👇 Small screens: initial in a circle */}
+              <div className="sm:hidden w-6 h-6 rounded-full bg-indigo-900 text-white flex items-center justify-center font-semibold">
+                {(rootContext?.user?.name || "U").charAt(0).toUpperCase()}
+              </div>
+
+              {/* 👇 Larger screens: full name and role */}
+              <div className="hidden sm:flex flex-col">
+                <p className="font-semibold">{rootContext?.user?.name || "User"}</p>
+              </div>
+            </div>
+            <p className="hidden sm:block"><ChevronDownIcon className="w-4 h-4 text-gray-400" /></p>
+          </div>
+          {showDropdown && (
+            <div className="absolute top-full right-0 mt-2 w-36 bg-white shadow-lg border rounded-md z-50">
+              <button
+                onClick={logOut}
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

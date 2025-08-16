@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { useTheme } from '../config/themecontext';
 import CreatePost from './createpost';
 import DandiyaPartner from './dandiyapartner';
 import ProfileCard from './profilecard';
@@ -14,7 +13,6 @@ import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
-    const { theme } = useTheme();
     const router = useRouter()
     const profileData = {
         name: "Kelin Jasen",
@@ -27,6 +25,8 @@ export default function Home() {
     };
 
     const storyColors = [
+        "#512E91", "#E6982D", "#EC8989", "#D6C3B5",
+        "#F8D94A", "#B3A4C4", "#EA9595", "#9E93AD",
         "#512E91", "#E6982D", "#EC8989", "#D6C3B5",
         "#F8D94A", "#B3A4C4", "#EA9595", "#9E93AD"
     ];
@@ -61,10 +61,6 @@ export default function Home() {
                 <SwiperSlide>
                     <div
                         className="w-full aspect-[1/1.2] rounded-xl border-4 border-gray-400 p-2 flex items-center justify-center flex-col cursor-pointer shadow-lg"
-                        style={{
-                            backgroundColor: "var(--bg-card)",
-                            color: theme === "dark" ? "var(--card-text)" : "var(--text-primary)",
-                        }}
                     >
                         <div onClick={() => router.push("/stories")} className="flex flex-col items-center justify-center">
                             <PlusCircle size={36} style={{ color: "var(--accent)" }} />
@@ -83,14 +79,10 @@ export default function Home() {
             </Swiper>
             <div className="mt-5 flex flex-col lg:flex-row gap-2">
                 {/* Center Content */}
-                <div className="w-full lg:w-1/2 flex flex-col gap-6 order-1 lg:order-2">
+                <div className="w-full lg:w-1/2 flex flex-col bg-gray-700 text-white gap-6 order-1 lg:order-2">
                     <CreatePost />
                     <div
                         className="rounded-lg shadow-md p-6"
-                        style={{
-                            backgroundColor: "var(--bg-card)",
-                            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-                        }}
                     >
                         <div className="flex items-center space-x-4 mb-4">
                             <img

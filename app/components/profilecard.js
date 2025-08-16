@@ -1,13 +1,7 @@
-import { useTheme } from "../config/themecontext";
-
 export default function ProfileCard() {
-    const { theme } = useTheme();
 
     return (
-        <div style={{
-            backgroundColor: "var(--bg-card)",
-            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-        }} className="rounded-lg p-6 shadow w-full">
+        <div className="rounded-lg bg-gray-700 text-white p-6 shadow w-full">
             <div className="flex flex-col items-center">
                 <img
                     src="https://randomuser.me/api/portraits/women/12.jpg"

@@ -1,10 +1,8 @@
 import { useState } from 'react';
 // Importing icons from @heroicons/react/24/outline
 import { CameraIcon, FaceSmileIcon, LanguageIcon, MapPinIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useTheme } from '../config/themecontext';
 
 export default function CreatePost({ onAddPost }) {
-    const { theme } = useTheme();
 
     // State for the main post content
     const [text, setText] = useState('');
@@ -110,13 +108,7 @@ export default function CreatePost({ onAddPost }) {
     };
 
     return (
-        <div
-            className="rounded-lg shadow-md p-6"
-            style={{
-                backgroundColor: "var(--bg-card)",
-                color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-            }}
-        >
+        <div className="rounded-lg bg-gray-700 text-white shadow-md p-6">
             <h3 className="font-bold text-lg mb-4">Create Post</h3>
 
             {/* Textarea for post content */}
@@ -175,17 +167,14 @@ export default function CreatePost({ onAddPost }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex text-xs flex-wrap gap-2 mb-4"
-                style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
-            >
-                <label style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }} className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors cursor-pointer">
+            <div className="flex text-xs flex-wrap gap-2 mb-4">
+                <label className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors cursor-pointer">
                     <CameraIcon className="h-4 w-4" />
                     <span>Album</span>
                     {/* Hidden input to handle file selection */}
                     <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                 </label>
                 <button
-                    style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                     onClick={handleSearchButtonClick}
                     className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors"
                 >
@@ -193,7 +182,6 @@ export default function CreatePost({ onAddPost }) {
                     <span>Feelings & Activity</span>
                 </button>
                 <button
-                    style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                     onClick={handleSearchButtonClick}
                     className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors"
                 >
@@ -201,7 +189,6 @@ export default function CreatePost({ onAddPost }) {
                     <span>Check In</span>
                 </button>
                 <button
-                    style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                     onClick={handleSearchButtonClick}
                     className="flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-full transition-colors"
                 >
@@ -212,7 +199,7 @@ export default function CreatePost({ onAddPost }) {
 
             {/* Search Box */}
             {showSearchBox && (
-                <div style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }} className="relative mb-4">
+                <div className="relative mb-4">
                     <input
                         type="text"
                         placeholder={searchPlaceholders[searchPlaceholderIndex]}
@@ -221,7 +208,6 @@ export default function CreatePost({ onAddPost }) {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <button
-                        style={{ color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)" }}
                         onClick={handleCloseSearchBox}
                         className="absolute right-3 top-3"
                         aria-label="Close search box"

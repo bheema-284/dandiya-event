@@ -1,72 +1,73 @@
-'use client';
-
-import { Geist, Geist_Mono } from "next/font/google";
+'use client'
 import "./globals.css";
+import { Inter } from 'next/font/google';
+import RootContext from "./components/config/rootcontext";
 import Navbar from "./components/navbar";
-import { useEffect, useState } from "react";
-import { ThemeContext } from "./config/themecontext";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import Login from "./components/common/login";
+import Toast from "./components/common/toast";
+import RegistrationForm from './components/registrationform';
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-
-
-const themeColors = {
-  light: {
-    '--bg-primary': '#ffffff',
-    '--bg-card': '#f9f9ffff', // dark navy like in the image
-    '--text-primary': '#252627ff',
-    '--text-secondary': '#373b40ff',
-    '--accent': '#4F46E5',
-    '--accent-hover': '#4338CA',
-  },
-  dark: {
-    '--bg-primary': '#1f2937',
-    '--bg-card': '#0b0a2b',
-    '--text-primary': '#f9fafb',
-    '--text-secondary': '#d1d5db',
-    '--card-text': '#ffffff',
-    '--accent': '#facc15',
-    '--accent-hover': '#eab308',
-  }
-};
-
+// ✅ Layouts MUST be server components → no "use client" at the top
 export default function RootLayout({ children }) {
-  const [theme, setTheme] = useState("light");
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
-  useEffect(() => {
-    const root = document.documentElement;
-    const colors = themeColors[theme];
-    for (const key in colors) {
-      root.style.setProperty(key, colors[key]);
-    }
-  }, [theme]);
   return (
-    <html lang="en">
-      <body
-        className={`
-    ${geistSans.variable} ${geistMono.variable}
-    antialiased min-h-screen flex flex-col bg-smile
-  `}
-      >
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-          <Navbar />
-          <div className={`w-full sm:w-[80%] m-auto flex flex-1 mt-16`}>
-            <main className={`flex-1 overflow-y-auto`}>
-              {children}
-            </main>
-          </div>
-        </ThemeContext.Provider>
+    <html lang="en" className={inter.variable}>
+      <body className="antialiased">
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
+  );
+}
+
+// ✅ Move your client-side logic into a separate provider component
+function RootProvider({ children }) {
+  const pathName = usePathname();
+  const [rootContext, setRootContext] = useState({
+    authenticated: false,
+    loader: true,
+    user: { name: "", email: "", mobile: "", password: "", token: "", isAdmin: "" },
+    accessToken: '',
+    toast: { show: false, dismiss: true, type: '', title: '', message: '' }
+  });
+
+  useEffect(() => {
+    const user_details =
+      typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem("user_details"));
+
+    const updatedContext = { ...rootContext, loader: false };
+
+    if (user_details) {
+      updatedContext.authenticated = true;
+      updatedContext.user = user_details;
+    } else {
+      updatedContext.authenticated = false;
+    }
+
+    setRootContext(updatedContext);
+  }, []);
+
+  // Bypass layout for API routes (if ever rendered in browser)
+  if (pathName?.startsWith("/api")) return children;
+
+  return (
+    <RootContext.Provider value={{ rootContext, setRootContext }}>
+      {pathName === "/signup" && !rootContext.authenticated ? (
+        <RegistrationForm />
+      ) : !rootContext.authenticated ? (
+        <Login />
+      ) : (
+        <div>
+          <Navbar />
+          <div className="w-full sm:w-[80%] m-auto flex flex-1 mt-16">
+            <main className="flex-1 overflow-y-auto">{children}</main>
+          </div>
+        </div>
+      )}
+      {rootContext?.toast && <Toast />}
+    </RootContext.Provider>
   );
 }

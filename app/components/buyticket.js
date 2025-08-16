@@ -1,12 +1,10 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { useTheme } from '../config/themecontext';
 import { Ticket } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Ticketing() {
     const [selectedDays, setSelectedDays] = useState([]); // holds numbers 1..10 (1 = SEASON PASS)
-    const { theme } = useTheme();
 
     const colorClasses = [
         { label: "SEASON PASS", bg: "bg-orange-400 text-black", hover: "hover:bg-orange-100 hover:text-orange-500" },
@@ -114,10 +112,7 @@ export default function Ticketing() {
     ];
 
     return (
-        <div style={{
-            backgroundColor: "var(--bg-card)",
-            color: theme === 'dark' ? "var(--card-text)" : "var(--text-primary)"
-        }} className="min-h-screen">
+        <div className="min-h-screen">
             {/* Day Selection */}
             <div className="flex flex-col items-center gap-4 py-6">
                 <div className="flex flex-wrap gap-2 justify-center">
@@ -133,7 +128,7 @@ export default function Ticketing() {
                                 key={day}
                                 onClick={() => handleDayToggle(day)}
                                 disabled={disabled}
-                                className={`px-3 md:px-4 py-1 rounded-full font-semibold border-2 ${theme === "light" ? "border-gray-400" : "border-white"} text-xs md:text-sm transition-all duration-200
+                                className={`px-3 md:px-4 py-1 rounded-full font-semibold border-2 text-xs md:text-sm transition-all duration-200
                     ${isSelected ? `${bg} shadow-md shadow-yellow-300` : `bg-gray-200 text-gray-700 ${hover}`}
                     ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                             >
