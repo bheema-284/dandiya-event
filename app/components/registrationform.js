@@ -10,11 +10,13 @@ export default function RegistrationForm() {
     const [dobMonth, setDobMonth] = useState('Month');
     const [dobYear, setDobYear] = useState('Year');
     const [gender, setGender] = useState('');
-    const [email, setEmail] = useState('');
+    const [contact, setContact] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({});
     const { rootContext, setRootContext } = useContext(RootContext);
     const router = useRouter();
-    // Format DOB into "DD-MM-YYYY" for Joi validation
+
+    // Format DOB into "DD-MM-YYYY" for backend
     const formatDOB = () => {
         if (dobDay === 'Day' || dobMonth === 'Month' || dobYear === 'Year') return '';
         const monthMap = {
@@ -25,22 +27,41 @@ export default function RegistrationForm() {
         return `${dobDay.padStart(2, '0')}-${monthMap[dobMonth]}-${dobYear}`;
     };
 
+    // Validation function
+    const validateForm = () => {
+        const newErrors = {};
+        if (!firstName.trim()) newErrors.firstName = "First name is required";
+        if (!surname.trim()) newErrors.surname = "Surname is required";
+        if (dobDay === 'Day' || dobMonth === 'Month' || dobYear === 'Year') newErrors.dob = "Date of birth is required";
+        if (!gender) newErrors.gender = "Please select a gender";
+        if (!contact.trim()) newErrors.contact = "Email or mobile is required";
+        else {
+            const isMobile = /^\d+$/.test(contact.trim());
+            const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
+            if (isMobile && contact.trim().length !== 10) newErrors.contact = "Mobile number must be 10 digits";
+            if (!isMobile && !isEmail) newErrors.contact = "Enter a valid email address";
+        }
+        if (!password) newErrors.password = "Password is required";
+        else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
 
-        // Determine what the user entered
-        const isMobile = /^\d{10}$/.test(email); // if 10 digits → treat as mobile
-        const isEmail = /\S+@\S+\.\S+/.test(email); // if email format → treat as email
+        const isMobile = /^\d+$/.test(contact.trim());
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
 
-        // Construct payload
         const newUser = {
             name: `${firstName} ${surname}`.trim(),
             password,
             gender,
             role: "user",
             date_of_birth: formatDOB(),
-            mobile: isMobile ? email : "", // if mobile, set mobile key
-            email: isEmail ? email : "",   // if email, set email key
+            mobile: isMobile ? contact.trim() : "",
+            email: isEmail ? contact.trim() : "",
         };
 
         try {
@@ -51,17 +72,15 @@ export default function RegistrationForm() {
             });
 
             const data = await res.json();
-
             if (!res.ok) throw new Error(data.error || 'Failed to register');
 
-            // Update rootContext & redirect
             router.push("/");
             setRootContext({
                 ...rootContext,
                 authenticated: true,
                 loader: false,
                 user: {
-                    name: `${firstName} ${surname}`.trim(),
+                    name: newUser.name,
                     email: newUser.email,
                     mobile: newUser.mobile,
                     token: "token",
@@ -82,9 +101,9 @@ export default function RegistrationForm() {
             setDobMonth('Month');
             setDobYear('Year');
             setGender('');
-            setEmail('');
+            setContact('');
             setPassword('');
-
+            setErrors({});
         } catch (err) {
             setRootContext((prev) => ({
                 ...prev,
@@ -102,7 +121,6 @@ export default function RegistrationForm() {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl font-inter">
-                {/* Header Section */}
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-800">Create a new account</h1>
                     <p className="text-gray-500 mt-1 text-base">It's quick and easy.</p>
@@ -110,26 +128,29 @@ export default function RegistrationForm() {
 
                 <hr className="mb-6 border-gray-200" />
 
-                {/* Registration Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* First Name & Surname */}
                     <div className="flex flex-col md:flex-row gap-4">
-                        <input
-                            type="text"
-                            placeholder="First name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            required
-                            className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Surname"
-                            value={surname}
-                            onChange={(e) => setSurname(e.target.value)}
-                            required
-                            className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        />
+                        <div className="flex-1">
+                            <input
+                                type="text"
+                                placeholder="First name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            />
+                            {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+                        </div>
+                        <div className="flex-1">
+                            <input
+                                type="text"
+                                placeholder="Surname"
+                                value={surname}
+                                onChange={(e) => setSurname(e.target.value)}
+                                className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            />
+                            {errors.surname && <p className="text-red-500 text-xs mt-1">{errors.surname}</p>}
+                        </div>
                     </div>
 
                     {/* Date of Birth */}
@@ -149,6 +170,7 @@ export default function RegistrationForm() {
                                 {[...Array(100).keys()].map(y => <option key={2025 - y}>{2025 - y}</option>)}
                             </select>
                         </div>
+                        {errors.dob && <p className="text-red-500 text-xs mt-1">{errors.dob}</p>}
                     </div>
 
                     {/* Gender */}
@@ -158,48 +180,48 @@ export default function RegistrationForm() {
                             {['female', 'male', 'custom'].map(g => (
                                 <label key={g} className="flex-1 flex justify-between border px-2 py-1.5 rounded-lg cursor-pointer">
                                     {g.charAt(0).toUpperCase() + g.slice(1)}
-                                    <input
-                                        type="radio"
-                                        name="gender"
-                                        value={g}
-                                        checked={gender === g}
-                                        onChange={(e) => setGender(e.target.value)}
-                                    />
+                                    <input type="radio" name="gender" value={g} checked={gender === g} onChange={(e) => setGender(e.target.value)} />
                                 </label>
                             ))}
                         </div>
+                        {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
                     </div>
 
-                    {/* Email & Password */}
-                    <input
-                        type="email"
-                        placeholder="Mobile number or email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
-                    />
-                    <input
-                        type="password"
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
-                    />
+                    {/* Contact */}
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Mobile number or email address"
+                            value={contact}
+                            onChange={(e) => setContact(e.target.value)}
+                            className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
+                        />
+                        {errors.contact && <p className="text-red-500 text-xs mt-1">{errors.contact}</p>}
+                    </div>
 
-                    {/* Sign Up button */}
+                    {/* Password */}
+                    <div>
+                        <input
+                            type="password"
+                            placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-2 py-1.5 border border-gray-300 rounded-lg"
+                        />
+                        {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+                    </div>
+
+                    {/* Submit */}
                     <div className="text-center my-6">
                         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-16 rounded-lg">
                             Sign Up
                         </button>
                     </div>
-                    {/* Info paragraphs (forced to single line each) */}
+
                     <p className="text-xs text-gray-600 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
                         People who use our service may have uploaded your contact information to Facebook.
                         <a href="#" className="text-blue-500 inline"> Learn more</a>.
                     </p>
-
                     <p className="text-xs text-gray-600 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
                         By clicking Sign Up, you agree to our
                         <a href="#" className="text-blue-500 inline"> Terms</a>,
