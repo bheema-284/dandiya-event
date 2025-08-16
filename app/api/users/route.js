@@ -13,8 +13,8 @@ const userPostSchema = Joi.object({
 })
     .xor("email", "mobile")
     .keys({
-        email: Joi.string().email(),
-        mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
+        email: Joi.string().email().allow('').optional(),
+        mobile: Joi.string().pattern(/^[6-9]\d{9}$/).allow('').optional(),
     });
 
 
