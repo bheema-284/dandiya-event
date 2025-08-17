@@ -7,21 +7,32 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import Loader from './common/loader';
 
 export default function RegistrationForm() {
-    const [firstName, setFirstName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [dobDay, setDobDay] = useState('Day');
-    const [dobMonth, setDobMonth] = useState('Month');
-    const [dobYear, setDobYear] = useState('Year');
-    const [gender, setGender] = useState('');
-    const [contact, setContact] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        firstName: '',
+        surname: '',
+        dobDay: 'Day',
+        dobMonth: 'Month',
+        dobYear: 'Year',
+        gender: '',
+        contact: '',
+        password: '',
+    });
     const [errors, setErrors] = useState({});
-    const { rootContext, setRootContext } = useContext(RootContext);
-    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [serviceCall, setServiceCall] = useState(false);
+
+    const { rootContext, setRootContext } = useContext(RootContext);
+    const router = useRouter();
+
+    // Update field values
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
     // Format DOB into "DD-MM-YYYY" for backend
     const formatDOB = () => {
+        const { dobDay, dobMonth, dobYear } = formData;
         if (dobDay === 'Day' || dobMonth === 'Month' || dobYear === 'Year') return '';
         const monthMap = {
             Jan: '01', Feb: '02', Mar: '03', Apr: '04',
@@ -33,29 +44,56 @@ export default function RegistrationForm() {
 
     // Validation function
     const validateForm = () => {
+        const { firstName, surname, dobDay, dobMonth, dobYear, gender, contact, password } = formData;
         const newErrors = {};
+
         if (!firstName.trim()) newErrors.firstName = "First name is required";
         if (!surname.trim()) newErrors.surname = "Surname is required";
-        if (dobDay === 'Day' || dobMonth === 'Month' || dobYear === 'Year') newErrors.dob = "Date of birth is required";
+        if (dobDay === 'Day' || dobMonth === 'Month' || dobYear === 'Year')
+            newErrors.dob = "Date of birth is required";
         if (!gender) newErrors.gender = "Please select a gender";
         if (!contact.trim()) newErrors.contact = "Email or mobile is required";
         else {
             const isMobile = /^\d+$/.test(contact.trim());
             const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
-            if (isMobile && contact.trim().length !== 10) newErrors.contact = "Mobile number must be 10 digits";
-            if (!isMobile && !isEmail) newErrors.contact = "Enter a valid email address";
+            if (isMobile && contact.trim().length !== 10)
+                newErrors.contact = "Mobile number must be 10 digits";
+            if (!isMobile && !isEmail)
+                newErrors.contact = "Enter a valid email address";
         }
         if (!password) newErrors.password = "Password is required";
-        else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
+        else if (password.length < 6)
+            newErrors.password = "Password must be at least 6 characters";
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
+    // Check if all fields filled (basic required check for disabling button)
+    const isFormFilled = () => {
+        const { firstName, surname, dobDay, dobMonth, dobYear, gender, contact, password } = formData;
+        return (
+            firstName.trim() &&
+            surname.trim() &&
+            dobDay !== 'Day' &&
+            dobMonth !== 'Month' &&
+            dobYear !== 'Year' &&
+            gender &&
+            contact.trim() &&
+            password
+        );
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setServiceCall(true)
-        if (!validateForm()) return;
+        setServiceCall(true);
 
+        if (!validateForm()) {
+            setServiceCall(false);
+            return;
+        }
+
+        const { firstName, surname, gender, contact, password } = formData;
         const isMobile = /^\d+$/.test(contact.trim());
         const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
 
@@ -66,12 +104,9 @@ export default function RegistrationForm() {
             role: "user",
             date_of_birth: formatDOB(),
         };
-        if (isMobile) {
-            newUser.mobile = contact.trim()
-        }
-        if (isEmail) {
-            newUser.email = contact.trim()
-        }
+        if (isMobile) newUser.mobile = contact.trim();
+        if (isEmail) newUser.email = contact.trim();
+
         try {
             const res = await fetch('/api/users', {
                 method: 'POST',
@@ -101,16 +136,19 @@ export default function RegistrationForm() {
                     message: "Registration Successful!",
                 },
             });
-            setServiceCall(false)
+            setServiceCall(false);
+
             // Reset form
-            setFirstName('');
-            setSurname('');
-            setDobDay('Day');
-            setDobMonth('Month');
-            setDobYear('Year');
-            setGender('');
-            setContact('');
-            setPassword('');
+            setFormData({
+                firstName: '',
+                surname: '',
+                dobDay: 'Day',
+                dobMonth: 'Month',
+                dobYear: 'Year',
+                gender: '',
+                contact: '',
+                password: '',
+            });
             setErrors({});
         } catch (err) {
             setRootContext((prev) => ({
@@ -123,8 +161,10 @@ export default function RegistrationForm() {
                     message: `❌ ${err.message}`,
                 },
             }));
+            setServiceCall(false);
         }
     };
+
     const getColor = (g) => {
         if (g === "male") return "bg-red-500";
         if (g === "female") return "bg-yellow-400";
@@ -149,9 +189,10 @@ export default function RegistrationForm() {
                         <div className="flex-1">
                             <input
                                 type="text"
+                                name="firstName"
                                 placeholder="First name"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                value={formData.firstName}
+                                onChange={handleChange}
                                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
@@ -159,9 +200,10 @@ export default function RegistrationForm() {
                         <div className="flex-1">
                             <input
                                 type="text"
+                                name="surname"
                                 placeholder="Surname"
-                                value={surname}
-                                onChange={(e) => setSurname(e.target.value)}
+                                value={formData.surname}
+                                onChange={handleChange}
                                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.surname && <p className="text-red-500 text-xs mt-1">{errors.surname}</p>}
@@ -172,15 +214,15 @@ export default function RegistrationForm() {
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Date of birth</label>
                         <div className="grid grid-cols-3 gap-2">
-                            <select value={dobDay} onChange={(e) => setDobDay(e.target.value)} className="px-3 py-2 border rounded-lg">
+                            <select name="dobDay" value={formData.dobDay} onChange={handleChange} className="px-3 py-2 border rounded-lg">
                                 <option>Day</option>
                                 {[...Array(31).keys()].map(d => <option key={d + 1}>{d + 1}</option>)}
                             </select>
-                            <select value={dobMonth} onChange={(e) => setDobMonth(e.target.value)} className="px-3 py-2 border rounded-lg">
+                            <select name="dobMonth" value={formData.dobMonth} onChange={handleChange} className="px-3 py-2 border rounded-lg">
                                 <option>Month</option>
                                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => <option key={m}>{m}</option>)}
                             </select>
-                            <select value={dobYear} onChange={(e) => setDobYear(e.target.value)} className="px-3 py-2 border rounded-lg">
+                            <select name="dobYear" value={formData.dobYear} onChange={handleChange} className="px-3 py-2 border rounded-lg">
                                 <option>Year</option>
                                 {[...Array(100).keys()].map(y => <option key={2025 - y}>{2025 - y}</option>)}
                             </select>
@@ -195,10 +237,16 @@ export default function RegistrationForm() {
                             {['female', 'male', 'custom'].map(g => (
                                 <label key={g} className="flex-1 items-center flex justify-between border px-2 py-1.5 rounded-lg cursor-pointer">
                                     {g.charAt(0).toUpperCase() + g.slice(1)}
-                                    <input type="radio" className='hidden' name="gender" value={g} checked={gender === g} onChange={(e) => setGender(e.target.value)} />
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value={g}
+                                        checked={formData.gender === g}
+                                        onChange={handleChange}
+                                        className="hidden"
+                                    />
                                     <span
-                                        className={`w-4 h-4 rounded-full border-2 border-gray-400 flex-shrink-0 
-            ${gender === g ? getColor(g) : "bg-white"}`}
+                                        className={`w-4 h-4 rounded-full border-2 border-gray-400 flex-shrink-0 ${formData.gender === g ? getColor(g) : "bg-white"}`}
                                     ></span>
                                 </label>
                             ))}
@@ -210,9 +258,10 @@ export default function RegistrationForm() {
                     <div>
                         <input
                             type="text"
+                            name="contact"
                             placeholder="Mobile number or email address"
-                            value={contact}
-                            onChange={(e) => setContact(e.target.value)}
+                            value={formData.contact}
+                            onChange={handleChange}
                             className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                         />
                         {errors.contact && <p className="text-red-500 text-xs mt-1">{errors.contact}</p>}
@@ -223,11 +272,11 @@ export default function RegistrationForm() {
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
+                                name="password"
                                 placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
                                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}
@@ -245,21 +294,28 @@ export default function RegistrationForm() {
 
                     {/* Submit */}
                     <div className="text-center my-6">
-                        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-16 rounded-lg">
+                        <button
+                            type="submit"
+                            disabled={!isFormFilled()}
+                            className={`font-bold py-3 px-16 rounded-lg ${isFormFilled()
+                                ? "bg-green-600 hover:bg-green-700 text-white"
+                                : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                                }`}
+                        >
                             Sign Up
                         </button>
                     </div>
 
-                    <p className="text-xs text-gray-600 mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {/* Terms */}
+                    <p className="text-xs text-gray-600 mb-2">
                         People who use our service may have uploaded your contact information to Facebook.
                         <Link href="#" className="text-blue-500 inline"> Learn more</Link>.
                     </p>
-                    <p className="text-xs text-gray-600 mb-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <p className="text-xs text-gray-600 mb-4">
                         By clicking Sign Up, you agree to our
                         <Link href="#" className="text-blue-500 inline"> Terms</Link>,
                         <Link href="#" className="text-blue-500 inline"> Privacy Policy</Link> and
                         <Link href="#" className="text-blue-500 inline"> Cookies Policy</Link>.
-                        You may receive SMS notifications from us and can opt out at any time.
                     </p>
                     <div className="text-center">
                         <Link href="/" className="text-blue-500 text-sm">Already have an account?</Link>

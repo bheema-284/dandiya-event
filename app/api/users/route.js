@@ -17,6 +17,12 @@ const userPostSchema = Joi.object({
         mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
     });
 
+const resetPasswordSchema = Joi.object({
+    email: Joi.string().email(),
+    mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
+    oldPassword: Joi.string().min(6).required(),
+    newPassword: Joi.string().min(6).required(),
+}).xor("email", "mobile");
 
 export async function GET() {
     try {
@@ -50,3 +56,40 @@ export async function POST(req) {
     }
 }
 
+// 🔹 Reset Password API
+export async function PUT(req) {
+    try {
+        const body = await req.json();
+        const { error, value } = resetPasswordSchema.validate(body);
+
+        if (error) {
+            return Response.json({ error: error.details[0].message }, { status: 400 });
+        }
+
+        const { email, mobile, oldPassword, newPassword } = value;
+
+        const client = await clientPromise;
+        const db = client.db(process.env.MONGODB_DBNAME);
+
+        // find user by email or mobile
+        const query = email ? { email } : { mobile };
+        const user = await db.collection("users").findOne(query);
+
+        if (!user) {
+            return Response.json({ error: "User not found" }, { status: 404 });
+        }
+
+        if (user.password !== oldPassword) {
+            return Response.json({ error: "Old password is incorrect" }, { status: 400 });
+        }
+
+        // update password
+        await db.collection("users").updateOne(query, {
+            $set: { password: newPassword },
+        });
+
+        return Response.json({ message: "Password updated successfully" });
+    } catch (error) {
+        return Response.json({ error: error.message }, { status: 500 });
+    }
+}
