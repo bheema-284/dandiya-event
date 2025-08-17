@@ -15,6 +15,13 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        {/* Favicon */}
+        <link rel="icon" type="image/png" href="/favicon.ico" />
+        {/* Optional: other meta tags */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Dandiya Carnival</title>
+      </head>
       <body className="bg-image antialiased">
         <RootProvider>{children}</RootProvider>
       </body>

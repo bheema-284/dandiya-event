@@ -108,7 +108,7 @@ export default function VendorRegistration({ selectedCategory = "Food Court" }) 
 
 
     return (
-        <div className={`${colors.lightBg} min-h-screen flex items-center justify-center p-6`}>
+        <div className={`${colors.lightBg} min-h-screen flex items-center text-gray-900 justify-center p-6`}>
             <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-6">
 
                 {/* Header */}
@@ -319,7 +319,7 @@ function TextAreaField({ label, name, value, onChange }) {
                 value={value}
                 onChange={onChange}
                 rows="3"
-                className={`mt-1 block w-full rounded-md p-2 border-2 border-yellow-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm`}
+                className={`mt-1 block w-full rounded-md p-2 border border-yellow-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm`}
             ></textarea>
         </div>
     );

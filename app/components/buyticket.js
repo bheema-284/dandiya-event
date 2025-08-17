@@ -112,7 +112,7 @@ export default function Ticketing() {
     ];
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-white text-gray-900">
             {/* Day Selection */}
             <div className="flex flex-col items-center gap-4 py-6">
                 <div className="flex flex-wrap gap-2 justify-center">
@@ -153,13 +153,7 @@ export default function Ticketing() {
                 </div>
 
                 {/* Right side - Info (40%) */}
-                <div
-                    style={{
-                        backgroundColor: "var(--bg-primary)",
-                        color: "var(--text-primary)",
-                    }}
-                    className="shadow-md flex flex-col w-full lg:w-2/5 h-full relative"
-                >
+                <div className="shadow-md flex flex-col w-full lg:w-2/5 h-full bg-white text-gray-900 relative">
                     <h3 className="font-bold text-sm md:text-md text-center border-b border-dotted border-yellow-500 pb-1">
                         {eventTitle}
                     </h3>

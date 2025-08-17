@@ -18,10 +18,12 @@ export default function Navbar() {
 
     setRootContext(updatedContext);
     router.push(`/`);
+    setShowDropdown(!showDropdown)
   };
 
   const userProfile = () => {
     router.push(`/profile`);
+    setShowDropdown(!showDropdown)
   }
 
   return (

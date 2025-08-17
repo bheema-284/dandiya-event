@@ -16,15 +16,15 @@ export default function EventCard() {
         <a href="#" className="block mt-1 text-sm leading-tight hover:underline">
           26 Sept 2025
         </a>
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-gray-100">
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
         </p>
-        <div className="mt-4 flex items-center text-gray-600">
-          <UsersIcon className="h-5 w-5 text-gray-400" />
+        <div className="mt-4 flex items-center text-gray-400">
+          <UsersIcon className="h-5 w-5 text-gray-100" />
           <span className="ml-2">15256 People Going</span>
         </div>
         <div className="mt-4 flex space-x-2">
-          <button className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-md">
+          <button className="flex items-center px-4 py-2 border bg-white border-transparent text-sm font-medium rounded-md shadow-md">
             <span className="text-blue-800">Going/Not Going</span>
           </button>
         </div>

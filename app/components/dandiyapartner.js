@@ -30,7 +30,7 @@ export default function DandiyaPartner() {
     );
 
     const UserItem = ({ user }) => (
-        <div className="flex items-center space-x-4 p-4 rounded-xl hover:bg-gray-700 hover:text-white transition-colors duration-200 cursor-pointer">
+        <div className="flex items-center space-x-4 p-4 rounded-xl hover:bg-white hover:text-gray-800 transition-colors duration-200 cursor-pointer">
             <div className="relative">
                 <Image
                     src={user.avatar}
@@ -73,8 +73,8 @@ export default function DandiyaPartner() {
                         <div className="space-y-1">
                             <h1 className="text-lg font-bold ">Friends</h1>
                         </div>
-                        <button className={`p-2 rounded-xl cursor-pointer transition-colors duration-200`}>
-                            <Sun size={20} />
+                        <button className={`p-2 rounded-xl bg-white rounded-md p-2 cursor-pointer transition-colors duration-200`}>
+                            <Sun size={20} className='text-gray-800' />
                         </button>
                     </div>
                     <p className="text-xs mb-4">Start New Conversation</p>

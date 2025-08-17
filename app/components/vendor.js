@@ -50,7 +50,7 @@ const VendorRegistration = () => {
                         FUN | FOOD | FLEA
                     </p>
 
-                    <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded-2xl shadow-xl text-left">
+                    <div className="w-full mx-auto mt-12 p-6 text-centetr">
                         <p className="text-gray-600 mb-4 text-sm md:text-base">
                             <strong className="text-gray-800">100+ Stalls = Food & Beverages / Fashion & Accessories / Games & Activities / Art & Handicrafts</strong>
                             <br />
