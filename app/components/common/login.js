@@ -156,7 +156,7 @@ const Login = () => {
                                     <button
                                         type="button"
                                         onClick={() => setScreen("otp")}
-                                        className="text-sm font-semibold text-blue-500 hover:underline"
+                                        className="text-sm font-semibold text-purple-500 hover:underline"
                                     >
                                         Forgot Password?
                                     </button>

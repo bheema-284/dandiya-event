@@ -205,7 +205,7 @@ export default function ForgetPassword({ setScreen }) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full rounded-lg bg-blue-500 p-3 font-semibold text-white shadow-md transition duration-200 hover:bg-blue-600 disabled:opacity-50"
+                        className="w-full rounded-lg bg-blue-500 p-3 font-semibold hover:rounded-full text-white shadow-md transition duration-200 hover:bg-blue-600 disabled:opacity-50"
                     >
                         {loading ? "Updating..." : "Update Password"}
                     </button>

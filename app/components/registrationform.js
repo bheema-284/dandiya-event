@@ -164,14 +164,14 @@ export default function RegistrationForm({ setScreen }) {
         <div className="flex items-center justify-center min-h-screen p-4">
             {serviceCall && <Loader />}
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl font-inter">
-              <div className='flex justify-end'>
-                  <button
-                    onClick={() => setScreen("login")}
-                    className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
-                >
-                    <XMarkIcon className="w-5 h-5 text-gray-700" />
-                </button>
-              </div>
+                <div className='flex justify-end'>
+                    <button
+                        onClick={() => setScreen("login")}
+                        className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
+                    >
+                        <XMarkIcon className="w-5 h-5 text-gray-700" />
+                    </button>
+                </div>
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-800">Create a new account</h1>
                     <p className="text-gray-500 mt-1 text-base">It's quick and easy.</p>
@@ -313,7 +313,7 @@ export default function RegistrationForm({ setScreen }) {
                         <Link href="#" className="text-blue-500 inline"> Privacy Policy</Link> and
                         <Link href="#" className="text-blue-500 inline"> Cookies Policy</Link>.
                     </p>
-                    <div className="text-center">
+                    <div onClick={() => setScreen("login")} className="text-center">
                         <Link href="/" className="text-blue-500 text-sm">Already have an account?</Link>
                     </div>
                 </form>
