@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import RootContext from './config/rootcontext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -24,6 +24,13 @@ export default function RegistrationForm() {
     const { rootContext, setRootContext } = useContext(RootContext);
     const router = useRouter();
 
+    // 🚀 Redirect if already authenticated
+    useEffect(() => {
+        if (rootContext?.authenticated) {
+            router.push("/");
+        }
+    }, [rootContext?.authenticated, router]);
+
     // Update field values
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,7 +49,7 @@ export default function RegistrationForm() {
         return `${dobDay.padStart(2, '0')}-${monthMap[dobMonth]}-${dobYear}`;
     };
 
-    // Validation function
+    // Validation
     const validateForm = () => {
         const { firstName, surname, dobDay, dobMonth, dobYear, gender, contact, password } = formData;
         const newErrors = {};
@@ -69,7 +76,7 @@ export default function RegistrationForm() {
         return Object.keys(newErrors).length === 0;
     };
 
-    // Check if all fields filled (basic required check for disabling button)
+    // Check if all fields filled
     const isFormFilled = () => {
         const { firstName, surname, dobDay, dobMonth, dobYear, gender, contact, password } = formData;
         return (
@@ -117,7 +124,6 @@ export default function RegistrationForm() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Failed to register');
 
-            router.push("/");
             setRootContext({
                 ...rootContext,
                 authenticated: true,
@@ -138,18 +144,6 @@ export default function RegistrationForm() {
             });
             setServiceCall(false);
 
-            // Reset form
-            setFormData({
-                firstName: '',
-                surname: '',
-                dobDay: 'Day',
-                dobMonth: 'Month',
-                dobYear: 'Year',
-                gender: '',
-                contact: '',
-                password: '',
-            });
-            setErrors({});
         } catch (err) {
             setRootContext((prev) => ({
                 ...prev,
@@ -165,12 +159,8 @@ export default function RegistrationForm() {
         }
     };
 
-    const getColor = (g) => {
-        if (g === "male") return "bg-red-500";
-        if (g === "female") return "bg-yellow-400";
-        if (g === "custom") return "bg-gradient-to-r from-red-500 to-yellow-400";
-        return "bg-white";
-    };
+    // 🚀 Don't render form if already authenticated
+    if (rootContext?.authenticated) return null;
 
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
