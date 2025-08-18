@@ -4,6 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { EyeIcon, EyeSlashIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import RootContext from "../config/rootcontext";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export default function ForgetPassword({ setShowLogin }) {
     const [inputType, setInputType] = useState("email"); // 'email' or 'mobile'
@@ -131,7 +132,16 @@ export default function ForgetPassword({ setShowLogin }) {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 font-sans antialiased">
-            <div className="w-full max-w-md overflow-hidden rounded-xl bg-white p-8 text-center shadow-2xl">
+            <div className="relative w-full max-w-md overflow-hidden rounded-xl bg-white p-8 text-center shadow-2xl">
+                {/* X mark at top-right */}
+                <button
+                    onClick={() => setShowLogin(true)}
+                    className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
+                >
+                    <XMarkIcon className="w-5 h-5 text-gray-700" />
+                </button>
+
+                {/* Lock icon center */}
                 <div className="flex justify-center">
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg">
                         <svg
@@ -154,23 +164,43 @@ export default function ForgetPassword({ setShowLogin }) {
                 <h1 className="mb-2 text-2xl font-bold text-gray-800">Update Password</h1>
                 <p className="mb-6 text-sm text-gray-600">
                     Enter your{" "}
-                    {inputType === "email" ? "email" : "mobile number"} and we'll send
-                    you a link to reset your password.
+                    {inputType === "email" ? "email" : "mobile number"} and we'll send you a
+                    link to reset your password.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4 text-left">
                     <input
                         type={inputType === "email" ? "email" : "tel"}
-                        placeholder={inputType === "email" ? "Email address" : "Mobile number"}
+                        placeholder={
+                            inputType === "email" ? "Email address" : "Mobile number"
+                        }
                         className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         required
                     />
 
-                    {renderPasswordInput("oldPassword", "Old Password", oldPassword, setOldPassword, "old")}
-                    {renderPasswordInput("newPassword", "New Password", newPassword, setNewPassword, "new")}
-                    {renderPasswordInput("confirmPassword", "Confirm Password", confirmPassword, setConfirmPassword, "confirm")}
+                    {renderPasswordInput(
+                        "oldPassword",
+                        "Old Password",
+                        oldPassword,
+                        setOldPassword,
+                        "old"
+                    )}
+                    {renderPasswordInput(
+                        "newPassword",
+                        "New Password",
+                        newPassword,
+                        setNewPassword,
+                        "new"
+                    )}
+                    {renderPasswordInput(
+                        "confirmPassword",
+                        "Confirm Password",
+                        confirmPassword,
+                        setConfirmPassword,
+                        "confirm"
+                    )}
 
                     <button
                         type="submit"
@@ -181,13 +211,14 @@ export default function ForgetPassword({ setShowLogin }) {
                     </button>
                 </form>
 
-
                 <button
                     onClick={toggleInputType}
                     className="mt-4 w-full border border-blue-300 rounded-lg hover:rounded-full p-3 text-sm font-semibold text-blue-500 transition-colors duration-200 hover:text-blue-600"
                 >
                     Search by{" "}
-                    {inputType === "email" ? "mobile number instead" : "email address instead"}
+                    {inputType === "email"
+                        ? "mobile number instead"
+                        : "email address instead"}
                 </button>
 
                 {message && (
@@ -208,6 +239,7 @@ export default function ForgetPassword({ setShowLogin }) {
                 </p>
             </Modal>
         </div>
+
     );
 }
 
