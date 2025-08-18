@@ -21,14 +21,11 @@ const Login = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [serviceCall, setServiceCall] = useState(false);
     const [showLogin, setShowLogin] = useState(true);
-    console.log("showLogin", showLogin)
 
     const onSave = (e) => {
         e.preventDefault(); // Prevent page refresh
         setIsLoading(true);
-        setServiceCall(true)
         const user = data.find((user) => (user.email === formData.email || user.mobile === formData.email));
         const userByEmail = data.find((user) => (user.email === formData.email || user.mobile === formData.email));
         const userByPassword = data.find((user) => user.password === formData.password);
@@ -102,7 +99,6 @@ const Login = () => {
             });
             localStorage.setItem("user_details", JSON.stringify(resp.user));
             setIsLoading(false);
-            setServiceCall(false)
         }
     };
 
@@ -110,7 +106,7 @@ const Login = () => {
     return (
         <>
             {showLogin ? <section className="">
-                {serviceCall && <Loader />}
+                {isLoading && <Loader />}
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex-1 text-center my-5">
                         <h1 className="text-3xl text-center font-bold text-fuchsia-600 mb-2">Dandiya Carnival</h1>

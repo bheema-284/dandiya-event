@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { EyeIcon, EyeSlashIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import RootContext from "../config/rootcontext";
 
 export default function ForgetPassword({ setShowLogin }) {
     const [inputType, setInputType] = useState("email"); // 'email' or 'mobile'
@@ -26,6 +27,7 @@ export default function ForgetPassword({ setShowLogin }) {
         setMessage("");
         setError("");
     };
+    const { rootContext, setRootContext } = useContext(RootContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -69,9 +71,29 @@ export default function ForgetPassword({ setShowLogin }) {
                 setIsUserNotFound(true);
             } else {
                 setError(data.error || "Something went wrong.");
+                setRootContext((prevContext) => ({
+                    ...prevContext,
+                    toast: {
+                        show: true,
+                        dismiss: true,
+                        type: "error",
+                        title: "Failed",
+                        message: `${data.error || "Something went wrong."}`,
+                    },
+                }));
             }
         } catch (err) {
             setError("Network error, please try again.");
+            setRootContext((prevContext) => ({
+                ...prevContext,
+                toast: {
+                    show: true,
+                    dismiss: true,
+                    type: "error",
+                    title: "Failed",
+                    message: "Network error, please try again.",
+                },
+            }));
         } finally {
             setLoading(false);
         }
@@ -171,12 +193,6 @@ export default function ForgetPassword({ setShowLogin }) {
                 {message && (
                     <div className="mt-4 rounded-lg bg-green-100 p-3 text-center text-sm text-green-700">
                         {message}
-                    </div>
-                )}
-
-                {error && (
-                    <div className="mt-4 rounded-lg bg-red-100 p-3 text-center text-sm text-red-700">
-                        {error}
                     </div>
                 )}
             </div>
