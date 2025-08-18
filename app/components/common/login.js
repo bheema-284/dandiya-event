@@ -98,20 +98,37 @@ const Login = () => {
 
     return (
         <>
-            {screen === "login" ? <section className="w-full min-h-screen flex flex-col items-center justify-center p-4" style={{
-                backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0)), url('/layer_10'), url('/layer_9'), url('/layer_11'), url('/layer_12'), url('/layer_13'), url('/layer_9')",
-                backgroundSize: "cover, cover, cover, cover, cover, cover",
-                backgroundPosition: "center, center, center, center, center, center",
-                backgroundRepeat: "no-repeat"
-            }}>
+            <header className="w-full h-24 fixed z-50 top-0 flex items-center justify-center bg-[#1a1945]">
+                <div className="w-full sm:w-[60%] m-auto flex items-center justify-between">
+                    {/* Left Durga Image */}
+                    <div className="flex items-center">
+                        <img
+                            src="/Durga.png"
+                            alt="Durga"
+                            className="h-16 w-auto object-contain"
+                            style={{
+                                filter:
+                                    'drop-shadow(0 0 2px white) drop-shadow(0 0 6px white)',
+                            }}
+                        />
+                    </div>
+
+                    {/* Title Logo */}
+                    <div className="flex-1 flex justify-center">
+                        <img
+                            src="/Dandiya Carnival Logo.png"
+                            alt="event"
+                            className="h-14 sm:h-16 w-auto object-contain"
+                        />
+                    </div>
+
+                    {/* Empty Spacer for alignment */}
+                    <div className="w-20"></div>
+                </div>
+            </header>
+            {screen === "login" ? <section className="pt-32">
                 {isLoading && <Loader />}
                 <div className="flex flex-col items-center justify-center">
-                    <div className="flex-1 text-center my-5">
-                        <h1 className="text-3xl text-center font-bold text-fuchsia-600 mb-2">Dandiya Carnival</h1>
-                        <p className="text-md italic text-center text-gray-800">
-                            Find your perfect rhythm and partner for the Navratri season.
-                        </p>
-                    </div>
                     <form onSubmit={onSave} className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -179,6 +196,19 @@ const Login = () => {
                 </div>
             </section> : screen === "otp" ? <ForgetPassword setScreen={setScreen} /> :
                 <RegistrationForm setScreen={setScreen} />}
+            <div className="relative w-full h-52">
+                <div className="absolute top-80vh bottom-5 left-0 right-0 flex justify-between z-0 px-10">
+                    <img src="/layer_8.png" className="h-36" />
+                    <img src="/layer_10.png" className="h-36" />
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 flex w-full flex justify-between items-end z-10">
+                    <img src="/layer_9.png" className="w-full h-20" />
+                    <img src="/layer_11.png" className="w-full h-20" />
+                    <img src="/layer_12.png" className="w-full h-20" />
+                    <img src="/layer_13.png" className="w-full h-20" />
+                </div>
+            </div>
         </>
     );
 };

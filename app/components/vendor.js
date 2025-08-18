@@ -13,12 +13,7 @@ const VendorRegistration = () => {
         setScreen('form');
     };
     return (
-        <div className="min-h-screen bg-gray-100 font-sans" style={{
-            backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0)), url('/layer_10'), url('/layer_9'), url('/layer_11'), url('/layer_12'), url('/layer_13'), url('/layer_9')",
-            backgroundSize: "cover, cover, cover, cover, cover, cover",
-            backgroundPosition: "center, center, center, center, center, center",
-            backgroundRepeat: "no-repeat"
-        }}>
+        <div className="min-h-screen bg-white font-sans" >
 
             {/* Main Content */}
             {screen === "vendor" && <main className="container mx-auto p-4 md:p-8">
@@ -29,18 +24,18 @@ const VendorRegistration = () => {
                     {/* Category cards - using placeholder images */}
                     <div className="flex w-52 mx-auto text-center gap-3 justify-between items-center">
                         {/* Food Stall */}
-                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white w-10 h-10 pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src='/layer_6.png' alt="Food Stall" className="w-full h-auto" />
+                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white w-20 h-16 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src='/layer_6.png' alt="Food Stall" className="w-full object-contain" />
                         </div>
 
                         {/* Flea Market */}
-                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white w-10 h-10 pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="/layer_7.png" alt="Flea Market" className="w-full h-auto" />
+                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white w-20 h-16 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src="/layer_7.png" alt="Flea Market" className="w-full h-full" />
                         </div>
 
                         {/* Fun Fair */}
-                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white w-10 h-10 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="/layer_5.png" alt="Fun Fair" className="w-full h-auto" />
+                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white w-20 h-16 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src="/layer_5.png" alt="Fun Fair" className="w-full h-full" />
                         </div>
                     </div>
                 </section>
@@ -74,16 +69,20 @@ const VendorRegistration = () => {
                     </div>
                 </section>
             </main>}
-            {screen === "form" && <VendorRegistrationPage selectedCategory={selectedCategory} />}
-            <div className="flex justify-center w-full mt-8">
-                <img src="/layer_10.png" className="h-24 object-contain" />
-                <img src="/layer_9.png" className="h-24 object-contain" />
-                <img src="/layer_11.png" className="h-24 object-contain" />
-                <img src="/layer_12.png" className="h-24 object-contain" />
-                <img src="/layer_13.png" className="h-24 object-contain" />
-                <img src="/layer_8.png" className="h-24 object-contain" />
-            </div>
+            {screen === "form" && <VendorRegistrationPage setScreen={setScreen} selectedCategory={selectedCategory} />}
+            <div className="relative w-full h-64 mt-8">
+                <div className="absolute top-80vh bottom-5 left-0 right-0 flex justify-between z-0 px-10">
+                    <img src="/layer_8.png" className="h-36" />
+                    <img src="/layer_10.png" className="h-36" />
+                </div>
 
+                <div className="absolute bottom-0 left-0 right-0 flex w-full flex justify-between z-10">
+                    <img src="/layer_9.png" className="w-full h-20" />
+                    <img src="/layer_11.png" className="w-full h-20" />
+                    <img src="/layer_12.png" className="w-full h-20" />
+                    <img src="/layer_13.png" className="w-full h-20" />
+                </div>
+            </div>
         </div>
     );
 };

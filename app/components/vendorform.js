@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { motion } from "framer-motion";
 import { CheckIcon } from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const stallData = {
     'Food Court': [
@@ -40,7 +41,7 @@ const colors = {
     lightBg: "bg-[#fff9f0]", // Cream background
 };
 
-export default function VendorRegistration({ selectedCategory = "Food Court" }) {
+export default function VendorRegistration({ setScreen, selectedCategory }) {
     const [step, setStep] = useState(0);
     const [formData, setFormData] = useState({
         vendorName: "",
@@ -110,7 +111,14 @@ export default function VendorRegistration({ selectedCategory = "Food Court" }) 
     return (
         <div className={`${colors.lightBg} min-h-screen flex items-center text-gray-900 justify-center p-6`}>
             <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-6">
-
+                <div className='flex justify-end'>
+                    <button
+                        onClick={() => setScreen("vendor")}
+                        className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
+                    >
+                        <XMarkIcon className="w-5 h-5 text-gray-700" />
+                    </button>
+                </div>
                 {/* Header */}
                 <div className="text-center mb-8">
                     <h1 className={`text-3xl font-extrabold ${colors.maroonText}`}>
@@ -118,7 +126,6 @@ export default function VendorRegistration({ selectedCategory = "Food Court" }) 
                     </h1>
                     <p className="text-gray-600">Register for the {selectedCategory}.</p>
                 </div>
-
                 {/* Progress Bar */}
                 <div className="relative mb-8">
                     <div className="w-full bg-gray-200 rounded-full h-2">
