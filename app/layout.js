@@ -62,10 +62,10 @@ function RootProvider({ children }) {
 
   return (
     <RootContext.Provider value={{ rootContext, setRootContext }}>
-      {pathName === "/signup" && !rootContext.authenticated ? (
-        <RegistrationForm />
-      ) : !rootContext.authenticated ? (
+      {!rootContext.authenticated ? (
         <Login />
+      ) : pathName === "/signup" && !rootContext.authenticated ? (
+        <RegistrationForm />
       ) : (
         <div>
           <Navbar />

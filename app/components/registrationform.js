@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import RootContext from './config/rootcontext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -23,13 +23,6 @@ export default function RegistrationForm() {
 
     const { rootContext, setRootContext } = useContext(RootContext);
     const router = useRouter();
-
-    // 🚀 Redirect if already authenticated
-    useEffect(() => {
-        if (rootContext?.authenticated) {
-            router.push("/");
-        }
-    }, [rootContext?.authenticated, router]);
 
     // Update field values
     const handleChange = (e) => {
@@ -143,6 +136,7 @@ export default function RegistrationForm() {
                 },
             });
             setServiceCall(false);
+            router.push("/");
 
         } catch (err) {
             setRootContext((prev) => ({
@@ -164,8 +158,6 @@ export default function RegistrationForm() {
         if (g === "custom") return "bg-gradient-to-r from-red-500 to-yellow-400";
         return "bg-white";
     };
-    // 🚀 Don't render form if already authenticated
-    if (rootContext?.authenticated) return null;
 
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
