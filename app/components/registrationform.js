@@ -164,12 +164,14 @@ export default function RegistrationForm({ setScreen }) {
         <div className="flex items-center justify-center min-h-screen p-4">
             {serviceCall && <Loader />}
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl font-inter">
-                <button
+              <div className='flex justify-end'>
+                  <button
                     onClick={() => setScreen("login")}
-                    className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
+                    className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
                 >
                     <XMarkIcon className="w-5 h-5 text-gray-700" />
                 </button>
+              </div>
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-800">Create a new account</h1>
                     <p className="text-gray-500 mt-1 text-base">It's quick and easy.</p>

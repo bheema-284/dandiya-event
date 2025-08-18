@@ -131,7 +131,7 @@ export default function ForgetPassword({ setScreen }) {
     );
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 font-sans antialiased">
+        <div className="flex min-h-screen items-center justify-center p-4 font-sans antialiased">
             <div className="relative w-full max-w-md overflow-hidden rounded-xl bg-white p-8 text-center shadow-2xl">
                 {/* X mark at top-right */}
                 <button
