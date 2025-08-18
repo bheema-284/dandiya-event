@@ -3,10 +3,10 @@ import React, { useContext, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import RootContext from "../config/rootcontext";
 import { useSWRFetch } from "../config/useswrfetch";
-import Link from "next/link";
 import Loader from "./loader";
 import ForgetPassword from "./forgetpassword";
 import RegistrationForm from "../registrationform";
+import bcrypt from "bcryptjs";
 
 const Login = () => {
     const { rootContext, setRootContext } = useContext(RootContext);
@@ -24,14 +24,15 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [screen, setScreen] = useState("login");
 
-    const onSave = (e) => {
-        e.preventDefault(); // Prevent page refresh
+    const onSave = async (e) => {
+        e.preventDefault();
         setIsLoading(true);
-        const user = data.find((user) => (user.email === formData.email || user.mobile === formData.email));
-        const userByEmail = data.find((user) => (user.email === formData.email || user.mobile === formData.email));
-        const userByPassword = data.find((user) => user.password === formData.password);
-        if (!userByEmail && !userByPassword) {
-            // User not found
+
+        const user = data.find(
+            (u) => u.email === formData.email || u.mobile === formData.email
+        );
+
+        if (!user) {
             setRootContext((prevContext) => ({
                 ...prevContext,
                 toast: {
@@ -42,24 +43,14 @@ const Login = () => {
                     message: "User not found. Please sign up.",
                 },
             }));
-            setIsLoading(false)
+            setIsLoading(false);
+            return;
         }
-        else if (!userByEmail) {
-            // Email not found
-            setRootContext((prevContext) => ({
-                ...prevContext,
-                toast: {
-                    show: true,
-                    dismiss: true,
-                    type: "error",
-                    title: "Login Failed",
-                    message: "Email not found. Please sign up.",
-                },
-            }));
-            setIsLoading(false)
 
-        } else if (!userByPassword) {
-            // Email found, but password wrong
+        // 🔑 Compare entered password with hashed password in DB
+        const isMatch = await bcrypt.compare(formData.password, user.password);
+
+        if (!isMatch) {
             setRootContext((prevContext) => ({
                 ...prevContext,
                 toast: {
@@ -70,38 +61,39 @@ const Login = () => {
                     message: "Incorrect password. Please try again.",
                 },
             }));
-            setIsLoading(false)
-
-        } else {
-            // Email and password correct
-            const username = user.name || userByEmail.email.split("@")[0];
-            const resp = {
-                ...rootContext,
-                authenticated: true,
-                loader: false,
-                user: {
-                    name: username,
-                    email: userByEmail.email,
-                    mobile: userByEmail.mobile,
-                    password: userByEmail.password,
-                    token: userByEmail.token,
-                },
-            };
-
-            setRootContext({
-                ...resp,
-                toast: {
-                    show: true,
-                    dismiss: true,
-                    type: "success",
-                    title: "Login Successful",
-                    message: "Welcome back!",
-                },
-            });
-            localStorage.setItem("user_details", JSON.stringify(resp.user));
             setIsLoading(false);
+            return;
         }
+
+        // ✅ Successful login
+        const username = user.name || user.email?.split("@")[0];
+        const resp = {
+            ...rootContext,
+            authenticated: true,
+            loader: false,
+            user: {
+                name: username,
+                email: user.email,
+                mobile: user.mobile,
+                token: user.token,
+            },
+        };
+
+        setRootContext({
+            ...resp,
+            toast: {
+                show: true,
+                dismiss: true,
+                type: "success",
+                title: "Login Successful",
+                message: "Welcome back!",
+            },
+        });
+
+        localStorage.setItem("user_details", JSON.stringify(resp.user));
+        setIsLoading(false);
     };
+
 
 
     return (

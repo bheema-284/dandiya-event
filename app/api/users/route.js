@@ -1,4 +1,5 @@
 import Joi from "joi";
+import bcrypt from "bcrypt";   // ✅ Add bcrypt
 import clientPromise from "../../lib/db";
 
 const userPostSchema = Joi.object({
@@ -10,12 +11,14 @@ const userPostSchema = Joi.object({
         .optional(),
     gender: Joi.string().valid("male", "female", "other").optional(),
     password: Joi.string().min(6).required(),
+    email: Joi.string().email(),
+    mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
 })
-    .xor("email", "mobile")
-    .keys({
-        email: Joi.string().email(),
-        mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
+    .or("email", "mobile")   // ✅ at least one required
+    .messages({
+        "object.missing": "Either email or mobile is required",
     });
+
 
 const resetPasswordSchema = Joi.object({
     email: Joi.string().email(),
@@ -46,6 +49,10 @@ export async function POST(req) {
 
         const client = await clientPromise;
         const db = client.db(process.env.MONGODB_DBNAME);
+
+        // ✅ Hash the password before saving
+        const hashedPassword = await bcrypt.hash(value.password, 10);
+        value.password = hashedPassword;
 
         const result = await db.collection("users").insertOne(value);
 
@@ -78,9 +85,12 @@ export async function PUT(req) {
             return Response.json({ error: "User not found" }, { status: 404 });
         }
 
+        // ✅ Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
         // update password
         await db.collection("users").updateOne(query, {
-            $set: { password: newPassword },
+            $set: { password: hashedPassword },
         });
 
         return Response.json({ message: "Password updated successfully" });

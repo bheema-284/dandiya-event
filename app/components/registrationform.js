@@ -69,7 +69,6 @@ export default function RegistrationForm({ setScreen }) {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
     // Check if all fields filled
     const isFormFilled = () => {
         const { firstName, surname, dobDay, dobMonth, dobYear, gender, contact, password } = formData;
@@ -118,16 +117,8 @@ export default function RegistrationForm({ setScreen }) {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Failed to register');
 
-            setRootContext({
-                ...rootContext,
-                authenticated: true,
-                loader: false,
-                user: {
-                    name: newUser.name,
-                    email: newUser.email,
-                    mobile: newUser.mobile,
-                    token: "token",
-                },
+            setRootContext((prev) => ({
+                ...prev,
                 toast: {
                     show: true,
                     dismiss: true,
@@ -135,9 +126,9 @@ export default function RegistrationForm({ setScreen }) {
                     title: "Successful",
                     message: "Registration Successful!",
                 },
-            });
+            }));
             setServiceCall(false);
-            router.push("/");
+            setScreen("login")
 
         } catch (err) {
             setRootContext((prev) => ({
@@ -189,7 +180,7 @@ export default function RegistrationForm({ setScreen }) {
                                 placeholder="First name"
                                 value={formData.firstName}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                                className="w-full p-2 rounded-lg border text-gray-900 border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
                         </div>
@@ -200,7 +191,7 @@ export default function RegistrationForm({ setScreen }) {
                                 placeholder="Surname"
                                 value={formData.surname}
                                 onChange={handleChange}
-                                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                                className="w-full p-2 rounded-lg text-gray-900 border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.surname && <p className="text-red-500 text-xs mt-1">{errors.surname}</p>}
                         </div>
@@ -210,15 +201,15 @@ export default function RegistrationForm({ setScreen }) {
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Date of birth</label>
                         <div className="grid grid-cols-3 gap-2">
-                            <select name="dobDay" value={formData.dobDay} onChange={handleChange} className="px-3 py-2 border border-gray-300 focus:outline-none focus:border-fuchsia-500 rounded-lg">
+                            <select name="dobDay" value={formData.dobDay} onChange={handleChange} className="px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:border-fuchsia-500 rounded-lg">
                                 <option>Day</option>
                                 {[...Array(31).keys()].map(d => <option key={d + 1}>{d + 1}</option>)}
                             </select>
-                            <select name="dobMonth" value={formData.dobMonth} onChange={handleChange} className="px-3 py-2 border border-gray-300 focus:outline-none focus:border-fuchsia-500 rounded-lg">
+                            <select name="dobMonth" value={formData.dobMonth} onChange={handleChange} className="px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:border-fuchsia-500 rounded-lg">
                                 <option>Month</option>
                                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => <option key={m}>{m}</option>)}
                             </select>
-                            <select name="dobYear" value={formData.dobYear} onChange={handleChange} className="px-3 py-2 border border-gray-300 focus:outline-none focus:border-fuchsia-500 rounded-lg">
+                            <select name="dobYear" value={formData.dobYear} onChange={handleChange} className="px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:border-fuchsia-500 rounded-lg">
                                 <option>Year</option>
                                 {[...Array(100).keys()].map(y => <option key={2025 - y}>{2025 - y}</option>)}
                             </select>
@@ -231,7 +222,7 @@ export default function RegistrationForm({ setScreen }) {
                         <label className="block text-sm font-medium text-gray-600 mb-1">Gender</label>
                         <div className="flex gap-2">
                             {['female', 'male', 'custom'].map(g => (
-                                <label key={g} className="flex-1 items-center flex justify-between border border-gray-300 focus:outline-none focus:border-fuchsia-500 px-2 py-1.5 rounded-lg cursor-pointer">
+                                <label key={g} className="flex-1 items-center text-gray-900 flex justify-between border border-gray-300 focus:outline-none focus:border-fuchsia-500 px-2 py-1.5 rounded-lg cursor-pointer">
                                     {g.charAt(0).toUpperCase() + g.slice(1)}
                                     <input
                                         type="radio"
@@ -258,7 +249,7 @@ export default function RegistrationForm({ setScreen }) {
                             placeholder="Mobile number or email address"
                             value={formData.contact}
                             onChange={handleChange}
-                            className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                            className="w-full p-2 rounded-lg text-gray-900 border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                         />
                         {errors.contact && <p className="text-red-500 text-xs mt-1">{errors.contact}</p>}
                     </div>
@@ -272,7 +263,7 @@ export default function RegistrationForm({ setScreen }) {
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                                className="w-full p-3 rounded-lg text-gray-900 border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             <span
                                 onClick={() => setShowPassword(!showPassword)}

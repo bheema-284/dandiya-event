@@ -2,7 +2,6 @@
 import React, { useState, Fragment, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { EyeIcon, EyeSlashIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
 import RootContext from "../config/rootcontext";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
@@ -18,7 +17,6 @@ export default function ForgetPassword({ setScreen }) {
     });
     const [loading, setLoading] = useState(false);
     const [isUserNotFound, setIsUserNotFound] = useState(false);
-    const router = useRouter();
     const toggleInputType = () => {
         setInputType(inputType === "email" ? "mobile" : "email");
         setInputValue("");
@@ -84,7 +82,6 @@ export default function ForgetPassword({ setScreen }) {
                 }));
                 setNewPassword("");
                 setConfirmPassword("");
-                router.push("/");
                 setScreen("login");
             } else if (res.status === 404) {
                 setIsUserNotFound(true);
