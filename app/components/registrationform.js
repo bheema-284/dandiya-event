@@ -158,7 +158,12 @@ export default function RegistrationForm() {
             setServiceCall(false);
         }
     };
-
+    const getColor = (g) => {
+        if (g === "male") return "bg-red-500";
+        if (g === "female") return "bg-yellow-400";
+        if (g === "custom") return "bg-gradient-to-r from-red-500 to-yellow-400";
+        return "bg-white";
+    };
     // 🚀 Don't render form if already authenticated
     if (rootContext?.authenticated) return null;
 
@@ -183,7 +188,7 @@ export default function RegistrationForm() {
                                 placeholder="First name"
                                 value={formData.firstName}
                                 onChange={handleChange}
-                                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
                         </div>
@@ -194,7 +199,7 @@ export default function RegistrationForm() {
                                 placeholder="Surname"
                                 value={formData.surname}
                                 onChange={handleChange}
-                                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                             />
                             {errors.surname && <p className="text-red-500 text-xs mt-1">{errors.surname}</p>}
                         </div>
@@ -204,15 +209,15 @@ export default function RegistrationForm() {
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Date of birth</label>
                         <div className="grid grid-cols-3 gap-2">
-                            <select name="dobDay" value={formData.dobDay} onChange={handleChange} className="px-3 py-2 border rounded-lg">
+                            <select name="dobDay" value={formData.dobDay} onChange={handleChange} className="px-3 py-2 border border-gray-300 focus:outline-none focus:border-fuchsia-500 rounded-lg">
                                 <option>Day</option>
                                 {[...Array(31).keys()].map(d => <option key={d + 1}>{d + 1}</option>)}
                             </select>
-                            <select name="dobMonth" value={formData.dobMonth} onChange={handleChange} className="px-3 py-2 border rounded-lg">
+                            <select name="dobMonth" value={formData.dobMonth} onChange={handleChange} className="px-3 py-2 border border-gray-300 focus:outline-none focus:border-fuchsia-500 rounded-lg">
                                 <option>Month</option>
                                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => <option key={m}>{m}</option>)}
                             </select>
-                            <select name="dobYear" value={formData.dobYear} onChange={handleChange} className="px-3 py-2 border rounded-lg">
+                            <select name="dobYear" value={formData.dobYear} onChange={handleChange} className="px-3 py-2 border border-gray-300 focus:outline-none focus:border-fuchsia-500 rounded-lg">
                                 <option>Year</option>
                                 {[...Array(100).keys()].map(y => <option key={2025 - y}>{2025 - y}</option>)}
                             </select>
@@ -225,7 +230,7 @@ export default function RegistrationForm() {
                         <label className="block text-sm font-medium text-gray-600 mb-1">Gender</label>
                         <div className="flex gap-2">
                             {['female', 'male', 'custom'].map(g => (
-                                <label key={g} className="flex-1 items-center flex justify-between border px-2 py-1.5 rounded-lg cursor-pointer">
+                                <label key={g} className="flex-1 items-center flex justify-between border border-gray-300 focus:outline-none focus:border-fuchsia-500 px-2 py-1.5 rounded-lg cursor-pointer">
                                     {g.charAt(0).toUpperCase() + g.slice(1)}
                                     <input
                                         type="radio"
@@ -252,7 +257,7 @@ export default function RegistrationForm() {
                             placeholder="Mobile number or email address"
                             value={formData.contact}
                             onChange={handleChange}
-                            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                            className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:border-fuchsia-500"
                         />
                         {errors.contact && <p className="text-red-500 text-xs mt-1">{errors.contact}</p>}
                     </div>
