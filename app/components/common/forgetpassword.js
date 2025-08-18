@@ -7,9 +7,8 @@ import RootContext from "../config/rootcontext";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export default function ForgetPassword({ setScreen }) {
-    const [inputType, setInputType] = useState("email"); // 'email' or 'mobile'
+    const [inputType, setInputType] = useState("email");
     const [inputValue, setInputValue] = useState("");
-    const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState({
@@ -17,32 +16,44 @@ export default function ForgetPassword({ setScreen }) {
         new: false,
         confirm: false,
     });
-    const [message, setMessage] = useState("");
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [isUserNotFound, setIsUserNotFound] = useState(false);
     const router = useRouter();
     const toggleInputType = () => {
         setInputType(inputType === "email" ? "mobile" : "email");
         setInputValue("");
-        setMessage("");
-        setError("");
     };
-    const { rootContext, setRootContext } = useContext(RootContext);
+    const { setRootContext } = useContext(RootContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage("");
-        setError("");
 
         if (newPassword !== confirmPassword) {
-            setError("New password and confirm password do not match.");
+            setRootContext((prevContext) => ({
+                ...prevContext,
+                toast: {
+                    show: true,
+                    dismiss: true,
+                    type: "error",
+                    title: "Error",
+                    message: "New password and confirm password do not match.",
+                },
+            }));
             return;
         }
 
         // Basic client-side validation for new password length
         if (newPassword.length < 6) {
-            setError("New password must be at least 6 characters long.");
+            setRootContext((prevContext) => ({
+                ...prevContext,
+                toast: {
+                    show: true,
+                    dismiss: true,
+                    type: "warning",
+                    title: "Warning",
+                    message: "New password must be at least 6 characters long.",
+                },
+            }));
             return;
         }
 
@@ -50,7 +61,6 @@ export default function ForgetPassword({ setScreen }) {
             setLoading(true);
             const payload = {
                 [inputType]: inputValue,
-                oldPassword,
                 newPassword,
             };
 
@@ -62,8 +72,16 @@ export default function ForgetPassword({ setScreen }) {
 
             const data = await res.json();
             if (res.ok) {
-                setMessage(data.message || "Password updated successfully!");
-                setOldPassword("");
+                setRootContext((prevContext) => ({
+                    ...prevContext,
+                    toast: {
+                        show: true,
+                        dismiss: true,
+                        type: "success",
+                        title: "Successful",
+                        message: `${data.message || "Password updated successfully!"}`,
+                    },
+                }));
                 setNewPassword("");
                 setConfirmPassword("");
                 router.push("/");
@@ -71,7 +89,6 @@ export default function ForgetPassword({ setScreen }) {
             } else if (res.status === 404) {
                 setIsUserNotFound(true);
             } else {
-                setError(data.error || "Something went wrong.");
                 setRootContext((prevContext) => ({
                     ...prevContext,
                     toast: {
@@ -84,7 +101,6 @@ export default function ForgetPassword({ setScreen }) {
                 }));
             }
         } catch (err) {
-            setError("Network error, please try again.");
             setRootContext((prevContext) => ({
                 ...prevContext,
                 toast: {
@@ -181,13 +197,6 @@ export default function ForgetPassword({ setScreen }) {
                     />
 
                     {renderPasswordInput(
-                        "oldPassword",
-                        "Old Password",
-                        oldPassword,
-                        setOldPassword,
-                        "old"
-                    )}
-                    {renderPasswordInput(
                         "newPassword",
                         "New Password",
                         newPassword,
@@ -221,11 +230,6 @@ export default function ForgetPassword({ setScreen }) {
                         : "email address instead"}
                 </button>
 
-                {message && (
-                    <div className="mt-4 rounded-lg bg-green-100 p-3 text-center text-sm text-green-700">
-                        {message}
-                    </div>
-                )}
             </div>
 
             <Modal

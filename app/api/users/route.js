@@ -20,7 +20,6 @@ const userPostSchema = Joi.object({
 const resetPasswordSchema = Joi.object({
     email: Joi.string().email(),
     mobile: Joi.string().pattern(/^[6-9]\d{9}$/),
-    oldPassword: Joi.string().min(6).required(),
     newPassword: Joi.string().min(6).required(),
 }).xor("email", "mobile");
 
@@ -66,7 +65,7 @@ export async function PUT(req) {
             return Response.json({ error: error.details[0].message }, { status: 400 });
         }
 
-        const { email, mobile, oldPassword, newPassword } = value;
+        const { email, mobile, newPassword } = value;
 
         const client = await clientPromise;
         const db = client.db(process.env.MONGODB_DBNAME);
@@ -77,10 +76,6 @@ export async function PUT(req) {
 
         if (!user) {
             return Response.json({ error: "User not found" }, { status: 404 });
-        }
-
-        if (user.password !== oldPassword) {
-            return Response.json({ error: "Old password is incorrect" }, { status: 400 });
         }
 
         // update password
