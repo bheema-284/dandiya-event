@@ -98,7 +98,12 @@ const Login = () => {
 
     return (
         <>
-            {screen === "login" ? <section className="">
+            {screen === "login" ? <section className="w-full min-h-screen flex flex-col items-center justify-center p-4" style={{
+                backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0)), url('/layer_10'), url('/layer_9'), url('/layer_11'), url('/layer_12'), url('/layer_13'), url('/layer_9')",
+                backgroundSize: "cover, cover, cover, cover, cover, cover",
+                backgroundPosition: "center, center, center, center, center, center",
+                backgroundRepeat: "no-repeat"
+            }}>
                 {isLoading && <Loader />}
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex-1 text-center my-5">

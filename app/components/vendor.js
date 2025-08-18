@@ -2,7 +2,6 @@
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import VendorRegistrationPage from './vendorform';
-
 // Main App component for the page
 const VendorRegistration = () => {
     const router = useRouter();
@@ -14,7 +13,12 @@ const VendorRegistration = () => {
         setScreen('form');
     };
     return (
-        <div className="min-h-screen bg-gray-100 font-sans">
+        <div className="min-h-screen bg-gray-100 font-sans" style={{
+            backgroundImage: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0)), url('/layer_10'), url('/layer_9'), url('/layer_11'), url('/layer_12'), url('/layer_13'), url('/layer_9')",
+            backgroundSize: "cover, cover, cover, cover, cover, cover",
+            backgroundPosition: "center, center, center, center, center, center",
+            backgroundRepeat: "no-repeat"
+        }}>
 
             {/* Main Content */}
             {screen === "vendor" && <main className="container mx-auto p-4 md:p-8">
@@ -23,33 +27,34 @@ const VendorRegistration = () => {
                     <h2 className="text-2xl font-bold text-gray-800 tracking-wide mb-8">CHOOSE YOUR VENDOR CATEGORY</h2>
 
                     {/* Category cards - using placeholder images */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <div className="flex w-52 mx-auto text-center gap-3 justify-between items-center">
                         {/* Food Stall */}
-                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://placehold.co/400x300/F4D03F/ffffff?text=Food+Stall" alt="Food Stall" className="w-full h-auto" />
+                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white w-10 h-10 pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src='/layer_6.png' alt="Food Stall" className="w-full h-auto" />
                         </div>
 
                         {/* Flea Market */}
-                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://placehold.co/400x300/9B59B6/ffffff?text=Flea+Market" alt="Flea Market" className="w-full h-auto" />
+                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white w-10 h-10 pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src="/layer_7.png" alt="Flea Market" className="w-full h-auto" />
                         </div>
 
                         {/* Fun Fair */}
-                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://placehold.co/400x300/E74C3C/ffffff?text=Fun+Fair" alt="Fun Fair" className="w-full h-auto" />
+                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white w-10 h-10 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src="/layer_5.png" alt="Fun Fair" className="w-full h-auto" />
                         </div>
                     </div>
                 </section>
 
                 {/* Dandiya Village Section */}
                 <section className="text-center my-16">
-                    <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 tracking-wide">
-                        DANDIYA VILLAGE
-                    </h1>
-                    <p className="text-xl md:text-2xl font-semibold text-gray-700 mt-4 tracking-wider">
+                    <div className="flex items-center justify-center">
+                        <div className="text-4xl md:text-6xl w-64 h-6 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 tracking-wide">
+                            <img src="/dandiya_village.png" alt="Fun Fair" className="w-full h-auto" />
+                        </div>
+                    </div>
+                    <p className="text-lg md:text-xl font-medium text-gray-700 mt-4 tracking-wider">
                         FUN | FOOD | FLEA
                     </p>
-
                     <div className="w-full mx-auto mt-12 p-6 text-centetr">
                         <p className="text-gray-600 mb-4 text-sm md:text-base">
                             <strong className="text-gray-800">100+ Stalls = Food & Beverages / Fashion & Accessories / Games & Activities / Art & Handicrafts</strong>
@@ -70,6 +75,15 @@ const VendorRegistration = () => {
                 </section>
             </main>}
             {screen === "form" && <VendorRegistrationPage selectedCategory={selectedCategory} />}
+            <div className="flex justify-center w-full mt-8">
+                <img src="/layer_10.png" className="h-24 object-contain" />
+                <img src="/layer_9.png" className="h-24 object-contain" />
+                <img src="/layer_11.png" className="h-24 object-contain" />
+                <img src="/layer_12.png" className="h-24 object-contain" />
+                <img src="/layer_13.png" className="h-24 object-contain" />
+                <img src="/layer_8.png" className="h-24 object-contain" />
+            </div>
+
         </div>
     );
 };
