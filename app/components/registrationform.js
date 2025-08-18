@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import Loader from './common/loader';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function RegistrationForm() {
+export default function RegistrationForm({ setScreen }) {
     const [formData, setFormData] = useState({
         firstName: '',
         surname: '',
@@ -163,6 +164,12 @@ export default function RegistrationForm() {
         <div className="flex items-center justify-center min-h-screen p-4">
             {serviceCall && <Loader />}
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl font-inter">
+                <button
+                    onClick={() => setScreen("login")}
+                    className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
+                >
+                    <XMarkIcon className="w-5 h-5 text-gray-700" />
+                </button>
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-gray-800">Create a new account</h1>
                     <p className="text-gray-500 mt-1 text-base">It's quick and easy.</p>

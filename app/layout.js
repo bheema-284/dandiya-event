@@ -5,7 +5,6 @@ import RootContext from "./components/config/rootcontext";
 import Navbar from "./components/navbar";
 import Login from "./components/common/login";
 import Toast from "./components/common/toast";
-import RegistrationForm from './components/registrationform';
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -64,8 +63,6 @@ function RootProvider({ children }) {
     <RootContext.Provider value={{ rootContext, setRootContext }}>
       {!rootContext.authenticated ? (
         <Login />
-      ) : pathName === "/signup" && !rootContext.authenticated ? (
-        <RegistrationForm />
       ) : (
         <div>
           <Navbar />

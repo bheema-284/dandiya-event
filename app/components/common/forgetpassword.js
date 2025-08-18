@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import RootContext from "../config/rootcontext";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
-export default function ForgetPassword({ setShowLogin }) {
+export default function ForgetPassword({ setScreen }) {
     const [inputType, setInputType] = useState("email"); // 'email' or 'mobile'
     const [inputValue, setInputValue] = useState("");
     const [oldPassword, setOldPassword] = useState("");
@@ -67,7 +67,7 @@ export default function ForgetPassword({ setShowLogin }) {
                 setNewPassword("");
                 setConfirmPassword("");
                 router.push("/");
-                setShowLogin(true);
+                setScreen("login");
             } else if (res.status === 404) {
                 setIsUserNotFound(true);
             } else {
@@ -135,7 +135,7 @@ export default function ForgetPassword({ setShowLogin }) {
             <div className="relative w-full max-w-md overflow-hidden rounded-xl bg-white p-8 text-center shadow-2xl">
                 {/* X mark at top-right */}
                 <button
-                    onClick={() => setShowLogin(true)}
+                    onClick={() => setScreen("login")}
                     className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-200"
                 >
                     <XMarkIcon className="w-5 h-5 text-gray-700" />

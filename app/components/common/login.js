@@ -6,6 +6,7 @@ import { useSWRFetch } from "../config/useswrfetch";
 import Link from "next/link";
 import Loader from "./loader";
 import ForgetPassword from "./forgetpassword";
+import RegistrationForm from "../registrationform";
 
 const Login = () => {
     const { rootContext, setRootContext } = useContext(RootContext);
@@ -21,7 +22,7 @@ const Login = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [showLogin, setShowLogin] = useState(true);
+    const [screen, setScreen] = useState("login");
 
     const onSave = (e) => {
         e.preventDefault(); // Prevent page refresh
@@ -105,7 +106,7 @@ const Login = () => {
 
     return (
         <>
-            {showLogin ? <section className="">
+            {screen === "login" ? <section className="">
                 {isLoading && <Loader />}
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex-1 text-center my-5">
@@ -154,7 +155,7 @@ const Login = () => {
                                 <div className="flex justify-end">
                                     <button
                                         type="button"
-                                        onClick={() => setShowLogin(false)}
+                                        onClick={() => setScreen("otp")}
                                         className="text-sm font-semibold text-blue-500 hover:underline"
                                     >
                                         Forgot Password?
@@ -169,17 +170,18 @@ const Login = () => {
                                 >
                                     {isLoading ? 'Loading...' : 'Log In'}
                                 </button>
-                                <p className="text-sm font-light text-gray-500 text-center dark:text-gray-400">
+                                <div className="text-sm font-light text-gray-500 text-center dark:text-gray-400">
                                     New User ?{" "}
-                                    <Link href={'/signup'} className="font-medium inline cursor-pointer text-purple-500 hover:underline dark:text-primary-500">
+                                    <p onClick={() => setScreen("registration")} className="font-medium inline cursor-pointer text-purple-500 hover:underline dark:text-primary-500">
                                         Sign up Now
-                                    </Link>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
-            </section> : <ForgetPassword setShowLogin={setShowLogin} />}
+            </section> : screen === "otp" ? <ForgetPassword setScreen={setScreen} /> :
+                <RegistrationForm setScreen={setScreen} />}
         </>
     );
 };
