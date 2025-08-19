@@ -123,7 +123,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-            {screen === "login" ? <section className="pt-32 bg-white my-24">
+            {screen === "login" ? <section className="pt-32 bg-white mb-24">
                 {isLoading && <Loader />}
                 <div className="flex flex-col bg-white items-center justify-center">
                     <form onSubmit={onSave} className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
