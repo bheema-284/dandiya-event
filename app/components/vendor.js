@@ -70,17 +70,30 @@ const VendorRegistration = () => {
                 </section>
             </main>}
             {screen === "form" && <VendorRegistrationPage setScreen={setScreen} selectedCategory={selectedCategory} />}
-            <div className="relative w-full h-64 mt-8">
-                <div className="absolute top-80vh bottom-5 left-0 right-0 flex justify-between z-0 px-10">
-                    <img src="/layer_8.png" className="h-36" />
-                    <img src="/layer_10.png" className="h-36" />
+            <div className="relative w-full mt-10">
+                {/* Shading overlay (soft white fade like reference) */}
+                <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-white via-white/60 to-transparent z-20 pointer-events-none"></div>
+
+                {/* Top floating images (rides) */}
+                <div className="absolute -top-20 sm:-top-24 left-4 sm:left-10 z-0">
+                    <img
+                        src="/layer_8.png"
+                        className="h-24 sm:h-32 md:h-36 object-contain"
+                    />
+                </div>
+                <div className="absolute  -top-20 sm:-top-26 right-4 sm:right-10 z-0">
+                    <img
+                        src="/layer_10.png"
+                        className="h-28 sm:h-36 md:h-40 object-contain"
+                    />
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 flex w-full flex justify-between z-10">
-                    <img src="/layer_9.png" className="w-full h-20" />
-                    <img src="/layer_11.png" className="w-full h-20" />
-                    <img src="/layer_12.png" className="w-full h-20" />
-                    <img src="/layer_13.png" className="w-full h-20" />
+                {/* Bottom decorative strip */}
+                <div className="relative flex flex-wrap justify-between items-end w-full z-10">
+                    <img src="/layer_9.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_11.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_12.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_13.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
                 </div>
             </div>
         </div>

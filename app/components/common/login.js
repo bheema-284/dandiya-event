@@ -97,38 +97,35 @@ const Login = () => {
 
 
     return (
-        <>
-            <header className="w-full h-24 fixed z-50 top-0 flex items-center justify-center bg-[#1a1945]">
-                <div className="w-full sm:w-[60%] m-auto flex items-center justify-between">
-                    {/* Left Durga Image */}
+        <div className="bg-white">
+            <div className="w-full py-3 flex justify-center fixed z-50 bg-[#1a1945] top-0 left-1/2 transform -translate-x-1/2">
+                {/* Container for Durga + Title */}
+                <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
+                    {/* Durga Image */}
                     <div className="flex items-center">
                         <img
                             src="/Durga.png"
                             alt="Durga"
-                            className="h-16 w-auto object-contain"
+                            className="h-12 sm:h-16 md:h-20 w-auto object-contain"
                             style={{
-                                filter:
-                                    'drop-shadow(0 0 2px white) drop-shadow(0 0 6px white)',
+                                filter: "drop-shadow(0 0 2px white) drop-shadow(0 0 6px white)",
                             }}
                         />
                     </div>
 
                     {/* Title Logo */}
-                    <div className="flex-1 flex justify-center">
+                    <div className="flex items-center">
                         <img
                             src="/Dandiya Carnival Logo.png"
                             alt="event"
-                            className="h-14 sm:h-16 w-auto object-contain"
+                            className="h-10 sm:h-14 md:h-16 lg:h-20 w-auto object-contain"
                         />
                     </div>
-
-                    {/* Empty Spacer for alignment */}
-                    <div className="w-20"></div>
                 </div>
-            </header>
-            {screen === "login" ? <section className="pt-32">
+            </div>
+            {screen === "login" ? <section className="pt-32 bg-white my-24">
                 {isLoading && <Loader />}
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col bg-white items-center justify-center">
                     <form onSubmit={onSave} className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -196,20 +193,33 @@ const Login = () => {
                 </div>
             </section> : screen === "otp" ? <ForgetPassword setScreen={setScreen} /> :
                 <RegistrationForm setScreen={setScreen} />}
-            <div className="relative w-full h-52">
-                <div className="absolute top-80vh bottom-5 left-0 right-0 flex justify-between z-0 px-10">
-                    <img src="/layer_8.png" className="h-36" />
-                    <img src="/layer_10.png" className="h-36" />
+            <div className="relative w-full bg-white">
+                {/* Shading overlay (soft white fade like reference) */}
+                <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-white via-white/60 to-transparent z-20 pointer-events-none"></div>
+
+                {/* Top floating images (rides) */}
+                <div className="absolute -top-20 sm:-top-24 left-4 sm:left-10 z-0">
+                    <img
+                        src="/layer_8.png"
+                        className="h-24 sm:h-32 md:h-36 object-contain"
+                    />
+                </div>
+                <div className="absolute  -top-20 sm:-top-26 right-4 sm:right-10 z-0">
+                    <img
+                        src="/layer_10.png"
+                        className="h-28 sm:h-36 md:h-40 object-contain"
+                    />
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 flex w-full flex justify-between items-end z-10">
-                    <img src="/layer_9.png" className="w-full h-20" />
-                    <img src="/layer_11.png" className="w-full h-20" />
-                    <img src="/layer_12.png" className="w-full h-20" />
-                    <img src="/layer_13.png" className="w-full h-20" />
+                {/* Bottom decorative strip */}
+                <div className="relative flex flex-wrap justify-between items-end w-full z-10">
+                    <img src="/layer_9.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_11.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_12.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_13.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

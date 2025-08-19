@@ -152,7 +152,7 @@ export default function RegistrationForm({ setScreen }) {
     };
 
     return (
-        <div className="flex items-center justify-center pt-32 p-4">
+        <div className="flex bg-white items-center justify-center pt-32 my-24 p-4">
             {serviceCall && <Loader />}
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl font-inter">
                 <div className='flex justify-end'>
