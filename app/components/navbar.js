@@ -33,11 +33,8 @@ export default function Navbar() {
     >
       <div className="w-full sm:w-[80%] flex items-center justify-between">
         {/* Left Logo + Title */}
-        <div className="flex cursor-pointer items-center">
-          <div
-            onClick={() => router.push('/')}
-            className="h-14 w-auto flex items-center justify-center bg-transparent"
-          >
+        <div onClick={() => router.push('/')} className="flex cursor-pointer items-center">
+          <div className="h-14 w-auto flex items-center justify-center bg-transparent">
             <img
               src="/Durga.png"
               alt="Durga"

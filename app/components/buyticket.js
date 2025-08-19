@@ -2,10 +2,11 @@
 import { useState, useMemo } from 'react';
 import { Ticket } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function Ticketing() {
     const [selectedDays, setSelectedDays] = useState([]); // holds numbers 1..10 (1 = SEASON PASS)
-
+    const router = useRouter();
     const colorClasses = [
         { label: "SEASON PASS", bg: "bg-orange-400 text-black", hover: "hover:bg-orange-100 hover:text-orange-500" },
         { label: "DAY 1", bg: "bg-red-500 text-white", hover: "hover:bg-red-100 hover:text-red-500" },
@@ -177,7 +178,7 @@ export default function Ticketing() {
                     </div>
 
                     {/* Book Now Button */}
-                    <div className="flex justify-center mt-4">
+                    <div onClick={() => { router.push(`/shopcart?days=${selectedDays.join(",")}`); }} className="flex justify-center mt-4">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
