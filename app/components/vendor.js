@@ -91,8 +91,8 @@ const VendorRegistration = () => {
                 {/* Bottom decorative strip */}
                 <div className="relative flex flex-wrap justify-between items-end w-full z-10">
                     <img src="/layer_9.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
-                    <img src="/layer_11.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
                     <img src="/layer_12.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
+                    <img src="/layer_11.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
                     <img src="/layer_13.png" className="flex-1 h-10 sm:h-18 md:h-20 object-cover" />
                 </div>
             </div>
