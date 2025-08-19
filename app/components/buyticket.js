@@ -8,10 +8,10 @@ export default function Ticketing() {
     const [selectedDays, setSelectedDays] = useState([]); // holds numbers 1..10 (1 = SEASON PASS)
     const router = useRouter();
     const colorClasses = [
-        { label: "SEASON PASS", bg: "bg-orange-400 text-black", hover: "hover:bg-orange-100 hover:text-orange-500" },
+        { label: "SEASON PASS", bg: "bg-orange-400 text-white", hover: "hover:bg-orange-100 hover:text-orange-500" },
         { label: "DAY 1", bg: "bg-red-500 text-white", hover: "hover:bg-red-100 hover:text-red-500" },
         { label: "DAY 2", bg: "bg-purple-500 text-white", hover: "hover:bg-purple-100 hover:text-purple-500" },
-        { label: "DAY 3", bg: "bg-yellow-500 text-black", hover: "hover:bg-yellow-100 hover:text-yellow-500" },
+        { label: "DAY 3", bg: "bg-yellow-500 text-white", hover: "hover:bg-yellow-100 hover:text-yellow-500" },
         { label: "DAY 4", bg: "bg-green-500 text-white", hover: "hover:bg-green-100 hover:text-green-500" },
         { label: "DAY 5", bg: "bg-pink-500 text-white", hover: "hover:bg-pink-100 hover:text-pink-500" },
         { label: "DAY 6", bg: "bg-indigo-500 text-white", hover: "hover:bg-indigo-100 hover:text-indigo-500" },
