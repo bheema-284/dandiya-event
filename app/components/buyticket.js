@@ -1,6 +1,5 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Ticket } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
@@ -33,15 +32,69 @@ export default function Ticketing() {
     // The textual details you provided (mapped to day numbers).
     // Note: index 1 corresponds to SEASON PASS; 2..10 correspond to Day 1..Day 9 respectively.
     const dayDetails = {
-        2: "Day 1 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Celebrate Navratri opening with Pooja & Grand Laser Show.",
-        3: "Day 2 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Dance into the night with vibrant festive beats.",
-        4: "Day 3 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Elegant rhythms & non-stop dandiya fun await.",
-        5: "Day 4 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Pure tradition, high-energy garba, and joy.",
-        6: "Day 5 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Twirl, groove, and sparkle through the night.",
-        7: "Day 6 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Fusion beats and electric dandiya vibes.",
-        8: "Day 7 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Carnival of lights, music, and dance.",
-        9: "Day 8 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Celebrate under the stars with festive magic.",
-        10: "Day 9 Pass – 6:16 PM to 1:11 AM | Entry valid for one person only | Grand Navratri finale with ultimate dandiya energy."
+        2: {
+            title: "Day 1 Pass",
+            subtitle: "Grand Opening ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Celebrate Navratri opening with Pooja & Grand Laser Show."
+        },
+        3: {
+            title: "Day 2 Pass",
+            subtitle: "Dance Night ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Dance into the night with vibrant festive beats."
+        },
+        4: {
+            title: "Day 3 Pass",
+            subtitle: "Elegant Rhythms ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Elegant rhythms & non-stop dandiya fun await."
+        },
+        5: {
+            title: "Day 4 Pass",
+            subtitle: "Tradition Night ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Pure tradition, high-energy garba, and joy."
+        },
+        6: {
+            title: "Day 5 Pass",
+            subtitle: "Twirl & Groove ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Twirl, groove, and sparkle through the night."
+        },
+        7: {
+            title: "Day 6 Pass",
+            subtitle: "Fusion Beats ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Fusion beats and electric dandiya vibes."
+        },
+        8: {
+            title: "Day 7 Pass",
+            subtitle: "Carnival Night ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Carnival of lights, music, and dance."
+        },
+        9: {
+            title: "Day 8 Pass",
+            subtitle: "Starry Celebration ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Celebrate under the stars with festive magic."
+        },
+        10: {
+            title: "Day 9 Pass",
+            subtitle: "Grand Finale ✨",
+            time: "6:16 PM to 1:11 AM",
+            entry: "Entry valid for one person only",
+            description: "Grand Navratri finale with ultimate dandiya energy."
+        }
     };
 
     const artists = useMemo(() => [
@@ -112,6 +165,11 @@ export default function Ticketing() {
         "Risk Disclaimer: Attendees participate at their own risk; organizers are not liable for personal injury, loss, or damage to property."
     ];
 
+    const getDayColor = (day) => {
+        if (day === "season") return colorClasses[0]; // Season Pass
+        return colorClasses[day]; // day = 1..9 matches index
+    };
+
     return (
         <div className="min-h-screen bg-white text-blue-900">
             {/* Day Selection */}
@@ -154,43 +212,58 @@ export default function Ticketing() {
                 </div>
 
                 {/* Right side - Info (40%) */}
-                <div className="shadow-md flex flex-col w-full lg:w-2/5 h-full bg-white text-gray-900 relative">
-                    <h3 className="font-bold text-sm md:text-md text-center border-b border-dotted border-yellow-500 pb-1">
-                        {eventTitle}
-                    </h3>
-                    <div className="mt-3 flex-1 pb-14 overflow-y-auto">
-                        {Object.keys(selectedInfoList).length > 0 ? (
-                            <ul className="list-disc pl-6 space-y-3 text-xs">
-                                {Object.values(selectedInfoList).map((line, idx) => {
-                                    const [heading, ...rest] = line.split(" – ");
+                <div className="shadow-md flex flex-col w-full justify-between text-center lg:w-2/5 h-full bg-white text-gray-900 relative rounded-xl border border-gray-200 overflow-hidden">
+                    {seasonSelected ? (
+                        <div className="flex flex-col h-full p-6">
+                            <h3 className="text-2xl font-extrabold text-gray-800">SEASON PASS</h3>
+                            <p className="text-md text-gray-900 mt-1">Access to all 9 days ✨</p>
+                            <p className="text-xs text-gray-500 mt-2">
+                                Entry valid for one person only. Enjoy all events, music, dance & grand finale.
+                            </p>
+
+                            {/* Book Now Button */}
+                            <div
+                                onClick={() => router.push(`/shopcart?days=${selectedDays.join(",")}`)}
+                                className="flex w-full px-6 pb-4 justify-center mt-auto"
+                            >
+                                <img src="/booknow.png" alt="drugs" className="h-6 sm:h-10 w-auto" />
+                            </div>
+                        </div>
+                    ) : selectedDays.length > 0 ? (
+                        <div className="flex flex-col h-full">
+                            {/* Scrollable area */}
+                            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                                {selectedDays.map((day, idx) => {
+                                    const info = dayDetails[day];
+                                    const colorInfo = getDayColor(day);
+                                     const bgClass = colorInfo.bg.split(" ")[0];
+                                    const borderColor = bgClass.replace("bg-", "border-");
                                     return (
-                                        <li key={idx} className="leading-snug">
-                                            <strong>{heading} –</strong> {rest.join(" – ")}
-                                        </li>
+                                        <div key={idx}>
+                                            {idx > 0 && <hr className={`my-4 border ${borderColor}`} />}
+                                            <h3 className="text-2xl font-extrabold text-gray-800 uppercase">{info.title}</h3>
+                                            <p className="text-md font-semibold text-gray-700 mt-1">{info.subtitle}</p>
+                                            <p className="text-xs text-gray-500 mt-2">{info.description}</p>
+                                        </div>
                                     );
                                 })}
-                            </ul>
-                        ) : (
-                            <p className="text-sm text-center">
+                            </div>
+
+                            {/* Single Book Now Button */}
+                            <div
+                                onClick={() => router.push(`/shopcart?days=${selectedDays.join(",")}`)}
+                                className="flex w-full px-6 pb-4 justify-center mt-auto"
+                            >
+                                <img src="/booknow.png" alt="drugs" className="h-6 sm:h-10 w-auto" />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center h-full p-6">
+                            <p className="text-sm text-gray-500">
                                 Select a day or the Season Pass to see details here.
                             </p>
-                        )}
-                    </div>
-
-                    {/* Book Now Button */}
-                    <div onClick={() => { router.push(`/shopcart?days=${selectedDays.join(",")}`); }} className="flex justify-center mt-4">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center justify-center gap-2 py-2 px-4
-                    bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 
-                    text-white font-bold text-sm md:text-base shadow-lg 
-                    rounded-t-lg border-t-4 border-yellow-200"
-                        >
-                            <Ticket size={18} />
-                            Book Your Ticket Now
-                        </motion.button>
-                    </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
