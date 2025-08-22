@@ -22,19 +22,19 @@ const VendorRegistration = () => {
                     <h2 className="text-2xl font-bold text-gray-800 tracking-wide mb-8">CHOOSE YOUR VENDOR CATEGORY</h2>
 
                     {/* Category cards - using placeholder images */}
-                    <div className="flex w-52 mx-auto text-center gap-3 justify-between items-center">
+                    <div className="flex w-3/4 mx-auto text-center gap-3 justify-between items-center">
                         {/* Food Stall */}
-                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white w-20 h-16 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div onClick={() => handleCategorySelect('Food Court')} className="bg-white w-full h-auto cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
                             <img src='/layer_6.png' alt="Food Stall" className="w-full object-contain" />
                         </div>
 
                         {/* Flea Market */}
-                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white w-20 h-16 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div onClick={() => handleCategorySelect('Flea Market')} className="bg-white w-full h-auto cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
                             <img src="/layer_7.png" alt="Flea Market" className="w-full h-full" />
                         </div>
 
                         {/* Fun Fair */}
-                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white w-20 h-16 cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <div onClick={() => handleCategorySelect('Fun Zone')} className="bg-white w-full h-auto cursor-pointer rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
                             <img src="/layer_5.png" alt="Fun Fair" className="w-full h-full" />
                         </div>
                     </div>
@@ -43,11 +43,11 @@ const VendorRegistration = () => {
                 {/* Dandiya Village Section */}
                 <section className="text-center my-16">
                     <div className="flex items-center justify-center">
-                        <div className="text-4xl md:text-6xl w-64 h-6 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 tracking-wide">
+                        <div className="text-4xl md:text-6xl w-64 h-8 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 tracking-wide">
                             <img src="/dandiya_village.png" alt="Fun Fair" className="w-full h-auto" />
                         </div>
                     </div>
-                    <p className="text-lg md:text-xl font-medium text-gray-700 mt-4 tracking-wider">
+                    <p className="text-lg md:text-xl font-semibold text-gray-700 mt-4 tracking-wider">
                         FUN | FOOD | FLEA
                     </p>
                     <div className="w-full mx-auto mt-12 p-6 text-centetr">

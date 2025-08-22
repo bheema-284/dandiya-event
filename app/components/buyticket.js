@@ -113,7 +113,7 @@ export default function Ticketing() {
     ];
 
     return (
-        <div className="min-h-screen bg-white text-gray-900">
+        <div className="min-h-screen bg-white text-blue-900">
             {/* Day Selection */}
             <div className="flex flex-col items-center gap-4 py-6">
                 <div className="flex flex-wrap gap-2 justify-center">
@@ -141,7 +141,7 @@ export default function Ticketing() {
             </div>
 
             {/* Banner */}
-            <div className="flex flex-col lg:flex-row bg-yellow-200 w-full h-[75vh]">
+            <div className="flex flex-col lg:flex-row bg-yellow-200 w-full h-[55vh]">
                 {/* Left side - Image (60%) */}
                 <div className="w-full lg:w-3/5 h-full">
                     <div className="flex-1 flex justify-center items-center w-full h-full">
@@ -232,12 +232,12 @@ export default function Ticketing() {
             <section className="px-6 pb-10">
                 <h2 className="text-xl font-bold mb-4 text-center">EVENT FACILITIES</h2>
                 <div className="flex flex-wrap gap-6 text-3xl justify-center">
-                    <img src="/Parking.png" alt="parking" className="h-8 w-auto" />
-                    <img src="/Taxi.png" alt="taxi" className="h-8 w-auto" />
-                    <img src="/hotel.png" alt="hotel" className="h-8 w-auto" />
-                    <img src="/All age groups.png" alt="all age groups" className="h-8 w-auto" />
-                    <img src="/rest rooms.png" alt="rest rooms" className="h-8 w-auto" />
-                    <img src="/Pet friendly.png" alt="pet" className="h-8 w-auto" />
+                    <img src="/Parking.png" alt="parking" className="h-8 sm:h-20 w-auto" />
+                    <img src="/Taxi.png" alt="taxi" className="h-8 sm:h-20 w-auto" />
+                    <img src="/hotel.png" alt="hotel" className="h-8 sm:h-20 w-auto" />
+                    <img src="/All age groups.png" alt="all age groups" className="h-8 sm:h-20 w-auto" />
+                    <img src="/rest rooms.png" alt="rest rooms" className="h-8 sm:h-20 w-auto" />
+                    <img src="/Pet friendly.png" alt="pet" className="h-8 sm:h-20 w-auto" />
                 </div>
             </section>
 
@@ -245,15 +245,15 @@ export default function Ticketing() {
             <section className="px-6 pb-10">
                 <h2 className="text-xl font-bold mb-4 text-center uppercase">Restrictions</h2>
                 <div className="flex flex-wrap gap-6 text-3xl justify-center">
-                    <img src="/Non liquor zone.jpg" alt="liquor" className="h-8 w-auto" />
-                    <img src="/no drugs icon.jpg" alt="drugs" className="h-8 w-auto" />
+                    <img src="/no drugs icon.jpg" alt="drugs" className="h-8 sm:h-20 w-auto" />
+                    <img src="/Non liquor zone.jpg" alt="liquor" className="h-8 sm:h-20 w-auto" />
                 </div>
             </section>
 
             {/* Terms & Conditions */}
             <section className="px-6 pb-10 text-center">
                 <h2 className="uppercase text-xl font-bold mb-4">Terms & Conditions</h2>
-                <div className="space-y-4">
+                <div className="space-y-4 font-semibold">
                     {termsAndConditions.map((term, index) => {
                         if (term.includes("inappropriate dressing")) {
                             const [before, after] = term.split("inappropriate dressing");
