@@ -199,7 +199,7 @@ export default function Ticketing() {
             </div>
 
             {/* Banner */}
-            <div className="flex flex-col lg:flex-row bg-yellow-200 w-full h-[55vh]">
+            <div className="flex flex-col lg:flex-row bg-white w-full h-[55vh]">
                 {/* Left side - Image (60%) */}
                 <div className="w-full lg:w-3/5 h-full">
                     <div className="flex-1 flex justify-center items-center w-full h-full">
@@ -212,7 +212,7 @@ export default function Ticketing() {
                 </div>
 
                 {/* Right side - Info (40%) */}
-                <div className="shadow-md flex flex-col w-full justify-between text-center lg:w-2/5 h-full bg-white text-gray-900 relative rounded-xl border border-gray-200 overflow-hidden">
+                <div className="flex flex-col w-full justify-between text-center lg:w-2/5 h-full bg-white text-gray-900 relative border border-gray-400 overflow-hidden">
                     {seasonSelected ? (
                         <div className="flex flex-col h-full p-6">
                             <h3 className="text-2xl font-extrabold text-gray-800">SEASON PASS</h3>
@@ -235,15 +235,18 @@ export default function Ticketing() {
                             <div className="flex-1 overflow-y-auto p-6 space-y-6">
                                 {selectedDays.map((day, idx) => {
                                     const info = dayDetails[day];
-                                    const colorInfo = getDayColor(day);
-                                     const bgClass = colorInfo.bg.split(" ")[0];
-                                    const borderColor = bgClass.replace("bg-", "border-");
+                                    const colorInfo = getDayColor(day - 1);
+                                    const bgClass = colorInfo.bg.split(" ")[0];
+                                    const textColor = bgClass.replace("bg-", "text-");
+                                    const bgBar = bgClass; // for bottom bar
                                     return (
                                         <div key={idx}>
-                                            {idx > 0 && <hr className={`my-4 border ${borderColor}`} />}
-                                            <h3 className="text-2xl font-extrabold text-gray-800 uppercase">{info.title}</h3>
+                                            <h3 className={`text-2xl font-extrabold uppercase ${textColor}`}>{info.title}</h3>
                                             <p className="text-md font-semibold text-gray-700 mt-1">{info.subtitle}</p>
                                             <p className="text-xs text-gray-500 mt-2">{info.description}</p>
+                                            {selectedDays.length > 1 && (
+                                                <div className={`h-0.5 mt-3 rounded ${bgBar}`} />
+                                            )}
                                         </div>
                                     );
                                 })}
